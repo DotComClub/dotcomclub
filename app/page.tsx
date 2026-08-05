@@ -7,8 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import NewsBanner from "@/components/NewsBanner";
-import { Newsletter } from "@/components/Newsletter";
 import EWasteImpactModal from "@/components/EWasteImpactModal";
 
 function AnimatedHeader() {
@@ -415,14 +413,7 @@ export default function Home() {
       {/* E-Waste Impact Modal */}
       <EWasteImpactModal />
 
-      {/* News Banner */}
-      <NewsBanner
-        newsUrl="https://www.thehindu.com/news/cities/mumbai/mumbai-college-students-collect-2-tonnes-of-e-waste-spread-awareness-among-schools/article69885016.ece"
-        title="DCC's E-Waste Drive featured in major news!"
-        description="Read about our environmental impact and sustainability efforts."
-        autoHideDuration={15000}
-        showOnlyOnce={true}
-      />
+
       {/* Import GSAP library */}
 
 
@@ -699,7 +690,7 @@ export default function Home() {
           </div>
         </section>
         {/* Newsletter Section */}
-        <Newsletter />
+
       </main>
     </div>
   );
