@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useLayoutEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, Variants } from "framer-motion";
 import { useQuery } from "convex/react";
@@ -13,11 +13,32 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Recycle, Users, Building, Trophy, TrendingUp, ArrowRight } from "lucide-react";
+import {
+  Recycle,
+  Users,
+  Building,
+  Trophy,
+  TrendingUp,
+  ArrowRight,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
+declare global {
+  interface Window {
+    resetEWasteModal?: () => void;
+  }
+}
+
 // CountUp Helper for animated numbers
-function CountUp({ end, duration = 1200, suffix = "" }: { end: number; duration?: number; suffix?: string }) {
+function CountUp({
+                   end,
+                   duration = 550,
+                   suffix = "",
+                 }: {
+  end: number;
+  duration?: number;
+  suffix?: string;
+}) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -26,23 +47,37 @@ function CountUp({ end, duration = 1200, suffix = "" }: { end: number; duration?
 
     const step = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+
+      const progress = Math.min(
+          (timestamp - startTimestamp) / duration,
+          1
+      );
+
       // Ease out cubic
       const easedProgress = 1 - Math.pow(1 - progress, 3);
+
       setCount(easedProgress * end);
+
       if (progress < 1) {
         animationFrameId = window.requestAnimationFrame(step);
       }
     };
+
     animationFrameId = window.requestAnimationFrame(step);
+
     return () => window.cancelAnimationFrame(animationFrameId);
   }, [end, duration]);
 
   const formattedValue = Number.isInteger(end)
-    ? Math.round(count).toLocaleString()
-    : count.toFixed(1);
+      ? Math.round(count).toLocaleString()
+      : count.toFixed(1);
 
-  return <span>{formattedValue}{suffix}</span>;
+  return (
+      <span>
+      {formattedValue}
+        {suffix}
+    </span>
+  );
 }
 
 const TARGET_GOAL_KG = 3000;
@@ -59,9 +94,30 @@ export default function EWasteImpactModal() {
   });
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
-  // Convex Data Queries
-  const statsData = useQuery(api.ewaste.getEwasteStats);
-  const topFiveData = useQuery(api.ewaste.getTopFive);
+  // Load the popup first, then start the live Convex subscriptions.
+  const [loadLiveData, setLoadLiveData] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setLoadLiveData(false);
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      setLoadLiveData(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [open]);
+
+  const statsData = useQuery(
+    api.ewaste.getEwasteStats,
+    loadLiveData ? {} : "skip"
+  );
+  const topFiveData = useQuery(
+    api.ewaste.getTopFive,
+    loadLiveData ? {} : "skip"
+  );
 
   // Use real Convex data only — no fake fallbacks
   const stats = useMemo(() => {
@@ -74,14 +130,20 @@ export default function EWasteImpactModal() {
 
   // Use real top contributors from Convex (show whatever exists, even if < 3)
   const topContributors = useMemo(() => {
-    if (topFiveData?.individuals && topFiveData.individuals.length > 0) {
-      return topFiveData.individuals.slice(0, 3).map((item, idx) => ({
-        rank: idx + 1,
-        name: item.name,
-        wasteWeight: item.wasteWeight,
-        medal: idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉",
-      }));
+    if (
+        topFiveData?.individuals &&
+        topFiveData.individuals.length > 0
+    ) {
+      return topFiveData.individuals
+          .slice(0, 3)
+          .map((item, idx) => ({
+            rank: idx + 1,
+            name: item.name,
+            wasteWeight: item.wasteWeight,
+            medal: idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉",
+          }));
     }
+
     return [];
   }, [topFiveData]);
 
@@ -113,6 +175,7 @@ export default function EWasteImpactModal() {
     } else {
       document.body.style.overflow = "";
     }
+
     return () => {
       document.body.style.overflow = "";
     };
@@ -120,6 +183,7 @@ export default function EWasteImpactModal() {
 
   const handleDontShowChange = (checked: boolean) => {
     setDontShowAgain(checked);
+
     if (checked) {
       sessionStorage.setItem("dcc_ewaste_modal_dont_show", "true");
     } else {
@@ -132,8 +196,13 @@ export default function EWasteImpactModal() {
     router.push("/ewaste-26");
   };
 
-  const progressPercentage = Math.min((stats.totalWeight / TARGET_GOAL_KG) * 100, 100);
-  const maxContributorWeight = topContributors[0]?.wasteWeight || 100;
+  const progressPercentage = Math.min(
+      (stats.totalWeight / TARGET_GOAL_KG) * 100,
+      100
+  );
+
+  const maxContributorWeight =
+      topContributors[0]?.wasteWeight || 100;
 
   // Optimized snappy variants for Framer Motion instant popup
   const containerVariants: Variants = {
@@ -142,6 +211,7 @@ export default function EWasteImpactModal() {
       opacity: 1,
       scale: 1,
       y: 0,
+
       transition: {
         duration: 0.2,
         ease: [0.16, 1, 0.3, 1],
@@ -362,28 +432,51 @@ export default function EWasteImpactModal() {
                 "ewaste-modal-cta-btn"
               )}
             >
-              <span>Explore E-Waste Drive</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-
-            {/* Don't Show Again Checkbox */}
-            <div className="flex items-center justify-center gap-2 text-xs text-neutral-400">
-              <Checkbox
-                id="dont-show"
-                checked={dontShowAgain}
-                onCheckedChange={(checked) => handleDontShowChange(Boolean(checked))}
-                className="border-neutral-600 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
-              />
-              <label
-                htmlFor="dont-show"
-                className="cursor-pointer select-none text-[11px] sm:text-xs text-neutral-400 hover:text-neutral-300 transition-colors"
+              <button
+                  onClick={handleExplore}
+                  className={cn(
+                      "w-full py-3 sm:py-3.5 px-6 rounded-full font-bold text-sm sm:text-base text-white",
+                      "bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500",
+                      "hover:from-emerald-500 hover:to-teal-400",
+                      "shadow-[0_4px_20px_rgba(16,185,129,0.35)] hover:shadow-[0_6px_25px_rgba(16,185,129,0.5)]",
+                      "hover:scale-[1.01] active:scale-[0.99]",
+                      "transition-all duration-200 flex items-center justify-center gap-2 group cursor-pointer"
+                  )}
               >
-                Don&apos;t show this again
-              </label>
-            </div>
+              <span>
+                Explore E-Waste Drive
+              </span>
+
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              {/* Don't Show Again Checkbox */}
+              <div className="flex items-center justify-center gap-2 text-xs text-neutral-400">
+                <Checkbox
+                    id="dont-show"
+                    checked={dontShowAgain}
+                    onCheckedChange={(
+                        checked
+                    ) =>
+                        handleDontShowChange(
+                            Boolean(
+                                checked
+                            )
+                        )
+                    }
+                    className="border-neutral-600 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                />
+
+                <label
+                    htmlFor="dont-show"
+                    className="cursor-pointer select-none text-[11px] sm:text-xs text-neutral-400 hover:text-neutral-300 transition-colors"
+                >
+                  Don&apos;t show this again
+                </label>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
   );
 }
