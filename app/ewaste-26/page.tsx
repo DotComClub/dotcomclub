@@ -136,6 +136,7 @@ const getCategoryIcon = (category: string) => {
 };
 
 // ==========================================
+<<<<<<< HEAD
 // PAAVNI MASCOT COMPONENT 
 // ==========================================
 const ECO_FACTS = [
@@ -262,6 +263,8 @@ function PaavniMascot() {
 }
 
 // ==========================================
+=======
+>>>>>>> origin/main
 // MAIN APP COMPONENT
 // ==========================================
 export default function EWasteDrive2026() {
@@ -942,8 +945,8 @@ export default function EWasteDrive2026() {
         </div>
       </section>
 
-      {/* Gallery Section */}
-      <ImagesScrollingGallery images={galleryImages} />
-    </div>
+        {/* Gallery Section */}
+        <ImagesScrollingGallery images={galleryImages} />
+      </div>
   );
 }
