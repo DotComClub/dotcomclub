@@ -88,7 +88,11 @@ export default function EWasteImpactModal() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Expose reset helper on window object for testing / manual reset
+<<<<<<< HEAD
+      (window as Window & { resetEWasteModal?: () => void }).resetEWasteModal = () => {
+=======
       window.resetEWasteModal = () => {
+>>>>>>> origin/main
         localStorage.removeItem("dcc_ewaste_modal_dont_show");
         localStorage.removeItem("dcc_ewaste_modal_seen");
         sessionStorage.removeItem("dcc_ewaste_modal_seen");
