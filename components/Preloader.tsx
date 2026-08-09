@@ -1,12 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-<<<<<<< HEAD
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
-=======
->>>>>>> origin/main
 
 interface PreloaderProps {
     onComplete: () => void;
@@ -46,17 +42,10 @@ export function Preloader({ onComplete, heroRef }: PreloaderProps) {
             .to(containerRef.current, { autoAlpha: 0, duration: 0.2, ease: "power1.out" }, 1.55)
             .call(onComplete, [], 1.7);
 
-<<<<<<< HEAD
-    return () => {
-      timeline.kill();
-    };
-  }, [heroRef, onComplete]);
-=======
         return () => {
             timeline.kill();
         };
     }, [heroRef, onComplete]);
->>>>>>> origin/main
 
     return (
         <div ref={containerRef} className="fixed inset-0 z-[9999] overflow-hidden bg-[#0f9d58]">

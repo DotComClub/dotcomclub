@@ -16,17 +16,10 @@ export interface ImagesScrollingGalleryProps {
 }
 
 function GalleryCard({
-<<<<<<< HEAD
   image,
   index,
   isMobile,
 }: {
-=======
-                       image,
-                       index,
-                       isMobile,
-                     }: {
->>>>>>> origin/main
   image: GalleryImage;
   index: number;
   isMobile: boolean;
@@ -184,34 +177,6 @@ export function ImagesScrollingGallery({
             </motion.p>
           </motion.div>
 
-<<<<<<< HEAD
-          <motion.h2
-            variants={itemVariants}
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-4"
-          >
-            Our E-Waste Collection Journey
-          </motion.h2>
-
-          <motion.p
-            variants={itemVariants}
-            className="text-base sm:text-lg text-neutral-400 leading-relaxed font-normal max-w-2xl mx-auto"
-          >
-            A glimpse of our collection drives, awareness campaigns,
-            volunteers, and impact across the community.
-          </motion.p>
-        </motion.div>
-
-        {/* Stacked Cards Gallery */}
-        <div className="relative pb-16 sm:pb-24">
-          {images.map((image, index) => (
-            <GalleryCard
-              key={image.id}
-              image={image}
-              index={index}
-              isMobile={isMobile}
-            />
-          ))}
-=======
           {/* Stacked Cards Gallery */}
           <div className="relative pb-16 sm:pb-24">
             {images.map((image, index) => (
@@ -223,7 +188,6 @@ export function ImagesScrollingGallery({
                 />
             ))}
           </div>
->>>>>>> origin/main
         </div>
       </section>
   );
