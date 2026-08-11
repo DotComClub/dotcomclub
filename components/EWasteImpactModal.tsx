@@ -80,7 +80,7 @@ function CountUp({
   );
 }
 
-const TARGET_GOAL_KG = 3000;
+const TARGET_GOAL_KG = 1000;
 
 export default function EWasteImpactModal() {
   const router = useRouter();
