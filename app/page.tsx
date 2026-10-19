@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import EWasteImpactModal from "@/components/EWasteImpactModal";
 
 function AnimatedHeader() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -411,7 +410,6 @@ export default function Home() {
   return (
     <div className="bg-black">
       {/* E-Waste Impact Modal */}
-      <EWasteImpactModal />
 
 
       {/* Import GSAP library */}

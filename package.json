@@ -8,7 +8,7 @@
     "dev:convex": "pnpm dlx convex dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
