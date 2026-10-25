@@ -18,7 +18,7 @@ export const metadata: Metadata = createMetadata({
   openGraph: {
     title: "Contingent Leader Registration - JHC DCC",
     description:
-      "Register as a Contingent Leader and lead your college to Cyberstrike 2025. Join us on 12th November!",
+      "Register as a Contingent Leader and lead your college to Cyberstrike 2025.",
     images: [
       {
         url: "https://www.jhcdotcomclub.com/images/cl-registration.jpg",

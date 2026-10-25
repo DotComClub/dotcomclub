@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { UploadButton } from "@/utils/uploadthing";
+import { CloudinaryFileUpload } from "@/components/cloudinary-file-upload";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,7 +30,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle } from "lucide-react";
 
 const formSchema = z.object({
   // College Information
@@ -127,14 +127,9 @@ const CLRegistration = () => {
         attendingClMeet: values.attendingClMeet === "yes",
       });
 
-      // Store registration ID with expiry date (November 13, 2025)
+      // Store registration ID for the confirmation page.
       if (registrationId) {
-        const expiryDate = new Date("2025-11-13T23:59:59").getTime();
-        const storageData = {
-          id: registrationId,
-          expiry: expiryDate,
-        };
-        localStorage.setItem("clRegistrationData", JSON.stringify(storageData));
+        localStorage.setItem("clRegistrationData", registrationId);
       } else {
         throw new Error("Registration ID not returned");
       }
@@ -224,7 +219,7 @@ const CLRegistration = () => {
               Contingent Leader Registration
             </CardTitle>
             <CardDescription className="text-muted-foreground mt-2 text-sm sm:text-base">
-              Register as a Contingent Leader for Cyberstrike 2025
+              Register as a Contingent Leader for Cyberstrike 2026
             </CardDescription>
           </CardHeader>
 
@@ -234,13 +229,6 @@ const CLRegistration = () => {
                 * Indicates required question
               </AlertDescription>
             </Alert>
-
-            <div className="bg-blue-900/20 border border-blue-500/30 rounded-md p-3 sm:p-4 text-blue-300">
-              <p className="text-xs sm:text-sm">
-                <strong>Important:</strong> The CL Meet is scheduled for{" "}
-                <strong>12th November 2025.</strong>
-              </p>
-            </div>
 
             <Form {...form}>
               <form
@@ -415,42 +403,10 @@ const CLRegistration = () => {
                             CL Fee Receipt / College ID *
                           </FormLabel>
                           <FormControl>
-                            <div className="space-y-2">
-                              {field.value ? (
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-green-900/20 border border-green-500/30 rounded-md">
-                                  <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
-                                    <span className="text-xs sm:text-sm text-green-300">
-                                      File uploaded successfully
-                                    </span>
-                                  </div>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => field.onChange("")}
-                                    className="text-red-400 hover:text-red-300 text-xs sm:text-sm"
-                                  >
-                                    Remove
-                                  </Button>
-                                </div>
-                              ) : (
-                                <div className="w-full">
-                                  <UploadButton
-                                    endpoint="clFeeReceipt"
-                                    onClientUploadComplete={(res) => {
-                                      if (res?.[0]?.url) {
-                                        field.onChange(res[0].url);
-                                      }
-                                    }}
-                                    onUploadError={(error: Error) => {
-                                      alert(`Upload error: ${error.message}`);
-                                    }}
-                                    className="ut-button:bg-red-600 ut-button:hover:bg-red-700 ut-button:w-full ut-button:text-sm"
-                                  />
-                                </div>
-                              )}
-                            </div>
+                            <CloudinaryFileUpload
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -466,42 +422,10 @@ const CLRegistration = () => {
                             CL Government ID (Aadhar/PAN/Driving License) *
                           </FormLabel>
                           <FormControl>
-                            <div className="space-y-2">
-                              {field.value ? (
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-green-900/20 border border-green-500/30 rounded-md">
-                                  <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
-                                    <span className="text-xs sm:text-sm text-green-300">
-                                      File uploaded successfully
-                                    </span>
-                                  </div>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => field.onChange("")}
-                                    className="text-red-400 hover:text-red-300 text-xs sm:text-sm"
-                                  >
-                                    Remove
-                                  </Button>
-                                </div>
-                              ) : (
-                                <div className="w-full">
-                                  <UploadButton
-                                    endpoint="clGovtId"
-                                    onClientUploadComplete={(res) => {
-                                      if (res?.[0]?.url) {
-                                        field.onChange(res[0].url);
-                                      }
-                                    }}
-                                    onUploadError={(error: Error) => {
-                                      alert(`Upload error: ${error.message}`);
-                                    }}
-                                    className="ut-button:bg-red-600 ut-button:hover:bg-red-700 ut-button:w-full ut-button:text-sm"
-                                  />
-                                </div>
-                              )}
-                            </div>
+                            <CloudinaryFileUpload
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -571,42 +495,10 @@ const CLRegistration = () => {
                             Assistant CL Fee Receipt / College ID *
                           </FormLabel>
                           <FormControl>
-                            <div className="space-y-2">
-                              {field.value ? (
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-green-900/20 border border-green-500/30 rounded-md">
-                                  <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
-                                    <span className="text-xs sm:text-sm text-green-300">
-                                      File uploaded successfully
-                                    </span>
-                                  </div>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => field.onChange("")}
-                                    className="text-red-400 hover:text-red-300 text-xs sm:text-sm"
-                                  >
-                                    Remove
-                                  </Button>
-                                </div>
-                              ) : (
-                                <div className="w-full">
-                                  <UploadButton
-                                    endpoint="clFeeReceipt"
-                                    onClientUploadComplete={(res) => {
-                                      if (res?.[0]?.url) {
-                                        field.onChange(res[0].url);
-                                      }
-                                    }}
-                                    onUploadError={(error: Error) => {
-                                      alert(`Upload error: ${error.message}`);
-                                    }}
-                                    className="ut-button:bg-red-600 ut-button:hover:bg-red-700 ut-button:w-full ut-button:text-sm"
-                                  />
-                                </div>
-                              )}
-                            </div>
+                            <CloudinaryFileUpload
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -622,42 +514,10 @@ const CLRegistration = () => {
                             Assistant CL Government ID *
                           </FormLabel>
                           <FormControl>
-                            <div className="space-y-2">
-                              {field.value ? (
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-green-900/20 border border-green-500/30 rounded-md">
-                                  <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
-                                    <span className="text-xs sm:text-sm text-green-300">
-                                      File uploaded successfully
-                                    </span>
-                                  </div>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => field.onChange("")}
-                                    className="text-red-400 hover:text-red-300 text-xs sm:text-sm"
-                                  >
-                                    Remove
-                                  </Button>
-                                </div>
-                              ) : (
-                                <div className="w-full">
-                                  <UploadButton
-                                    endpoint="clGovtId"
-                                    onClientUploadComplete={(res) => {
-                                      if (res?.[0]?.url) {
-                                        field.onChange(res[0].url);
-                                      }
-                                    }}
-                                    onUploadError={(error: Error) => {
-                                      alert(`Upload error: ${error.message}`);
-                                    }}
-                                    className="ut-button:bg-red-600 ut-button:hover:bg-red-700 ut-button:w-full ut-button:text-sm"
-                                  />
-                                </div>
-                              )}
-                            </div>
+                            <CloudinaryFileUpload
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -675,7 +535,7 @@ const CLRegistration = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-sm sm:text-base font-medium">
-                        Will you be attending the CL Meet on 12th November? *
+                        Will you be attending the CL Meet? *
                       </FormLabel>
                       <FormControl>
                         <RadioGroup

@@ -15,7 +15,6 @@ import {
 } from "react";
 import {
   CheckCircle2,
-  Calendar,
   Mail,
   Building2,
   Download,
@@ -203,10 +202,6 @@ const AccessCard = ({
           </div>
         </div>
 
-        <div className="mt-auto flex items-center justify-between text-[0.55rem] uppercase tracking-[0.35em] text-white/45">
-          <span>Event Date</span>
-          <span className="text-white/60">Nov 12, 2025</span>
-        </div>
       </div>
     </div>
   );
@@ -225,13 +220,14 @@ export default function CLConfirmation() {
 
     if (storedData) {
       try {
-        const { id, expiry } = JSON.parse(storedData);
-        const now = new Date().getTime();
+        const parsedData = JSON.parse(storedData) as
+          | string
+          | { id?: string };
+        const id =
+          typeof parsedData === "string" ? parsedData : parsedData.id;
 
-        if (now > expiry) {
-          localStorage.removeItem("clRegistrationData");
-          router.push("/cyberstrike-25/cl");
-          return;
+        if (!id) {
+          throw new Error("Registration ID not found");
         }
 
         setRegistrationId(id as Id<"clRegistrations">);
@@ -329,7 +325,7 @@ export default function CLConfirmation() {
             <p className="max-w-2xl text-sm text-zinc-300 md:text-base">
               Your Contingent Leader registration has been successfully
               submitted. Below are your digital access cards for the CL and
-              Assistant CL. Save these for the event on 12th November 2025.
+              Assistant CL.
             </p>
           </div>
         </div>
@@ -399,9 +395,9 @@ export default function CLConfirmation() {
             {/* CL Meet Info */}
             <div className="rounded-lg border border-red-500/30 bg-red-900/10 p-6">
               <div className="flex items-center gap-3 mb-4">
-                <Calendar className="h-5 w-5 text-red-400" />
+                <CheckCircle2 className="h-5 w-5 text-red-400" />
                 <h3 className="text-lg font-semibold text-white">
-                  CL Meet - 12th November 2025
+                  CL Meet
                 </h3>
               </div>
               <div className="space-y-3 text-sm text-zinc-300">
@@ -476,7 +472,7 @@ export default function CLConfirmation() {
                   <span>Your documents are being verified by our team</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Calendar className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
                   <span>
                     Further details about Cyberstrike 2025 will be shared before
                     the event
@@ -497,19 +493,6 @@ export default function CLConfirmation() {
                 Registration Details
               </h3>
               <div className="grid gap-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Submitted on</span>
-                  <span className="text-white">
-                    {new Date(registration.submittedAt).toLocaleDateString(
-                      "en-IN",
-                      {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      }
-                    )}
-                  </span>
-                </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Status</span>
                   <Badge
