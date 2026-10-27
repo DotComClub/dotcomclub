@@ -4,11 +4,11 @@ import { Metadata } from "next";
 export const metadata: Metadata = createMetadata({
   title: "Contingent Leader Registration - JHC Dot Com Club",
   description:
-    "Register as a Contingent Leader for JHC Dot Com Club. Lead your college delegation to Cyberstrike 2025 and represent your institution in Mumbai's premier tech fest.",
+    "Register as a Contingent Leader for JHC Dot Com Club. Lead your college delegation to Cyberstrike 2026 and represent your institution in Mumbai's premier tech fest.",
   keywords: [
     "Contingent Leader registration",
     "CL registration",
-    "Cyberstrike 2025 CL",
+    "Cyberstrike 2026 CL",
     "College contingent",
     "Tech fest registration",
     "Student leader registration",
@@ -18,7 +18,7 @@ export const metadata: Metadata = createMetadata({
   openGraph: {
     title: "Contingent Leader Registration - JHC DCC",
     description:
-      "Register as a Contingent Leader and lead your college to Cyberstrike 2025.",
+      "Register as a Contingent Leader and lead your college to Cyberstrike 2026.",
     images: [
       {
         url: "https://www.jhcdotcomclub.com/images/cl-registration.jpg",

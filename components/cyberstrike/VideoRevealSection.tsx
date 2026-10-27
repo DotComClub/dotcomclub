@@ -76,7 +76,7 @@ export const VideoRevealSection = () => {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-6 text-sm uppercase tracking-[0.35em] text-gray-400 md:flex-row">
-          <span>Systems compromised for 2025</span>
+          <span>Systems compromised for 2026</span>
           <Link
             href="/events"
             className="rounded-full border border-red-500/60 px-6 py-3 text-xs font-semibold tracking-[0.4em] text-red-400 transition-colors duration-300 hover:border-red-400 hover:text-white"

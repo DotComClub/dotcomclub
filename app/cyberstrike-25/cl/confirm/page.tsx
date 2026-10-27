@@ -138,7 +138,7 @@ const AccessCard = ({
             aria-hidden
           />
           <div className="relative flex items-center justify-between px-6 pt-6 text-[0.55rem] uppercase tracking-[0.45em] text-white/75">
-            <span>Cyberstrike • 2025</span>
+            <span>Cyberstrike • 2026</span>
             <span className="rounded-full border border-white/25 px-3 py-1 text-[0.55rem] uppercase tracking-[0.4em] text-white/75">
               {roleBadge}
             </span>
@@ -220,11 +220,14 @@ export default function CLConfirmation() {
 
     if (storedData) {
       try {
-        const parsedData = JSON.parse(storedData) as
-          | string
-          | { id?: string };
-        const id =
-          typeof parsedData === "string" ? parsedData : parsedData.id;
+        let id: string | undefined;
+        try {
+          const parsedData = JSON.parse(storedData) as string | { id?: string };
+          id = typeof parsedData === "string" ? parsedData : parsedData.id;
+        } catch {
+          // The registration form stores the Convex ID as plain text.
+          id = storedData;
+        }
 
         if (!id) {
           throw new Error("Registration ID not found");
@@ -317,7 +320,7 @@ export default function CLConfirmation() {
 
           <div className="flex flex-col gap-4">
             <Badge className="w-fit bg-white/10 text-xs uppercase tracking-[0.35em] text-white">
-              CL Registration • Cyberstrike 2025
+              CL Registration • Cyberstrike 2026
             </Badge>
             <h1 className="text-3xl font-bold md:text-4xl">
               Registration Confirmed!
@@ -407,9 +410,10 @@ export default function CLConfirmation() {
                       You have confirmed your attendance!
                     </p>
                     <p>
-                      The CL Meet will provide you with all the essential
-                      information about Cyberstrike 2025, including event rules,
-                      registration process, and important dates.
+                      The CL Meet on 28th November, 2026 will provide you with
+                      all the essential information about Cyberstrike 2026,
+                      including event rules, registration process, and
+                      important dates.
                     </p>
                     <p className="text-zinc-400 text-xs">
                       Further details about the venue and timing will be shared
@@ -474,7 +478,7 @@ export default function CLConfirmation() {
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
                   <span>
-                    Further details about Cyberstrike 2025 will be shared before
+                    Further details about Cyberstrike 2026 will be shared before
                     the event
                   </span>
                 </li>

@@ -9,7 +9,6 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "motion/react";
-import Link from "next/link";
 import { useState } from "react";
 import { HoverBorderGradient } from "./hover-border-gradient";
 
@@ -144,17 +143,9 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                   />
                 </motion.a>
               ))}
-              <Link href={"/cyberstrike-25"}>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  <HoverBorderGradient className="text-sm font-medium relative text-foreground px-4 py-2 rounded-full">
-                    <span>Cyberstrike 25</span>
-                  </HoverBorderGradient>
-                </motion.div>
-              </Link>
+              <HoverBorderGradient className="text-sm font-medium relative text-foreground px-4 py-2 rounded-full">
+                <span>Theme Reveal Soon</span>
+              </HoverBorderGradient>
             </>
           )}
 
@@ -162,17 +153,9 @@ export const FloatingNav = ({ className }: { className?: string }) => {
           {isMobile && (
             <>
               {/* Register button always visible on mobile */}
-              <Link href={"/cyberstrike-25"}>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  <HoverBorderGradient className="text-sm font-medium relative text-foreground px-4 py-2 rounded-full">
-                    <span>Cyberstrike 25</span>
-                  </HoverBorderGradient>
-                </motion.div>
-              </Link>
+              <HoverBorderGradient className="text-sm font-medium relative text-foreground px-4 py-2 rounded-full">
+                <span>Theme Soon</span>
+              </HoverBorderGradient>
               {/* Mobile menu button */}
               <motion.button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

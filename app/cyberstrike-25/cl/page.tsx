@@ -224,6 +224,18 @@ const CLRegistration = () => {
           </CardHeader>
 
           <CardContent className="space-y-6 p-4 sm:p-6">
+            <div className="relative overflow-hidden border border-white/15 border-l-2 border-l-red-400 bg-white/[0.06] px-4 py-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-xl">
+              <div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-red-500/[0.04]"
+                aria-hidden="true"
+              />
+              <p className="relative text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-red-300">
+                CL Meet
+              </p>
+              <p className="relative mt-1 text-lg font-semibold tracking-tight text-white drop-shadow-sm sm:text-xl">
+                28th November 2026
+              </p>
+            </div>
             <Alert>
               <AlertDescription className="text-sm">
                 * Indicates required question
@@ -535,7 +547,7 @@ const CLRegistration = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-sm sm:text-base font-medium">
-                        Will you be attending the CL Meet? *
+                        Will you be attending the CL Meet on 28th November, 2026? *
                       </FormLabel>
                       <FormControl>
                         <RadioGroup

@@ -276,7 +276,7 @@ export default function Home() {
                 Aftermovie
               </h2>
               <p className="text-gray-300 mt-2 text-center">
-                Watch the aftermovie of our E-Waste Drive 2025.
+                Watch the aftermovie of our E-Waste Drive 2026.
               </p>
             </div>
             <div className="p-6">
@@ -285,7 +285,7 @@ export default function Home() {
                   width="100%"
                   height="100%"
                   src="https://www.youtube.com/embed/orFJSBbqOyM?si=SwMDYKqIXd3vqfJc"
-                  title="E-Waste Drive 2025 Aftermovie"
+                  title="E-Waste Drive 2026 Aftermovie"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
@@ -310,8 +310,8 @@ export default function Home() {
     });
 
     useEffect(() => {
-      // Target date: November 11, 2025 at 10:00 AM
-      const targetDate = new Date("2025-11-11T10:00:00").getTime();
+      // Target date: November 28, 2026 at midnight in India
+      const targetDate = new Date("2026-11-28T00:00:00+05:30").getTime();
 
       const calculateTimeLeft = () => {
         const now = new Date().getTime();
@@ -359,11 +359,11 @@ export default function Home() {
             <span
               className={cn("text-red-500 tracking-wide", zentry.className)}
             >
-              Pre Event 2025
+              Pre Event 2026
             </span>
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-gray-300 font-circularweb max-w-3xl mx-auto px-2 sm:px-4 leading-relaxed">
-            Mark your calendars for our Pre Event 2025.
+            Mark your calendars for our Pre Event on 28th November, 2026.
           </p>
         </div>
 
@@ -517,12 +517,6 @@ export default function Home() {
 
           <div className="mt-4 md:mt-12 hero-button-container flex flex-col sm:flex-row gap-3 sm:gap-4 px-4 w-full max-w-md sm:max-w-none sm:w-auto">
             <Link
-              href="/cyberstrike-25"
-              className="px-6 sm:px-8 py-2.5 sm:py-3 bg-red-600 text-white rounded-full hover:bg-red-700 transition-all duration-300 shadow-lg shadow-red-500/20 text-center text-sm sm:text-base"
-            >
-              CYBERSTRIKE 25
-            </Link>
-            <Link
               href="/cyberstrike-25/cl"
               className="px-6 sm:px-8 py-2.5 sm:py-3 border-2 border-red-500 text-white rounded-full hover:bg-red-500 hover:text-white transition-all duration-300 shadow-lg text-center text-sm sm:text-base"
             >
@@ -600,7 +594,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
               {
-                title: "Cyberstrike 2025-26",
+                title: "Cyberstrike 2026",
                 image:
                   "https://0wcouur2ua.ufs.sh/f/aRfYxWK0MkHnIZmLNDPl5jBct46VPznEMd1hQDgXqiTmby29",
                 featured: true,

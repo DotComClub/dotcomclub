@@ -533,7 +533,7 @@ export default function ContactPage() {
             <span>{">"} Connection: <span className="text-green-400">ENCRYPTED</span></span>
           </div>
           <div className="mt-2 text-xs opacity-60 text-green-400/60">
-            DCC Terminal Interface © 2025 | All transmissions secured
+            DCC Terminal Interface © 2026 | All transmissions secured
           </div>
         </div>
       </div>
