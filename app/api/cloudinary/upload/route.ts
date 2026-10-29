@@ -44,7 +44,7 @@ export async function POST(request: Request) {
   const cloudinaryFormData = new FormData();
   cloudinaryFormData.append("file", file);
   cloudinaryFormData.append("upload_preset", uploadPreset);
-  cloudinaryFormData.append("folder", "dotcomclub/cyberstrike-25/cl");
+  cloudinaryFormData.append("folder", "dotcomclub/cyberstrike-26/cl");
 
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,

@@ -237,11 +237,11 @@ export default function CLConfirmation() {
         setIsLoading(false);
       } catch {
         localStorage.removeItem("clRegistrationData");
-        router.push("/cyberstrike-25/cl");
+        router.push("/cyberstrike-26/cl");
       }
     } else {
       setTimeout(() => {
-        router.push("/cyberstrike-25/cl");
+        router.push("/cyberstrike-26/cl");
       }, 1000);
     }
   }, [router]);

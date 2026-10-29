@@ -517,7 +517,7 @@ export default function Home() {
 
           <div className="mt-4 md:mt-12 hero-button-container flex flex-col sm:flex-row gap-3 sm:gap-4 px-4 w-full max-w-md sm:max-w-none sm:w-auto">
             <Link
-              href="/cyberstrike-25/cl"
+              href="/cyberstrike-26/cl"
               className="px-6 sm:px-8 py-2.5 sm:py-3 border-2 border-red-500 text-white rounded-full hover:bg-red-500 hover:text-white transition-all duration-300 shadow-lg text-center text-sm sm:text-base"
             >
               CL REGISTRATION

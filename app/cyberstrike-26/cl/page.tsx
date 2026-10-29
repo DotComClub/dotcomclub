@@ -154,7 +154,7 @@ const CLRegistration = () => {
 
       // Small delay to ensure localStorage is set, then redirect
       await new Promise((resolve) => setTimeout(resolve, 100));
-      router.push("/cyberstrike-25/cl/confirm");
+      router.push("/cyberstrike-26/cl/confirm");
     } catch (error) {
       console.error("Error submitting registration:", error);
       alert("Error submitting registration. Please try again.");

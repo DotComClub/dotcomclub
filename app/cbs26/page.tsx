@@ -68,7 +68,7 @@ export default function Home() {
       <div className="absolute top-1/3 right-12 w-2 h-2 bg-accent rounded-full animate-ping"></div>
       <div className="absolute bottom-1/3 left-12 w-2 h-2 bg-primary rounded-full animate-ping delay-1000"></div>
 
-      {/* Section 1: Cyberstrike 25 */}
+      {/* Section 1: Cyberstrike 26 */}
       <section className="relative z-10 flex items-center justify-center min-h-screen w-full py-8 px-4">
         {/* Content */}
         <div className="flex flex-col items-center justify-center w-full max-w-6xl gap-8">
@@ -76,7 +76,7 @@ export default function Home() {
         <h2 className="text-6xl md:text-6xl lg:text-7xl font-headline font-black tracking-wide mb-6">
           <TwoColorTypewriter
             text1="CYBERSTRIKE"
-            text2="25"
+            text2="26"
             color1="white"
             color2="#ef4444"
             speed={100}

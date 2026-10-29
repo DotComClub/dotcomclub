@@ -58,7 +58,7 @@ export const VideoRevealSection = () => {
               satoshi.className
             )}
           >
-            Dive into the teaser for Cyberstrike 25. Every frame carries a hint,
+            Dive into the teaser for Cyberstrike. Every frame carries a hint,
             every flicker is a breadcrumb for those who can decode failure.
           </p>
         </div>
@@ -67,7 +67,7 @@ export const VideoRevealSection = () => {
           <div className="relative aspect-video w-full">
             <iframe
               src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=0&rel=0&modestbranding=1`}
-              title="Cyberstrike 25 Teaser"
+              title="Cyberstrike Teaser"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="absolute inset-0 h-full w-full"

@@ -136,7 +136,7 @@ const getCLRegistrationTemplate = (
         <div style="background-color: #f3e8ff; border: 1px solid #c084fc; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center;">
           <h4 style="color: #7c3aed; margin: 0 0 15px 0;">Download Your Digital Access Card</h4>
           <p style="margin: 10px 0;">Your personalized CL access card is ready!</p>
-          <a href="https://www.jhcdotcomclub.com/cyberstrike-25/cl/confirm" 
+          <a href="https://www.jhcdotcomclub.com/cyberstrike-26/cl/confirm" 
              style="display: inline-block; background-color: #7c3aed; color: #fff; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 10px 0; font-weight: bold;">
             View & Download ID Cards
           </a>
