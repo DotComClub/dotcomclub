@@ -276,7 +276,7 @@ export default function Home() {
                 Aftermovie
               </h2>
               <p className="text-gray-300 mt-2 text-center">
-                Watch the aftermovie of our E-Waste Drive 2026.
+                Watch the aftermovie of our E-Waste Drive 2025.
               </p>
             </div>
             <div className="p-6">
