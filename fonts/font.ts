@@ -31,6 +31,38 @@ export const satoshi = localFont({
   variable: "--font-satoshi",
 });
 
+export const anton = localFont({
+  src: [
+    {
+      path: "./Satoshi-Black.woff2",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-anton",
+});
+
+export const dmSans = localFont({
+  src: [
+    {
+      path: "./Satoshi-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./Satoshi-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./Satoshi-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-dm",
+});
+
 export const circular = localFont({
   src: [
     {

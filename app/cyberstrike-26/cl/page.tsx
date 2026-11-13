@@ -31,6 +31,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Loader2, AlertCircle } from "lucide-react";
+import { anton, dmSans } from "@/fonts/font";
+import { BackgroundCanvas } from "@/components/home/BackgroundCanvas";
+import { Navbar } from "@/components/home/Navbar";
 
 const formSchema = z.object({
   // College Information
@@ -165,10 +168,12 @@ const CLRegistration = () => {
   // Show loading state while checking form status
   if (formStatus === undefined) {
     return (
-      <div className="min-h-screen py-8 px-4 pt-32">
+      <div className={`home-root cl-page ${anton.variable} ${dmSans.variable}`}>
+        <BackgroundCanvas />
+        <Navbar />
         <div className="max-w-4xl mx-auto flex items-center justify-center min-h-[400px]">
           <div className="flex items-center gap-3">
-            <Loader2 className="animate-spin h-8 w-8 text-red-500" />
+            <Loader2 className="animate-spin h-8 w-8 text-[#9E71FF]" />
             <span className="text-white text-lg">Loading...</span>
           </div>
         </div>
@@ -179,17 +184,19 @@ const CLRegistration = () => {
   // Check if form is closed
   if (formStatus === false) {
     return (
-      <div className="min-h-screen py-8 px-4 pt-20 sm:pt-24 md:pt-32">
+      <div className={`home-root cl-page ${anton.variable} ${dmSans.variable}`}>
+        <BackgroundCanvas />
+        <Navbar />
         <div className="max-w-4xl mx-auto">
-          <Card className="shadow-lg border-red-500/30">
+          <Card className="cl-card shadow-lg">
             <CardHeader className="text-center p-4 sm:p-6">
               <CardTitle className="text-2xl sm:text-3xl font-bold text-white">
                 CL Registration Closed
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6 p-4 sm:p-6">
-              <Alert className="border-red-500/30 bg-red-900/10">
-                <AlertCircle className="h-4 w-4 text-red-400" />
+              <Alert className="cl-alert">
+                <AlertCircle className="h-4 w-4 text-[#9E71FF]" />
                 <AlertDescription className="text-gray-300">
                   The Contingent Leader registration is currently closed. Please
                   check back later or contact us for more information.
@@ -198,7 +205,7 @@ const CLRegistration = () => {
               <div className="flex justify-center">
                 <Button
                   onClick={() => router.push("/")}
-                  className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
+                  className="cl-submit-button text-white w-full sm:w-auto"
                 >
                   Back to Home
                 </Button>
@@ -211,9 +218,16 @@ const CLRegistration = () => {
   }
 
   return (
-    <div className="min-h-screen py-8 px-4 pt-20 sm:pt-24 md:pt-32">
-      <div className="max-w-4xl mx-auto">
-        <Card className="shadow-lg">
+    <div className={`home-root cl-page ${anton.variable} ${dmSans.variable}`}>
+      <BackgroundCanvas />
+      <Navbar />
+      <div className="cl-shell">
+        <div className="cl-intro">
+          <p className="cl-kicker">CYBERSTRIKE 2026 / CONTINGENT LEADER</p>
+          <h1>Lead the charge.</h1>
+          <p>Register your college delegation for the next chapter of Cyberstrike.</p>
+        </div>
+        <Card className="cl-card shadow-lg">
           <CardHeader className="text-center p-4 sm:p-6">
             <CardTitle className="text-2xl sm:text-3xl font-bold text-white">
               Contingent Leader Registration
@@ -224,12 +238,12 @@ const CLRegistration = () => {
           </CardHeader>
 
           <CardContent className="space-y-6 p-4 sm:p-6">
-            <div className="relative overflow-hidden border border-white/15 border-l-2 border-l-red-400 bg-white/[0.06] px-4 py-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-xl">
+            <div className="cl-meet-card relative overflow-hidden px-4 py-3 text-left">
               <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-red-500/[0.04]"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-[#9E71FF]/[0.08]"
                 aria-hidden="true"
               />
-              <p className="relative text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-red-300">
+              <p className="relative text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-[#CBB7FF]">
                 CL Meet
               </p>
               <p className="relative mt-1 text-lg font-semibold tracking-tight text-white drop-shadow-sm sm:text-xl">
@@ -249,7 +263,7 @@ const CLRegistration = () => {
               >
                 {/* College Information Section */}
                 <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">
+                  <h3 className="cl-section-title text-lg sm:text-xl font-semibold text-white mb-4">
                     College Information
                   </h3>
 
@@ -300,7 +314,7 @@ const CLRegistration = () => {
 
                 {/* Contingent Leader Section */}
                 <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">
+                  <h3 className="cl-section-title text-lg sm:text-xl font-semibold text-white mb-4">
                     Contingent Leader Details
                   </h3>
 
@@ -586,7 +600,7 @@ const CLRegistration = () => {
                 <div className="flex justify-center pt-4">
                   <Button
                     type="submit"
-                    className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto px-6 sm:px-8 py-2 rounded-md font-medium text-sm sm:text-base"
+                    className="cl-submit-button text-white w-full sm:w-auto px-6 sm:px-8 py-2 rounded-md font-medium text-sm sm:text-base"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -604,14 +618,14 @@ const CLRegistration = () => {
                   <p className="flex flex-wrap items-center justify-center gap-2">
                     <Link
                       href="/contact-us"
-                      className="text-red-600 hover:underline"
+                      className="text-[#CBB7FF] hover:text-white hover:underline"
                     >
                       Contact Us
                     </Link>{" "}
                     <span>|</span>
                     <Link
                       href="/terms-and-conditions"
-                      className="text-red-600 hover:underline"
+                      className="text-[#CBB7FF] hover:text-white hover:underline"
                     >
                       Terms and Conditions
                     </Link>

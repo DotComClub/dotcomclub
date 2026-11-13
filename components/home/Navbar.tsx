@@ -43,7 +43,7 @@ export function Navbar() {
 
     if (typeof window !== "undefined") {
       if ("requestIdleCallback" in window) {
-        (window as any).requestIdleCallback(prefetchRoutes);
+        window.requestIdleCallback(prefetchRoutes);
       } else {
         setTimeout(prefetchRoutes, 250);
       }
