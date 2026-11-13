@@ -9,6 +9,8 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "motion/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { HoverBorderGradient } from "./hover-border-gradient";
 
@@ -48,6 +50,7 @@ const navItems = [
 ];
 
 export const FloatingNav = ({ className }: { className?: string }) => {
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
   const isMobile = useIsMobile();
   const [visible, setVisible] = useState(true); // Changed initial state to true
@@ -77,6 +80,9 @@ export const FloatingNav = ({ className }: { className?: string }) => {
       }
     }
   });
+
+  if (pathname === "/") return null;
+
   return (
     <>
       <AnimatePresence mode="wait">
@@ -143,9 +149,17 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                   />
                 </motion.a>
               ))}
-              <HoverBorderGradient className="text-sm font-medium relative text-foreground px-4 py-2 rounded-full">
-                <span>Theme Reveal Soon</span>
-              </HoverBorderGradient>
+              <Link href={"/cyberstrike-25"}>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <HoverBorderGradient className="text-sm font-medium relative text-foreground px-4 py-2 rounded-full">
+                    <span>Cyberstrike 25</span>
+                  </HoverBorderGradient>
+                </motion.div>
+              </Link>
             </>
           )}
 
@@ -153,9 +167,17 @@ export const FloatingNav = ({ className }: { className?: string }) => {
           {isMobile && (
             <>
               {/* Register button always visible on mobile */}
-              <HoverBorderGradient className="text-sm font-medium relative text-foreground px-4 py-2 rounded-full">
-                <span>Theme Soon</span>
-              </HoverBorderGradient>
+              <Link href={"/cyberstrike-25"}>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <HoverBorderGradient className="text-sm font-medium relative text-foreground px-4 py-2 rounded-full">
+                    <span>Cyberstrike 25</span>
+                  </HoverBorderGradient>
+                </motion.div>
+              </Link>
               {/* Mobile menu button */}
               <motion.button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

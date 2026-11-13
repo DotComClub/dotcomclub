@@ -6,6 +6,7 @@ import { Instagram, Linkedin, Mail, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 // Subtle, purposeful links for DCC
 const footerNavLinks = [
@@ -45,6 +46,9 @@ const socialLinks = [
 ];
 
 export const Footer = () => {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
+
   const currentYear = new Date().getFullYear();
 
   return (
