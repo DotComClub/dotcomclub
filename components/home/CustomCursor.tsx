@@ -45,7 +45,7 @@ export function CustomCursor() {
     const pts = Array.from({ length: N }, () => ({ x: -99, y: -99 }));
     let ps: Particle[] = [];
     const cl = ["#9E71FF", "#fff", "#C9B2FF", "#5A2FC0"];
-    const HS = "a, summary, button, .person, .ev, .why li";
+    const HS = "a, summary, button, .person, .ev, .why li, .cd";
 
     const crs = () => {
       const d = Math.min(window.devicePixelRatio || 1, 2);
@@ -74,6 +74,8 @@ export function CustomCursor() {
           lb = "play";
         } else if (el.closest(".person")) {
           lb = "hi";
+        } else if (el.closest(".cd") && !el.matches("a")) {
+          lb = "read";
         } else if (el.closest(".ev") && !el.matches("a")) {
           lb = "read";
         } else {

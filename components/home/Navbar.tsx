@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface NavLinkItem {
   label: string;
@@ -24,12 +24,24 @@ const NAV_LINKS: NavLinkItem[] = [
 
 export function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [navColor, setNavColor] = useState<"p" | "l" | "d">("p");
   const [isAtTop, setIsAtTop] = useState(true);
   const [isHidden, setIsHidden] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showFab, setShowFab] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
+
+  // Active navigation link tracking based on current pathname
+  const activeIndex = NAV_LINKS.findIndex((link) => {
+    if (link.href === "/") return pathname === "/";
+    return pathname === link.href || pathname?.startsWith(link.href + "/");
+  });
+
+  // Reset navigation indicator on route change
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname]);
 
   // Proactively prefetch all routes in the background on initial load
   useEffect(() => {
@@ -61,28 +73,29 @@ export function Navbar() {
     sliderRef.current.style.opacity = "1";
   }, []);
 
-  // Update slider position for first/active link
+  // Update slider position for active link
   useEffect(() => {
-    const activeLink = linkRefs.current[0];
-    if (activeLink) {
-      moveSlider(activeLink);
+    const currentActiveEl =
+      activeIndex !== -1 ? linkRefs.current[activeIndex] : linkRefs.current[0];
+    if (currentActiveEl) {
+      moveSlider(currentActiveEl);
     }
 
     const handleResize = () => {
-      if (activeLink) moveSlider(activeLink);
+      if (currentActiveEl) moveSlider(currentActiveEl);
     };
 
     window.addEventListener("resize", handleResize);
     if (document.fonts) {
       document.fonts.ready.then(() => {
-        if (activeLink) moveSlider(activeLink);
+        if (currentActiveEl) moveSlider(currentActiveEl);
       });
     }
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [moveSlider]);
+  }, [moveSlider, activeIndex]);
 
   // Scroll tracking for nav color, hide/show, atTop, and fab
   useEffect(() => {
@@ -96,7 +109,7 @@ export function Navbar() {
 
       // Color tracking based on intersecting section at y = 32px
       const sections = document.querySelectorAll<HTMLElement>(
-        ".home-root header, .home-root section, .home-root footer"
+        ".home-root header, .home-root section, .home-root footer, .blog-root header, .blog-root section, .blog-root footer"
       );
       let t: "p" | "l" | "d" = "d";
 
@@ -180,37 +193,42 @@ export function Navbar() {
             className="nv"
             ref={navContainerRef}
             onMouseLeave={() => {
-              const activeLink = linkRefs.current[0];
-              if (activeLink) moveSlider(activeLink);
+              const currentActiveEl =
+                activeIndex !== -1 ? linkRefs.current[activeIndex] : linkRefs.current[0];
+              if (currentActiveEl) moveSlider(currentActiveEl);
             }}
           >
             <span className="sl" ref={sliderRef} style={{ pointerEvents: "none" }} />
-            {NAV_LINKS.map((link, idx) => (
-              <Link
-                key={link.label}
-                ref={(el) => {
-                  linkRefs.current[idx] = el;
-                }}
-                className={`rl ${link.isCl ? "cl" : ""}`}
-                href={link.href}
-                prefetch={true}
-                onMouseEnter={(e) => {
-                  moveSlider(e.currentTarget);
-                  router.prefetch(link.href);
-                }}
-                onFocus={(e) => {
-                  moveSlider(e.currentTarget);
-                  router.prefetch(link.href);
-                }}
-                onClick={() => {
-                  if (link.href !== "/") {
-                    setIsNavigating(true);
-                  }
-                }}
-              >
-                <span data-t={link.label}>{link.label}</span>
-              </Link>
-            ))}
+            {NAV_LINKS.filter(link => !(link.isCl && pathname === "/sponsors")).map((link, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <Link
+                  key={link.label}
+                  ref={(el) => {
+                    linkRefs.current[idx] = el;
+                  }}
+                  className={`rl ${isActive ? "cl" : ""}`}
+                  href={link.href}
+                  prefetch={true}
+                  aria-current={isActive ? "page" : undefined}
+                  onMouseEnter={(e) => {
+                    moveSlider(e.currentTarget);
+                    router.prefetch(link.href);
+                  }}
+                  onFocus={(e) => {
+                    moveSlider(e.currentTarget);
+                    router.prefetch(link.href);
+                  }}
+                  onClick={() => {
+                    if (link.href !== pathname) {
+                      setIsNavigating(true);
+                    }
+                  }}
+                >
+                  <span data-t={link.label}>{link.label}</span>
+                </Link>
+              );
+            })}
           </div>
 
           <button
@@ -235,36 +253,42 @@ export function Navbar() {
           }
         }}
       >
-        {NAV_LINKS.slice(0, 8).map((link, idx) => (
-          <Link
-            key={link.label}
-            className="ml"
-            href={link.href}
-            prefetch={true}
-            style={{ "--n": idx } as React.CSSProperties}
-            onMouseEnter={() => router.prefetch(link.href)}
-            onClick={() => {
-              closeMenu();
-              if (link.href !== "/") {
-                setIsNavigating(true);
-              }
-            }}
-          >
-            <i>{link.label}</i>
-          </Link>
-        ))}
+        {NAV_LINKS.slice(0, 8).map((link, idx) => {
+          const isActive = idx === activeIndex;
+          return (
+            <Link
+              key={link.label}
+              className={`ml ${isActive ? "cl" : ""}`}
+              href={link.href}
+              prefetch={true}
+              style={{ "--n": idx } as React.CSSProperties}
+              aria-current={isActive ? "page" : undefined}
+              onMouseEnter={() => router.prefetch(link.href)}
+              onClick={() => {
+                closeMenu();
+                if (link.href !== pathname) {
+                  setIsNavigating(true);
+                }
+              }}
+            >
+              <i>{link.label}</i>
+            </Link>
+          );
+        })}
 
         <div className="mf">
-          <Link
-            href="/cyberstrike-26/cl"
-            prefetch={true}
-            onClick={() => {
-              closeMenu();
-              setIsNavigating(true);
-            }}
-          >
-            CL Registration
-          </Link>
+          {pathname !== "/sponsors" && (
+            <Link
+              href="/cyberstrike-26/cl"
+              prefetch={true}
+              onClick={() => {
+                closeMenu();
+                setIsNavigating(true);
+              }}
+            >
+              CL Registration
+            </Link>
+          )}
           <a
             href="https://www.instagram.com/dotcomclubjhc/"
             target="_blank"
@@ -290,15 +314,17 @@ export function Navbar() {
       </div>
 
       {/* Floating CTA for Mobile */}
-      <Link
-        className={`btn wh fab ${showFab ? "s" : ""}`}
-        id="fab"
-        href="/cyberstrike-26/cl"
-        prefetch={true}
-        onClick={() => setIsNavigating(true)}
-      >
-        CL Registration
-      </Link>
+      {pathname !== "/sponsors" && pathname !== "/about-us" && pathname !== "/contact-us" && pathname !== "/magazines" && (
+        <Link
+          className={`btn wh fab ${showFab ? "s" : ""}`}
+          id="fab"
+          href="/cyberstrike-26/cl"
+          prefetch={true}
+          onClick={() => setIsNavigating(true)}
+        >
+          CL Registration
+        </Link>
+      )}
     </>
   );
 }

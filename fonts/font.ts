@@ -31,36 +31,20 @@ export const satoshi = localFont({
   variable: "--font-satoshi",
 });
 
-export const anton = localFont({
-  src: [
-    {
-      path: "./Satoshi-Black.woff2",
-      weight: "400",
-      style: "normal",
-    },
-  ],
+import { Anton, DM_Sans, Dancing_Script } from "next/font/google";
+
+export const anton = Anton({
+  subsets: ["latin"],
+  weight: "400",
   variable: "--font-anton",
+  display: "swap",
 });
 
-export const dmSans = localFont({
-  src: [
-    {
-      path: "./Satoshi-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "./Satoshi-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./Satoshi-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
+export const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
   variable: "--font-dm",
+  display: "swap",
 });
 
 export const circular = localFont({
@@ -84,8 +68,6 @@ export const zentry = localFont({
   ],
   variable: "--font-zentry",
 });
-
-import { Dancing_Script } from "next/font/google";
 
 export const dancingScript = Dancing_Script({
   subsets: ["latin"],
