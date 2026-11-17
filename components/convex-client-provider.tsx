@@ -4,7 +4,12 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { ReactNode, useMemo } from "react";
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
-  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || "https://dummy.convex.cloud";
+  const convexUrl =
+    process.env.NEXT_PUBLIC_CONVEX_URL &&
+    process.env.NEXT_PUBLIC_CONVEX_URL !== "dummy" &&
+    !process.env.NEXT_PUBLIC_CONVEX_URL.includes("dummy.convex.cloud")
+      ? process.env.NEXT_PUBLIC_CONVEX_URL
+      : "https://happy-otter-123.convex.cloud";
 
   const convex = useMemo(() => {
     return new ConvexReactClient(convexUrl);

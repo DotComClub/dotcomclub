@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 const URL_STRING = "www.dotcomclub.com";
-const STORAGE_KEY = "dcc_home_loader_seen";
 
 interface LoaderProps {
   onLoaded?: () => void;
 }
 
 export function Loader({ onLoaded }: LoaderProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  // Rendered immediately in SSR so the user sees the intro FIRST on frame 0
+  const [isVisible, setIsVisible] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [typedText, setTypedText] = useState("");
   const [percentage, setPercentage] = useState("0%");
@@ -18,33 +18,47 @@ export function Loader({ onLoaded }: LoaderProps) {
   const onLoadedRef = useRef(onLoaded);
   onLoadedRef.current = onLoaded;
 
+  const hasFinishedRef = useRef(false);
+
+  // Fast skip handler (user clicks or taps anywhere to skip)
+  const skipLoader = useCallback(() => {
+    if (hasFinishedRef.current) return;
+    hasFinishedRef.current = true;
+    setTypedText(URL_STRING);
+    setPercentage("100%");
+    setIsOpen(true);
+    document.body.classList.remove("lock");
+    onLoadedRef.current?.();
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 650);
+  }, []);
+
   useEffect(() => {
     // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    // Check if loader was already shown in this session
-    let alreadySeen = false;
-    try {
-      alreadySeen = sessionStorage.getItem(STORAGE_KEY) === "1";
-    } catch {
-      // Ignore storage access restrictions
-    }
-
-    if (prefersReducedMotion || alreadySeen) {
+    if (prefersReducedMotion) {
+      setIsVisible(false);
       onLoadedRef.current?.();
       return;
     }
 
-    // Activate loader and lock body scroll
-    setIsVisible(true);
+    // Lock body scroll immediately during intro
     document.body.classList.add("lock");
 
     let k = 0;
     const timeouts: NodeJS.Timeout[] = [];
 
+    // Fast, optimized character typing interval (42ms per character)
     const interval = setInterval(() => {
+      if (hasFinishedRef.current) {
+        clearInterval(interval);
+        return;
+      }
+
       k++;
       setTypedText(URL_STRING.slice(0, k));
       setPercentage(`${Math.round((k / URL_STRING.length) * 100)}%`);
@@ -52,38 +66,44 @@ export function Loader({ onLoaded }: LoaderProps) {
       if (k >= URL_STRING.length) {
         clearInterval(interval);
 
-        // Hold full text briefly before opening radial mask
+        // Hold full text briefly before expanding the circular radial mask
         const t1 = setTimeout(() => {
+          if (hasFinishedRef.current) return;
           setIsOpen(true);
 
-          // Mark session and signal loaded
+          // Unlock scroll and signal page content ready
           const t2 = setTimeout(() => {
+            if (hasFinishedRef.current) return;
             document.body.classList.remove("lock");
-            try {
-              sessionStorage.setItem(STORAGE_KEY, "1");
-            } catch {
-              // Ignore storage errors
-            }
             onLoadedRef.current?.();
 
-            // Remove loader from DOM after mask animation completes (1.15s)
+            // Unmount loader cleanly after circular mask expands
             const t3 = setTimeout(() => {
               setIsVisible(false);
-            }, 850);
+            }, 750);
             timeouts.push(t3);
-          }, 450);
+          }, 320);
           timeouts.push(t2);
-        }, 450);
+        }, 220);
         timeouts.push(t1);
       }
-    }, 85);
+    }, 42);
+
+    // Keyboard listener to skip on Escape / Space / Enter
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === " " || e.key === "Enter") {
+        skipLoader();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
 
     return () => {
       clearInterval(interval);
       timeouts.forEach(clearTimeout);
+      window.removeEventListener("keydown", onKeyDown);
       document.body.classList.remove("lock");
     };
-  }, []);
+  }, [skipLoader]);
 
   if (!isVisible) return null;
 
@@ -92,6 +112,9 @@ export function Loader({ onLoaded }: LoaderProps) {
       className={`ld ${isOpen ? "open" : ""}`}
       id="ld"
       aria-hidden="true"
+      onClick={skipLoader}
+      style={{ cursor: "pointer" }}
+      title="Click to skip"
     >
       <div className="bar">
         <b />

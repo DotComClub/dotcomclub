@@ -835,6 +835,10 @@ body:has(.magazine-root) footer:not(#contact),
 body:has(.magazine-root) [class*="z-[5000]"],
 body:has(.magazine-root) > div > footer,
 body:has(.magazine-root) > footer,
+body:has(.teams-root) footer:not(#contact),
+body:has(.teams-root) [class*="z-[5000]"],
+body:has(.teams-root) > div > footer,
+body:has(.teams-root) > footer,
 body:has(.blog-root) footer:not(#contact),
 body:has(.blog-root) [class*="z-[5000]"],
 body:has(.blog-root) > div > footer,
@@ -852,10 +856,13 @@ body:has(.contact-root),
 body:has(.contact-root) main,
 body:has(.magazine-root),
 body:has(.magazine-root) main,
+body:has(.teams-root),
+body:has(.teams-root) main,
 body:has(.blog-root),
 body:has(.blog-root) main {
   padding-bottom: 0 !important;
   margin-bottom: 0 !important;
+  overflow: visible !important;
   overflow-y: visible !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
@@ -1555,20 +1562,45 @@ html.cc * {
 }
 
 /* Events Stack */
+.home-root {
+  --stack-base: 88px;
+  --stack-step: 10px;
+}
+
+body:has(nav.hide) .home-root,
+.home-root.nav-hidden {
+  --stack-base: 40px;
+}
+
+@media (max-width: 768px) {
+  .home-root {
+    --stack-base: 76px;
+    --stack-step: 6px;
+  }
+
+  body:has(nav.hide) .home-root,
+  .home-root.nav-hidden {
+    --stack-base: 36px;
+  }
+}
+
 .home-root .ev {
   position: sticky;
-  top: calc(78px + var(--i) * 12px);
+  top: var(--top, calc(var(--stack-base, 88px) + var(--i) * var(--stack-step, 10px)));
   z-index: calc(var(--i) + 1);
-  min-height: min(64svh, 540px);
-  border-radius: 30px;
-  padding: clamp(20px, 4vw, 44px);
+  min-height: auto;
+  border-radius: clamp(20px, 3vw, 30px);
+  padding: clamp(20px, 3.2vw, 38px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 30px;
+  justify-content: flex-start;
+  gap: clamp(16px, 2.2vw, 24px);
   margin-bottom: 14px;
   background: var(--b);
   color: var(--f);
+  box-sizing: border-box;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  transition: top 0.4s cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
 .home-root .ev .tr {
@@ -1590,22 +1622,48 @@ html.cc * {
 }
 
 .home-root .ev h3 {
-  font-size: clamp(52px, 13vw, 190px);
-  line-height: 0.88;
+  font: 400 clamp(32px, 5.5vw, 68px) / 1.02 var(--font-anton), Anton, Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: inherit;
+  margin: 0;
+  word-break: break-word;
 }
 
 .home-root .ev p {
-  margin: 12px 0 0;
-  max-width: 420px;
+  margin: clamp(10px, 1.4vw, 16px) 0 0;
+  max-width: 520px;
   font-weight: 500;
-  opacity: 0.85;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.5;
+  opacity: 0.88;
 }
 
 .home-root .ev a {
   display: inline-block;
-  margin-top: 16px;
+  margin-top: clamp(12px, 1.6vw, 18px);
   font-weight: 700;
+  font-size: clamp(14px, 1.1vw, 16px);
   border-bottom: 2px solid currentColor;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .home-root .ev {
+    padding: 18px 20px;
+    gap: 14px;
+    border-radius: 20px;
+  }
+
+  .home-root .ev h3 {
+    font-size: clamp(26px, 7vw, 42px);
+    line-height: 1.06;
+  }
+
+  .home-root .ev p {
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
 }
 
 /* Squad */
@@ -2150,7 +2208,6 @@ html.cc * {
   background: var(--bg);
   color: var(--tx);
   font: 400 17px/1.55 var(--font-dm), 'DM Sans', system-ui, sans-serif;
-  overflow-x: clip;
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -2397,56 +2454,125 @@ html.cc * {
 .about-root .jr {
   background: var(--lav);
   color: var(--ink);
+  padding-top: clamp(80px, 9vw, 120px);
+  padding-bottom: clamp(60px, 8vw, 120px);
 }
 
 .about-root .jr .lead {
   color: var(--ink);
 }
 
-/* Progress bar */
-.about-root .pg {
+/* Fixed Timeline Progress Bar */
+.about-root .timeline-fixed-bar {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 65;
+  background: #EDE5FF;
+  padding: 10px clamp(16px, 2.4vw, 36px);
+  border-bottom: 1px solid rgba(27, 16, 48, 0.12);
+  transition: top 0.55s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.about-root .timeline-fixed-bar.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.about-root .timeline-fixed-bar.nav-hidden,
+body:has(nav.hide) .about-root .timeline-fixed-bar {
+  top: 0 !important;
+}
+
+.about-root .timeline-fixed-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 14px;
-  font-weight: 700;
-  margin-bottom: 26px;
+  gap: 18px;
+  width: 100%;
 }
 
-.about-root .pg u {
+.about-root .timeline-fixed-counter {
+  font-family: var(--font-dm), 'DM Sans', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1B1030;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.about-root .timeline-fixed-track {
   flex: 1;
   height: 3px;
-  background: #1b103030;
-  text-decoration: none;
+  background: rgba(27, 16, 48, 0.25);
+  border-radius: 999px;
   position: relative;
-  border-radius: 3px;
+  overflow: hidden;
 }
 
-.about-root .pg u::after {
-  content: "";
+.about-root .timeline-fixed-fill {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
-  width: var(--w, 8%);
-  background: var(--ink);
-  border-radius: 3px;
-  transition: width 0.3s;
+  background: #1B1030;
+  border-radius: 999px;
+  transition: width 0.15s ease-out;
+}
+
+/* In-page progress bar (legacy fallback) */
+.about-root .pg {
+  display: none;
 }
 
 /* Sticky stacked event cards */
+.about-root {
+  --stack-base: 106px;
+  --stack-step: 6px;
+}
+
+body:has(nav.hide) .about-root,
+.about-root.nav-hidden {
+  --stack-base: 42px;
+}
+
+@media (max-width: 768px) {
+  .about-root {
+    --stack-base: 94px;
+    --stack-step: 4px;
+  }
+
+  body:has(nav.hide) .about-root,
+  .about-root.nav-hidden {
+    --stack-base: 38px;
+  }
+}
+
 .about-root .ev {
   position: sticky;
-  top: calc(78px + var(--i) * 12px);
-  min-height: min(64svh, 520px);
-  border-radius: 30px;
-  padding: clamp(20px, 4vw, 44px);
+  top: var(--top, calc(var(--stack-base, 106px) + var(--i) * var(--stack-step, 6px)));
+  z-index: calc(var(--i) + 1);
+  min-height: auto;
+  border-radius: clamp(18px, 2.5vw, 28px);
+  padding: clamp(18px, 2.6vw, 32px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 30px;
-  margin-bottom: 14px;
+  justify-content: flex-start;
+  gap: clamp(12px, 1.6vw, 20px);
+  margin-bottom: clamp(14px, 2vw, 22px);
   background: var(--b);
   color: var(--f);
+  box-sizing: border-box;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: top 0.4s cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
 .about-root .ev .tr {
@@ -2454,36 +2580,69 @@ html.cc * {
   justify-content: space-between;
   gap: 12px;
   align-items: center;
-  font-weight: 500;
-  font-size: 15px;
+  font-weight: 600;
+  font-size: clamp(13px, 1.1vw, 15px);
+  letter-spacing: 0.02em;
 }
 
 .about-root .ev .tg {
-  border: 2px solid currentColor;
+  border: 1.5px solid currentColor;
   border-radius: 999px;
-  padding: 3px 14px;
+  padding: 3px 12px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: clamp(11px, 0.95vw, 13px);
   white-space: nowrap;
 }
 
+.about-root .ev .yr {
+  font: 400 clamp(24px, 3.6vw, 42px) / 1 var(--font-anton), Anton, Impact, sans-serif;
+  letter-spacing: 0.02em;
+  opacity: 0.88;
+  margin-bottom: clamp(4px, 0.6vw, 8px);
+}
+
 .about-root .ev h3 {
-  font-size: clamp(52px, 13vw, 190px);
-  line-height: 0.88;
+  font: 400 clamp(28px, 4.2vw, 52px) / 1.04 var(--font-anton), Anton, Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: inherit;
-  margin-top: 8px;
+  margin: 0;
+  word-break: break-word;
 }
 
 .about-root .ev p {
-  margin: 14px 0 0;
-  max-width: 620px;
+  margin: clamp(10px, 1.2vw, 16px) 0 0;
+  max-width: 720px;
+  font-family: var(--font-dm), 'DM Sans', system-ui, sans-serif;
   font-weight: 500;
-  opacity: 0.9;
+  font-size: clamp(13.5px, 1.15vw, 16px);
+  line-height: 1.55;
+  opacity: 0.92;
 }
 
-.about-root .ev .yr {
-  font: 400 clamp(60px, 12vw, 150px) / 0.9 var(--font-anton), Anton, Impact, sans-serif;
-  opacity: 0.9;
+@media (max-width: 768px) {
+  .about-root .ev {
+    padding: 16px 18px;
+    gap: 10px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+  }
+
+  .about-root .ev .yr {
+    font-size: clamp(20px, 5.2vw, 26px);
+    margin-bottom: 3px;
+  }
+
+  .about-root .ev h3 {
+    font-size: clamp(22px, 6vw, 32px);
+    line-height: 1.08;
+  }
+
+  .about-root .ev p {
+    font-size: 13px;
+    line-height: 1.45;
+    margin-top: 8px;
+  }
 }
 
 /* ── Mobile FAB ── */
@@ -2537,7 +2696,6 @@ html.cc * {
   background: var(--bg);
   color: var(--tx);
   font: 400 17px/1.55 var(--font-dm), 'DM Sans', system-ui, sans-serif;
-  overflow-x: clip;
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -4280,6 +4438,81 @@ html.cc * {
   display: grid;
   gap: 14px;
 }
+.contact-root .ir .ph2 .v {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.contact-root .ir .v a.call-btn,
+.contact-root .ir a.call-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+  background: #1B1030;
+  color: #F4EEFF;
+  border: 1.5px solid #1B1030;
+  border-radius: 999px;
+  padding: 8px 26px 8px 8px;
+  font-family: var(--font-dm), 'DM Sans', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(18px, 2.2vw, 24px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  text-decoration: none !important;
+  text-transform: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
+}
+.contact-root .ir > li:hover a.call-btn {
+  border-color: var(--p);
+}
+.contact-root .ir .v a.call-btn:hover,
+.contact-root .ir a.call-btn:hover,
+.contact-root .ir .v a.call-btn:focus-visible,
+.contact-root .ir a.call-btn:focus-visible {
+  background: #F4EEFF;
+  color: #1B1030;
+  border-color: #F4EEFF;
+  transform: translateY(-2px);
+  text-decoration: none !important;
+  text-underline-offset: 0 !important;
+  outline: none;
+}
+.contact-root .ir a.call-btn .call-ico-wrap {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 999px;
+  background: #9E71FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.25s ease;
+}
+.contact-root .ir a.call-btn .call-ico {
+  width: 22px;
+  height: 22px;
+  stroke: #1B1030;
+  transition: stroke 0.25s ease;
+}
+.contact-root .ir a.call-btn:hover .call-ico-wrap,
+.contact-root .ir a.call-btn:focus-visible .call-ico-wrap {
+  background: #1B1030;
+}
+.contact-root .ir a.call-btn:hover .call-ico,
+.contact-root .ir a.call-btn:focus-visible .call-ico {
+  stroke: #9E71FF;
+}
+.contact-root .ir a.call-btn .call-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
 @media (min-width: 800px) {
   .contact-root .ir > li {
     grid-template-columns: 220px 1fr;
@@ -4837,6 +5070,427 @@ html.cc * {
   }
   .magazine-root .ln > i,
   .magazine-root .h1 s i {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Teams Page Styles (.teams-root)
+   ========================================================================== */
+.teams-root {
+  --p: #9E71FF;
+  --bg: #0E0819;
+  --bg2: #1A1230;
+  --ink: #1B1030;
+  --tx: #F4EEFF;
+  --mute: #B3A5D6;
+  --lav: #EDE5FF;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: var(--font-dm), 'DM Sans', system-ui, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.teams-root h1,
+.teams-root h2,
+.teams-root h3 {
+  font-family: var(--font-anton), Anton, Impact, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.teams-root .wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+.teams-root section {
+  padding: 72px 0;
+  position: relative;
+}
+
+.teams-root .btn {
+  display: inline-block;
+  background: var(--p);
+  color: var(--ink);
+  font-weight: 700;
+  padding: 15px 28px;
+  border-radius: 999px;
+  transition: transform 0.15s, box-shadow 0.2s;
+  text-decoration: none;
+}
+.teams-root .btn:hover {
+  transform: translateY(-2px);
+}
+.teams-root .btn.dk {
+  background: var(--ink);
+  color: #fff;
+}
+.teams-root .btn.wh {
+  background: #fff;
+  color: var(--ink);
+}
+
+.teams-root .hd {
+  font-size: clamp(46px, 11vw, 150px);
+  margin-bottom: 36px;
+}
+
+.teams-root .ln {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+.teams-root .ln > i {
+  display: block;
+  font-style: normal;
+  transform: translateY(105%);
+  transition: transform 0.9s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.teams-root .in .ln > i {
+  transform: none;
+}
+
+/* FAB */
+.teams-root .fab {
+  position: fixed;
+  left: 50%;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  transform: translate(-50%, 170%);
+  transition: transform 0.4s cubic-bezier(0.3, 1.4, 0.5, 1);
+  white-space: nowrap;
+  box-shadow: 0 10px 30px #0008;
+}
+.teams-root .fab.s {
+  transform: translate(-50%, 0);
+}
+@media (min-width: 1101px) {
+  .teams-root .fab {
+    display: none;
+  }
+}
+
+/* Hero Section (Normal Solid Background, NO Animation as requested) */
+.teams-root .hero {
+  position: relative;
+  min-height: 100svh;
+  background: var(--p);
+  color: var(--ink);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 100px 0 190px;
+}
+.teams-root .h1 {
+  font-size: clamp(100px, min(33vw, 34vh), 400px);
+  line-height: 0.86;
+}
+.teams-root .h1.tm {
+  font-size: clamp(80px, min(21vw, 30vh), 340px);
+}
+.teams-root .h1 s {
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+  padding-bottom: 0.04em;
+}
+.teams-root .h1 s i {
+  display: block;
+  font-style: normal;
+  transform: translateY(112%);
+  transition: transform 1s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.teams-root .h1 s:nth-child(2) i {
+  transition-delay: 0.12s;
+}
+.teams-root.go .h1 s i {
+  transform: none;
+}
+.teams-root .od {
+  display: inline-block;
+  width: 0.15em;
+  height: 0.15em;
+  border-radius: 50%;
+  background: var(--ink);
+  margin: 0 0.06em;
+}
+.teams-root .hero p {
+  max-width: 410px;
+  font-size: 19px;
+  font-weight: 500;
+  margin: 22px 0 24px;
+}
+.teams-root .hero .c2 {
+  opacity: 0;
+  transition: opacity 0.8s 0.9s;
+}
+.teams-root.go .hero .c2 {
+  opacity: 1;
+}
+.teams-root .bdg {
+  position: absolute;
+  right: 18px;
+  top: 92px;
+  width: clamp(86px, 16vw, 170px);
+  animation: sp 16s linear infinite;
+  opacity: 0;
+  transition: opacity 0.8s 1s;
+}
+.teams-root.go .bdg {
+  opacity: 1;
+}
+@keyframes sp {
+  to { rotate: 360deg; }
+}
+.teams-root .tp {
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 11px 0;
+  z-index: 2;
+}
+.teams-root .t1 {
+  bottom: 62px;
+  background: var(--ink);
+  color: var(--p);
+  rotate: -3deg;
+}
+.teams-root .t2 {
+  bottom: 30px;
+  background: #fff;
+  color: var(--ink);
+  rotate: 2.5deg;
+}
+.teams-root .tp div {
+  display: inline-block;
+  animation: m 28s linear infinite;
+  font: 400 clamp(24px, 5vw, 34px)/1 var(--font-anton), Anton, Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.teams-root .t2 div {
+  animation-direction: reverse;
+}
+.teams-root .tp span {
+  margin: 0 18px;
+}
+.teams-root .hero .wrap {
+  position: relative;
+  z-index: 2;
+}
+
+/* Squad Section & Filter */
+.teams-root .fl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 16px;
+}
+.teams-root .pill {
+  font: 700 15px/1 var(--font-dm), 'DM Sans', system-ui, sans-serif;
+  background: transparent;
+  color: var(--tx);
+  border: 2px solid var(--p);
+  border-radius: 999px;
+  padding: 12px 22px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, transform 0.2s;
+}
+.teams-root .pill:hover {
+  background: rgba(158, 113, 255, 0.2);
+  transform: translateY(-2px);
+}
+.teams-root .pill[aria-pressed="true"] {
+  background: var(--p);
+  color: var(--ink);
+}
+.teams-root .fcnt {
+  color: var(--mute);
+  margin: 0 0 36px;
+  font-weight: 500;
+}
+.teams-root .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 16px;
+}
+@media (min-width: 640px) {
+  .teams-root .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 22px;
+  }
+}
+@media (min-width: 1000px) {
+  .teams-root .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.teams-root .person {
+  transition: opacity 0.35s, transform 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.teams-root .person.out {
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
+}
+.teams-root .person[hidden] {
+  display: none;
+}
+.teams-root .pw {
+  position: relative;
+}
+.teams-root .person i {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--bg2);
+  border: 2px solid var(--p);
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.3s, transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.teams-root .person:hover i {
+  background: var(--p);
+  transform: scale(1.05);
+}
+.teams-root .person i span {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font: 400 clamp(28px, 6vw, 56px)/1 var(--font-anton), Anton, Impact, sans-serif;
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  transition: color 0.3s;
+}
+.teams-root .person:hover i span {
+  color: var(--ink);
+}
+.teams-root .person b {
+  display: block;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--tx);
+  margin-top: 4px;
+}
+.teams-root .person small {
+  display: block;
+  color: var(--mute);
+  font-weight: 500;
+  font-size: 15px;
+  margin-top: 2px;
+}
+.teams-root .tag {
+  display: inline-block;
+  margin-top: 8px;
+  border: 1.5px solid var(--p);
+  color: var(--p);
+  border-radius: 999px;
+  font: 700 11px/1 var(--font-dm), 'DM Sans', sans-serif;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+}
+.teams-root .so {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(10px + 9%);
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
+  z-index: 5;
+}
+.teams-root .person:hover .so,
+.teams-root .person:focus-within .so {
+  opacity: 1;
+  transform: none;
+}
+.teams-root .so a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+.teams-root .so a:hover {
+  background: var(--ink);
+  color: #fff;
+  transform: scale(1.1);
+}
+.teams-root .so svg {
+  width: 17px;
+  height: 17px;
+}
+@media (hover: none) {
+  .teams-root .so {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Statement Section */
+.teams-root .st.cnt {
+  padding: 110px 0;
+  background: var(--lav);
+  color: var(--ink);
+  text-align: left;
+}
+.teams-root .st p {
+  font: 700 clamp(28px, 5.6vw, 70px)/1.12 var(--font-dm), 'DM Sans', sans-serif;
+  letter-spacing: -0.025em;
+  margin: 0;
+  max-width: 1100px;
+  color: var(--ink);
+}
+.teams-root .w {
+  opacity: 0.2;
+  transition: opacity 0.25s;
+  color: var(--ink);
+}
+.teams-root .w.on {
+  opacity: 1;
+  color: var(--ink);
+}
+
+/* CTA Section */
+.teams-root .cta {
+  background: var(--p);
+  color: var(--ink);
+  text-align: center;
+  padding: 90px 0;
+}
+.teams-root .cta h2 {
+  font-size: clamp(56px, 15vw, 240px);
+  margin-bottom: 30px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .teams-root .person,
+  .teams-root .so,
+  .teams-root .pill,
+  .teams-root .tp div,
+  .teams-root .bdg,
+  .teams-root .ln > i,
+  .teams-root .h1 s i {
+    animation: none;
     transition: none;
   }
 }

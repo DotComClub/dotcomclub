@@ -5,6 +5,7 @@ import { Navbar } from "@/components/home/Navbar";
 import { FooterSection } from "@/components/home/FooterSection";
 import { CustomCursor } from "@/components/home/CustomCursor";
 import { anton, dmSans } from "@/fonts/font";
+import { Phone } from "lucide-react";
 
 const MARQUEE_WORDS = [
   "Events",
@@ -93,7 +94,7 @@ export default function ContactUsPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
-    }, 300);
+    }, 40);
 
     // CRT TV observer
     const tvElement = tvRef.current;
@@ -396,20 +397,36 @@ export default function ContactUsPage() {
                 </a>
               </div>
             </li>
-            <li>
+            <li className="ir-phone">
               <em>Phone</em>
               <div className="ph2">
                 <div className="v">
                   Hussain Tinwala
-                  <small>
-                    <a href="tel:+919867069971">+91 9867069971</a>
-                  </small>
+                  <a
+                    className="call-btn"
+                    href="tel:+919867069971"
+                    data-cursor="call"
+                    aria-label="Call Hussain Tinwala at +91 98670 69971"
+                  >
+                    <span className="call-ico-wrap" aria-hidden="true">
+                      <Phone size={22} strokeWidth={2.2} className="call-ico" />
+                    </span>
+                    <span className="call-num">+91 98670 69971</span>
+                  </a>
                 </div>
                 <div className="v">
                   Bhalchandra
-                  <small>
-                    <a href="tel:+919152854203">+91 9152854203</a>
-                  </small>
+                  <a
+                    className="call-btn"
+                    href="tel:+919152854203"
+                    data-cursor="call"
+                    aria-label="Call Bhalchandra at +91 91528 54203"
+                  >
+                    <span className="call-ico-wrap" aria-hidden="true">
+                      <Phone size={22} strokeWidth={2.2} className="call-ico" />
+                    </span>
+                    <span className="call-num">+91 91528 54203</span>
+                  </a>
                 </div>
               </div>
             </li>

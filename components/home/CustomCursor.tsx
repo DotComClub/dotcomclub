@@ -66,7 +66,12 @@ export function CustomCursor() {
       r.classList.toggle("s", sm && hov);
 
       if (el && !sm) {
-        if (el.id === "snd" || el.closest(".why li")) {
+        const cursorAttr =
+          (el as HTMLElement).dataset?.cursor ||
+          (el.closest("[data-cursor]") as HTMLElement)?.dataset?.cursor;
+        if (cursorAttr) {
+          lb = cursorAttr;
+        } else if (el.id === "snd" || el.closest(".why li")) {
           lb = "";
         } else if (el.matches("summary")) {
           lb = "open";

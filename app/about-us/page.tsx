@@ -129,9 +129,13 @@ const MARQUEE_WORDS = [
 export default function AboutPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeCard, setActiveCard] = useState(1);
+  const [isTimelineVisible, setIsTimelineVisible] = useState(false);
+  const [isNavHidden, setIsNavHidden] = useState(false);
+  const [progressPercent, setProgressPercent] = useState((1 / EVENTS.length) * 100);
+  const stackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 60);
+    const timer = setTimeout(() => setIsLoaded(true), 30);
     return () => clearTimeout(timer);
   }, []);
 
@@ -146,8 +150,19 @@ export default function AboutPage() {
     const cards = Array.from(
       document.querySelectorAll<HTMLElement>(".ev")
     );
-    const pgLabel = document.getElementById("pgt");
-    const pgBar = document.getElementById("pgb");
+    const timelineEl = document.getElementById("timeline");
+
+    // Timeline section visibility observer
+    let timelineIo: IntersectionObserver | null = null;
+    if (timelineEl) {
+      timelineIo = new IntersectionObserver(
+        (entries) => {
+          setIsTimelineVisible(entries[0].isIntersecting);
+        },
+        { threshold: 0 }
+      );
+      timelineIo.observe(timelineEl);
+    }
 
     // Heading reveals
     const revealEls = document.querySelectorAll(".rv");
@@ -171,7 +186,9 @@ export default function AboutPage() {
       const diff = y - lastY;
       nav.classList.toggle("at", y < 24);
       if (Math.abs(diff) > 6) {
-        nav.classList.toggle("hide", diff > 0 && y > 220);
+        const isHidden = diff > 0 && y > 220;
+        nav.classList.toggle("hide", isHidden);
+        setIsNavHidden(isHidden);
         lastY = y;
       }
       // section colour
@@ -192,25 +209,82 @@ export default function AboutPage() {
         if (c.getBoundingClientRect().top < window.innerHeight * 0.55) n = k + 1;
       });
       setActiveCard(n);
-      if (pgLabel) pgLabel.textContent = `${n} / ${cards.length}`;
-      if (pgBar) pgBar.style.setProperty("--w", `${(n / cards.length) * 100}%`);
+
+      // Smooth progress fill tracking timeline scroll progress
+      if (timelineEl) {
+        const rect = timelineEl.getBoundingClientRect();
+        const total = rect.height - window.innerHeight * 0.5;
+        const current = -rect.top + 70;
+        const ratio = total > 0 ? Math.max(0, Math.min(1, current / total)) : 0;
+        const pct = Math.max((n / cards.length) * 100, ratio * 100);
+        setProgressPercent(Math.min(100, pct));
+      }
     };
+
+    const updateCardTops = () => {
+      const cards = stackRef.current?.querySelectorAll<HTMLElement>(".ev");
+      if (!cards || cards.length === 0) return;
+      const innerHeight = window.innerHeight;
+      const isMobile = window.innerWidth < 768;
+      const navHidden = !!nav?.classList.contains("hide");
+      const baseTop = isMobile ? (navHidden ? 38 : 94) : (navHidden ? 42 : 106);
+      const step = isMobile ? 4 : 6;
+
+      cards.forEach((card, i) => {
+        const defaultTop = baseTop + i * step;
+        const cardHeight = card.offsetHeight;
+        const availableHeight = innerHeight - defaultTop - 16;
+        if (cardHeight > availableHeight) {
+          const maxTop = Math.max(baseTop, innerHeight - cardHeight - 16);
+          card.style.setProperty("--top", `${Math.min(defaultTop, maxTop)}px`);
+        } else {
+          card.style.removeProperty("--top");
+        }
+      });
+    };
+
+    updateCardTops();
+    window.addEventListener("resize", updateCardTops, { passive: true });
+
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => updateCardTops()) : null;
+    cards.forEach((c) => ro?.observe(c));
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
     return () => {
       io.disconnect();
+      if (timelineIo) timelineIo.disconnect();
+      if (ro) ro.disconnect();
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", updateCardTops);
     };
   }, [isLoaded]);
 
   return (
     <div
-      className={`about-root home-root ${isLoaded ? "go" : ""} ${anton.variable} ${dmSans.variable}`}
+      className={`about-root home-root ${isLoaded ? "go" : ""} ${isNavHidden ? "nav-hidden" : ""} ${anton.variable} ${dmSans.variable}`}
     >
       <Navbar />
       <CustomCursor />
+
+      {/* Fixed Timeline Progress Bar */}
+      <aside
+        className={`timeline-fixed-bar ${isTimelineVisible ? "visible" : ""} ${isNavHidden ? "nav-hidden" : ""}`}
+        aria-label="Timeline progress"
+      >
+        <div className="timeline-fixed-wrap">
+          <span className="timeline-fixed-counter">
+            {activeCard} / {EVENTS.length}
+          </span>
+          <div className="timeline-fixed-track" aria-hidden="true">
+            <div
+              className="timeline-fixed-fill"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+      </aside>
 
       {/* FAB – mobile floating button */}
       <a className="fab btn wh" href="#timeline" id="fab">
@@ -312,14 +386,8 @@ export default function AboutPage() {
           <h2 className="hd rv">Our Journey</h2>
           <p className="lead">Explore our innovation journey</p>
 
-          {/* Progress bar */}
-          <div className="pg" aria-hidden="true">
-            <span id="pgt">1 / {EVENTS.length}</span>
-            <u id="pgb" />
-          </div>
-
           {/* Stacked sticky cards */}
-          <div id="stack">
+          <div id="stack" ref={stackRef}>
             {EVENTS.map((ev) => (
               <article
                 key={ev.index}

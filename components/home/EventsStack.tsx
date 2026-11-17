@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { RevealHeading } from "./RevealHeading";
 
@@ -32,6 +33,45 @@ const EVENTS: EventItem[] = [
 ];
 
 export function EventsStack() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateCardTops = () => {
+      const cards = containerRef.current?.querySelectorAll<HTMLElement>(".ev");
+      if (!cards || cards.length === 0) return;
+      const innerHeight = window.innerHeight;
+      const isMobile = window.innerWidth < 768;
+      const nav = document.querySelector("nav");
+      const navHidden = !!nav?.classList.contains("hide");
+      const baseTop = isMobile ? (navHidden ? 36 : 76) : (navHidden ? 40 : 88);
+      const step = isMobile ? 6 : 10;
+
+      cards.forEach((card, i) => {
+        const defaultTop = baseTop + i * step;
+        const cardHeight = card.offsetHeight;
+        const availableHeight = innerHeight - defaultTop - 16;
+        if (cardHeight > availableHeight) {
+          const maxTop = Math.max(baseTop, innerHeight - cardHeight - 16);
+          card.style.setProperty("--top", `${Math.min(defaultTop, maxTop)}px`);
+        } else {
+          card.style.removeProperty("--top");
+        }
+      });
+    };
+
+    updateCardTops();
+    window.addEventListener("resize", updateCardTops, { passive: true });
+
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => updateCardTops()) : null;
+    const cards = containerRef.current?.querySelectorAll<HTMLElement>(".ev");
+    cards?.forEach((c) => ro?.observe(c));
+
+    return () => {
+      if (ro) ro.disconnect();
+      window.removeEventListener("resize", updateCardTops);
+    };
+  }, []);
+
   return (
     <section id="events">
       <div className="wrap">
@@ -42,7 +82,7 @@ export function EventsStack() {
         </p>
 
         {/* All cards are direct children of ONE shared container div */}
-        <div>
+        <div id="events-stack" ref={containerRef} className="events-stack">
           {EVENTS.map((item, idx) => (
             <article
               key={item.title}

@@ -199,7 +199,13 @@ export function Navbar() {
             }}
           >
             <span className="sl" ref={sliderRef} style={{ pointerEvents: "none" }} />
-            {NAV_LINKS.filter(link => !(link.isCl && pathname === "/sponsors")).map((link, idx) => {
+            {NAV_LINKS.filter(
+              (link) =>
+                !(
+                  link.isCl &&
+                  (pathname === "/sponsors" || pathname === "/teams")
+                )
+            ).map((link, idx) => {
               const isActive = idx === activeIndex;
               return (
                 <Link
@@ -277,7 +283,7 @@ export function Navbar() {
         })}
 
         <div className="mf">
-          {pathname !== "/sponsors" && (
+          {pathname !== "/sponsors" && pathname !== "/teams" && (
             <Link
               href="/cyberstrike-26/cl"
               prefetch={true}
@@ -314,7 +320,7 @@ export function Navbar() {
       </div>
 
       {/* Floating CTA for Mobile */}
-      {pathname !== "/sponsors" && pathname !== "/about-us" && pathname !== "/contact-us" && pathname !== "/magazines" && (
+      {pathname !== "/sponsors" && pathname !== "/about-us" && pathname !== "/contact-us" && pathname !== "/magazines" && pathname !== "/teams" && (
         <Link
           className={`btn wh fab ${showFab ? "s" : ""}`}
           id="fab"

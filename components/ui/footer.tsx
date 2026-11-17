@@ -54,7 +54,8 @@ export const Footer = () => {
     pathname === "/about-us" ||
     pathname === "/sponsors" ||
     pathname === "/contact-us" ||
-    pathname === "/magazines"
+    pathname === "/magazines" ||
+    pathname === "/teams"
   )
     return null;
 

@@ -191,7 +191,7 @@ export default function SponsorsPage() {
   const cxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 60);
+    const timer = setTimeout(() => setIsLoaded(true), 30);
     return () => clearTimeout(timer);
   }, []);
 

@@ -146,7 +146,7 @@ export default function MagazinesPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
-    }, 300);
+    }, 40);
 
     // Heading text reveals (.rv)
     const revealEls = document.querySelectorAll(".rv");
