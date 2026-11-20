@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   Big_Shoulders,
   Instrument_Serif,
@@ -97,7 +98,7 @@ const FS = [
   " intro*=1.0-vig*0.7;",
   " intro=mix(intro,vec3(0.0),outside);",
   " float ad=uAmb*(0.2*(1.0-sl)+0.5*vig*vig);",
-  " vec3 amb=st*uAmb*0.09+vhs*uAmb*0.1;",
+  " vec3 amb=st*uAmb*0.12+vhs*uAmb*0.22+tb*uAmb+vec3(uSurge)*uAmb;",
   " float aA=clamp(ad+max(amb.r,max(amb.g,amb.b)),0.0,1.0);",
   " vec4 ambient=vec4(amb,aA);",
   " float blk=h2(floor(uv*uCss/12.0)+floor(uT*18.0));",
@@ -110,7 +111,7 @@ const FS = [
   "  float t1=smoothstep(-0.16,0.0,dd2);",
   "  float on=step(1.0-t1*0.95,blk2);",
   "  vec3 nc=mix(vec3(0.92),vec3(0.43,0.95,1.0),step(0.82,blk));",
-  "  nc=mix(nc,vec3(0.89,0.25,0.17),step(0.94,blk2));",
+  "  nc=mix(nc,vec3(0.61,0.42,1.0),step(0.94,blk2));",
   "  col=mix(ambient,vec4(nc,1.0),on);",
   " }",
   " gl_FragColor=col;",
@@ -913,6 +914,7 @@ export default function Cyberstrike26Page() {
       P.down = true;
       if (e.target && (e.target as HTMLElement).closest("button")) return;
       addRipple(P.x, P.y);
+      pulseT = Math.max(pulseT, 0.45);
       if (!done) firstGesture();
     };
 
@@ -1375,19 +1377,20 @@ export default function Cyberstrike26Page() {
       S.surge = pulseT > 0.8 ? (pulseT - 0.8) * 1.2 : 0;
       S.rgb = 0.25 + clamp(sp, 0, 2) * 0.6 + pulseT * 4;
       S.stat = 0.012 + pulseT * 0.12;
-
+      root.style.setProperty("--tear", S.tear.toFixed(3));
     }
 
     const triggerPulse = () => {
-      pulseT = 0.6;
+      pulseT = 1.0;
     };
+    (window as unknown as { __pulse?: () => void }).__pulse = triggerPulse;
 
-    // Periodic random micro-pulse for ambient CRT shader atmosphere (does not disrupt text)
+    // Periodic random CRT glitch pulses for authentic background atmosphere
     safeInterval(() => {
       if (done && Math.random() < 0.45) {
         triggerPulse();
       }
-    }, 4500);
+    }, 3600);
 
     // ================= Main Loop =================
     let last = 0;
@@ -1537,9 +1540,9 @@ export default function Cyberstrike26Page() {
     ];
     const barSets = [
       ["#9a9a94", "#9a9a2c", "#2c9a9a", "#2c9a2c", "#9a2c9a", "#9a2c2c", "#2c2c9a"],
-      ["#3a332f", "#6b625a", "#a39a91", "#ede6dc", "#a39a91", "#6b625a", "#3a332f"],
-      ["#111", "#111", "#222", "#111", "#e2402c", "#111", "#111"],
-      ["#ede6dc", "#111", "#ede6dc", "#111", "#ede6dc", "#111", "#ede6dc"],
+      ["#352c58", "#6a5f93", "#a79cc4", "#efe9ff", "#a79cc4", "#6a5f93", "#352c58"],
+      ["#111", "#111", "#222", "#111", "#9b6bff", "#111", "#111"],
+      ["#efe9ff", "#111", "#efe9ff", "#111", "#efe9ff", "#111", "#efe9ff"],
     ];
     let fi = 0;
     function paintBars() {
@@ -1777,7 +1780,7 @@ export default function Cyberstrike26Page() {
               height: Math.random() < 0.5 ? 1 : 2,
               x: mx - w / 2 + (Math.random() - 0.5) * 50,
               y: my + (Math.random() - 0.5) * 34,
-              backgroundColor: Math.random() < 0.78 ? "#e2402c" : "#6ef2ff",
+              backgroundColor: Math.random() < 0.78 ? "#9b6bff" : "#6ef2ff",
               opacity: 0.9,
             });
             gsap.to(el, {
@@ -1813,7 +1816,7 @@ export default function Cyberstrike26Page() {
             height: s,
             x: fxCoord + (Math.random() - 0.5) * 30,
             y: fyCoord + (Math.random() - 0.5) * 22,
-            backgroundColor: Math.random() < 0.6 ? "#e2402c" : "#ede6dc",
+            backgroundColor: Math.random() < 0.6 ? "#9b6bff" : "#efe9ff",
             opacity: 0.85,
           });
           gsap.to(el, {
@@ -2004,8 +2007,52 @@ export default function Cyberstrike26Page() {
       }
     }
 
-    // ================= 04 Event Channels =================
-    // Interactive event channels tabs & accordion managed cleanly via React state (activeChannel, openEventId)
+    // ================= Watermark & Nav Toggle =================
+    const wm = root.querySelector<HTMLElement>(".ft-wm");
+    function fitWm() {
+      if (!wm || !wm.parentElement) return;
+      wm.style.fontSize = "100px";
+      const fs = (100 * wm.parentElement.clientWidth) / wm.offsetWidth;
+      wm.style.fontSize = `${fs}px`;
+    }
+    window.addEventListener("resize", fitWm);
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        if (!disposed) fitWm();
+      });
+    }
+    safeTimeout(fitWm, 300);
+    fitWm();
+
+    const navTop = root.querySelector<HTMLElement>("nav.top");
+    const navBtn = root.querySelector<HTMLButtonElement>("#navBtn");
+    function setNav(open: boolean) {
+      if (open && (window as unknown as { __pulse?: () => void }).__pulse) {
+        (window as unknown as { __pulse?: () => void }).__pulse?.();
+      }
+      document.documentElement.classList.toggle("navlock", open);
+      navTop?.classList.toggle("open", open);
+      navBtn?.setAttribute("aria-expanded", open ? "true" : "false");
+      if (navBtn) navBtn.textContent = open ? "Close" : "Menu";
+    }
+    const onNavBtnClick = () => {
+      if (navTop) setNav(!navTop.classList.contains("open"));
+    };
+    const onNavClick = (e: MouseEvent) => {
+      if ((e.target as HTMLElement)?.closest("#navMenu a")) {
+        setNav(false);
+      }
+    };
+    const onNavResize = () => {
+      if (window.innerWidth > 1040) setNav(false);
+    };
+    const onNavKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setNav(false);
+    };
+    navBtn?.addEventListener("click", onNavBtnClick);
+    navTop?.addEventListener("click", onNavClick);
+    window.addEventListener("resize", onNavResize);
+    window.addEventListener("keydown", onNavKey);
 
     // ================= Cleanup =================
     return () => {
@@ -2022,6 +2069,9 @@ export default function Cyberstrike26Page() {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("resize", resize);
       window.removeEventListener("resize", fitHero);
+      window.removeEventListener("resize", fitWm);
+      window.removeEventListener("resize", onNavResize);
+      window.removeEventListener("keydown", onNavKey);
       document.removeEventListener("visibilitychange", onVisibilityChange);
 
       feedBtn?.removeEventListener("click", onFeedBtnClick);
@@ -2029,6 +2079,9 @@ export default function Cyberstrike26Page() {
       humStBtn?.removeEventListener("click", onHumClick);
       sndBtn?.removeEventListener("click", onSndClick);
       replayBtn?.removeEventListener("click", onReplayClick);
+      navBtn?.removeEventListener("click", onNavBtnClick);
+      navTop?.removeEventListener("click", onNavClick);
+      document.documentElement.classList.remove("navlock");
 
       root.querySelectorAll<HTMLElement>("[data-sl]").forEach((e) => {
         unslice(e);
@@ -2046,12 +2099,7 @@ export default function Cyberstrike26Page() {
         } catch {}
       }
 
-      if (gl) {
-        try {
-          const ext = gl.getExtension("WEBGL_lose_context");
-          if (ext) ext.loseContext();
-        } catch {}
-      }
+      delete (window as unknown as { __pulse?: () => void }).__pulse;
     };
   }, []);
 
@@ -2114,6 +2162,84 @@ export default function Cyberstrike26Page() {
           Sound off
         </button>
       </div>
+
+      <nav className="top" aria-label="Primary">
+        <div className="wrap">
+          <ul id="navMenu">
+            <li>
+              <Link href="/">Home</Link>
+            </li>
+            <li>
+              <a href="/cyberstrike-26" aria-current="page">
+                Cyberstrike
+              </a>
+            </li>
+            <li>
+              <a href="/blogs">Blogs</a>
+            </li>
+            <li>
+              <a href="/about-us">About Us</a>
+            </li>
+            <li>
+              <a href="/sponsors">Sponsors</a>
+            </li>
+            <li>
+              <a href="/teams">Teams</a>
+            </li>
+            <li>
+              <a href="/magazines">Magazines</a>
+            </li>
+            <li>
+              <a href="/contact-us">Contact</a>
+            </li>
+            <li className="gap">
+              <a href="/e-waste">E-waste</a>
+            </li>
+            <li className="sec first">
+              <a href="/cl-registration">CL Registration</a>
+            </li>
+            <li className="sec so">
+              <a
+                href="https://www.instagram.com/dotcomclubjhc/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="soc"
+              >
+                Instagram
+              </a>
+            </li>
+            <li className="sec so">
+              <a
+                href="https://www.youtube.com/@JhcDcc/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="soc"
+              >
+                YouTube
+              </a>
+            </li>
+            <li className="sec so">
+              <a
+                href="https://www.linkedin.com/company/dotcomclub/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="soc"
+              >
+                LinkedIn
+              </a>
+            </li>
+          </ul>
+          <button
+            className="navbtn"
+            id="navBtn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="navMenu"
+          >
+            Menu
+          </button>
+        </div>
+      </nav>
 
       <main id="main" tabIndex={-1}>
         <header className="hero" id="home">
@@ -2467,6 +2593,139 @@ export default function Cyberstrike26Page() {
           </div>
         </section>
       </main>
+
+      <footer className="ft">
+        <div className="ft-top">
+          <div className="ft-brand">
+            <p className="ft-logo" aria-label="Dot Com Club">
+              <span aria-hidden="true">
+                DOT<i />
+                <br />
+                COM
+                <br />
+                CLUB
+              </span>
+            </p>
+            <span className="ft-pill">Est. 2014</span>
+            <p className="ft-tag">
+              Empowering digital creativity and innovation through technology.
+            </p>
+          </div>
+          <nav aria-label="Quick links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li>
+                <Link href="/">Home</Link>
+              </li>
+              <li>
+                <a href="/blogs">Blogs</a>
+              </li>
+              <li>
+                <a href="/events">Events</a>
+              </li>
+              <li>
+                <a href="/about-us">About Us</a>
+              </li>
+              <li>
+                <a href="/sponsors">Sponsors</a>
+              </li>
+              <li>
+                <a href="/teams">Teams</a>
+              </li>
+              <li>
+                <a href="/magazines">Magazines</a>
+              </li>
+              <li>
+                <a href="/contact-us">Contact Us</a>
+              </li>
+              <li>
+                <a href="/e-waste">E-waste</a>
+              </li>
+            </ul>
+          </nav>
+          <nav aria-label="Legal">
+            <h3>Legal</h3>
+            <ul>
+              <li>
+                <a href="/terms-and-conditions">Terms and Conditions</a>
+              </li>
+              <li>
+                <a href="/privacy-policy">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="/refund-policy">Refund Policy</a>
+              </li>
+            </ul>
+          </nav>
+          <nav aria-label="Connect">
+            <h3>Connect</h3>
+            <ul>
+              <li>
+                <a
+                  href="https://www.instagram.com/dotcomclubjhc/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="soc"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.2" cy="6.8" r=".6" />
+                  </svg>
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.youtube.com/@JhcDcc/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="soc"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
+                    <path d="M10 9.5v5l4.5-2.5z" />
+                  </svg>
+                  YouTube
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/company/dotcomclub/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="soc"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 10v8M6 6.5v.01M10.5 18v-8M10.5 13a3 3 0 0 1 6 0v5" />
+                  </svg>
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:jhcdotcomclub.official@gmail.com"
+                  className="soc"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="5" width="18" height="14" rx="2.5" />
+                    <path d="m4 7 8 6 8-6" />
+                  </svg>
+                  Email
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div className="ft-wmw" aria-hidden="true">
+          <span className="ft-wm">
+            DOTCOMCLUB<i />COM
+          </span>
+        </div>
+        <div className="ft-bot">
+          <span>&copy; 2026 DCC &bull; Brought to life by DCC Web-Ops Team</span>
+        </div>
+      </footer>
     </div>
   );
 }
