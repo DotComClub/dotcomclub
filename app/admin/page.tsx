@@ -12,6 +12,7 @@ import {
   Database,
   FileText,
   GraduationCap,
+  Gamepad2,
   LogOut,
   Mail,
   MessageSquare,
@@ -23,6 +24,7 @@ export default function AdminDashboard() {
   const { isAuthenticated, login, logout } = useAdminAuth();
   const members = useQuery(api.registration.listMembers);
   const contacts = useQuery(api.contact.listContacts);
+  const esportsRegistrations = useQuery(api.esportsRegistrations.listRegistrations);
   const router = useRouter();
 
   // Show login screen if not authenticated
@@ -116,6 +118,30 @@ export default function AdminDashboard() {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="bg-black border-cyan-500/30">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Gamepad2 className="w-5 h-5 mr-2 text-cyan-400" />
+                Esports Registrations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-400 mb-4">
+                View esports entries, team rosters and individual registrations.
+              </p>
+              <p className="text-sm text-cyan-400 mb-4">
+                {esportsRegistrations?.length || 0} total registrations
+              </p>
+              <Button
+                onClick={() => router.push("/admin/esports")}
+                className="w-full bg-cyan-700 hover:bg-cyan-600 text-white"
+              >
+                <Gamepad2 className="w-4 h-4 mr-2" />
+                View Esports Registrations
+              </Button>
+            </CardContent>
+          </Card>
+
           <Card className="bg-black border-red-500/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center">

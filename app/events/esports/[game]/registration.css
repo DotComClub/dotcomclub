@@ -1,0 +1,58 @@
+.esports-registration { min-height: 100vh; scroll-behavior: smooth; }
+.esports-registration .er-main { width: 100%; max-width: 1500px; margin: 0 auto; padding: clamp(112px,13vw,170px) 24px clamp(60px,8vw,120px); }
+.esports-registration .eh-top { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line); color: var(--dim); }
+.esports-registration .navback { display: inline-flex; gap: .6em; min-height: 44px; align-items: center; color: var(--ink); text-decoration: none; }
+.esports-registration .ph { max-width: 100%; font-size: clamp(76px,15vw,210px); overflow-wrap: anywhere; word-break: break-word; }
+.esports-registration .er-header { min-width: 0; }
+.esports-registration .real-cricket-title {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  white-space: normal;
+  line-height: 1;
+}
+.esports-registration .real-cricket-title::before,
+.esports-registration .real-cricket-title::after {
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 100%;
+}
+.esports-registration .er-form { border-top: 1px solid var(--line); padding-top: clamp(28px,5vw,56px); }
+.esports-registration .er-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px 24px; }
+.esports-registration .er-field { display: grid; min-width: 0; gap: 8px; color: var(--dim); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.esports-registration .er-field > span { min-width: 0; overflow-wrap: anywhere; line-height: 1.35; }
+.esports-registration .er-roster-note { margin: 0 0 22px; color: var(--cyan); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.esports-registration .er-field input {
+  width: 100%;
+  min-width: 0;
+  height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #0d0920;
+  color: var(--ink);
+  padding: 0 14px;
+  font: 400 14px var(--mono);
+  outline: none;
+}
+.esports-registration .er-field input:focus { border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan); }
+.esports-registration .er-team-name { max-width: 500px; margin-bottom: 24px; }
+.esports-registration .er-team fieldset { min-width: 0; margin: 0 0 20px; padding: clamp(14px,2vw,20px); border: 1px solid var(--line); }
+.esports-registration .er-team legend { max-width: calc(100% - 16px); padding: 0 8px; color: var(--red); font-size: 11px; letter-spacing: .12em; line-height: 1.4; text-transform: uppercase; overflow-wrap: anywhere; }
+.esports-registration .er-submit { width: 100%; justify-content: space-between; margin-top: 24px; border: 0; cursor: pointer; }
+.esports-registration .er-submit span { flex: 1; }
+.esports-registration .er-submit:disabled { opacity: .65; cursor: wait; }
+.esports-registration .er-error { color: #ff8da1; margin: 18px 0 0; }
+.esports-registration .er-success { min-height: 420px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; border-top:1px solid var(--line); }
+.esports-registration .er-success > span { display:grid; width:48px;height:48px;place-items:center;border:1px solid var(--cyan);color:var(--cyan);font-size:24px;margin-bottom:18px; }
+.esports-registration .er-success h2 { margin:0 0 12px;font:900 clamp(48px,8vw,90px)/.9 var(--display);text-transform:uppercase; }
+.esports-registration .er-success p { color:var(--dim); }
+@media (max-width:700px) {
+  .esports-registration .er-main { padding-inline:16px; }
+  .esports-registration .eh-top { align-items:flex-start; flex-wrap: wrap; }
+  .esports-registration .eh-top > span { padding-top:13px; }
+  .esports-registration .er-fields { grid-template-columns:1fr; }
+  .esports-registration .er-team fieldset { padding:14px 10px; }
+}

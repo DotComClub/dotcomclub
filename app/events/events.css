@@ -1,0 +1,245 @@
+.events-root {
+  padding-top: 72px;
+  scroll-behavior: smooth;
+}
+
+.events-root .h2 {
+  animation: rgb 1.1s ease .15s both;
+}
+
+.events-root .hrow {
+  will-change: transform;
+}
+
+.events-reveal {
+  opacity: 0;
+  transform: translate3d(0, 48px, 0);
+}
+
+@keyframes events-slice-glitch {
+  0% {
+    opacity: 0;
+    transform: translate(
+      calc(var(--dx, 0) * 22px),
+      calc(var(--dy, 0) * 10px)
+    );
+  }
+  18% { opacity: .95; clip-path: inset(8% -12% 58% -12%); }
+  38% { opacity: .7; clip-path: inset(52% -12% 20% -12%); }
+  58% { opacity: .9; clip-path: inset(28% -12% 46% -12%); }
+  78% { opacity: .45; clip-path: inset(62% -12% 8% -12%); }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 -12% 0 -12%);
+    transform: translate(0, 0);
+  }
+}
+
+.cs26-root [data-glitch].events-glitch-enter .sl > .s {
+  animation: events-slice-glitch 900ms cubic-bezier(.2,.8,.1,1) both;
+}
+
+.events-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity .65s ease var(--reveal-delay, 0ms), transform .9s cubic-bezier(.2,.8,.1,1) var(--reveal-delay, 0ms);
+}
+
+.esports-reference .fd.events-reveal,
+.event-channel-page .channel-event.events-reveal,
+.er-header.events-reveal,
+.er-form.events-reveal,
+.er-success.events-reveal {
+  opacity: 0;
+  transform: translate3d(0, 54px, 0);
+}
+
+.esports-reference .fd.events-revealed,
+.event-channel-page .channel-event.events-revealed,
+.er-header.events-revealed,
+.er-form.events-revealed,
+.er-success.events-revealed,
+.esports-reference .eh-top.events-revealed,
+.esports-reference .ph.events-revealed,
+.esports-reference .pin.events-revealed,
+.er-fields.events-revealed,
+.er-team fieldset.events-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity .65s ease, transform .9s cubic-bezier(.2,.8,.1,1);
+}
+
+.esports-reference .eh-top.events-reveal,
+.esports-reference .ph.events-reveal,
+.esports-reference .pin.events-reveal,
+.er-fields.events-reveal,
+.er-team fieldset.events-reveal {
+  opacity: 0;
+  transform: translate3d(0, 38px, 0);
+}
+
+.esports-reference .eh-top.events-revealed,
+.esports-reference .ph.events-revealed,
+.esports-reference .pin.events-revealed,
+.er-fields.events-revealed,
+.er-team fieldset.events-revealed {
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.esports-reference .sht.events-dialog-enter {
+  animation: events-dialog-enter 240ms cubic-bezier(.2,.8,.1,1) both;
+}
+
+@keyframes events-dialog-enter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0) scale(.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.events-root .s5 {
+  min-height: calc(100vh - 72px);
+  padding-block: clamp(90px, 12vw, 160px) clamp(90px, 12vw, 180px);
+  border-top: 0;
+}
+
+.events-root .sin {
+  margin: 0 0 3em;
+  color: var(--dim);
+  max-width: 30em;
+}
+
+.events-root .hub {
+  display: block;
+  border-top: 1px solid var(--line);
+}
+
+.events-root .hrow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 26em);
+  gap: 10px 40px;
+  align-items: end;
+  padding: clamp(22px, 3vw, 40px) 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: opacity .5s ease calc(var(--i) * 90ms), transform .8s cubic-bezier(.2,.8,.1,1) calc(var(--i) * 90ms);
+}
+
+.events-root .hl {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.events-root .hl .mono,
+.events-root .hm .mono {
+  color: var(--dim);
+}
+
+.events-root .nm {
+  font: 900 clamp(48px, 9vw, 150px)/.9 var(--display);
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1.2px var(--dim);
+  transition: color .25s, -webkit-text-stroke-color .25s, transform .35s, text-shadow .9s ease calc(var(--i) * 90ms);
+}
+
+.events-root .hrow:hover .nm,
+.events-root .hrow:focus-visible .nm {
+  color: var(--ink);
+  -webkit-text-stroke-color: transparent;
+  transform: translateX(14px);
+  text-shadow: -3px 0 var(--red), 3px 0 var(--cyan);
+}
+
+.events-root .hm {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.events-root .hd {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--dim);
+}
+
+.events-root .ar {
+  font-style: normal;
+  font-size: 28px;
+  line-height: 1;
+  transition: transform .3s;
+}
+
+.events-root .hrow:hover .ar {
+  transform: translate(6px, -6px);
+}
+
+@media (max-width: 800px) {
+  .events-root .hrow {
+    grid-template-columns: 1fr;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .events-reveal,
+    .esports-reference .eh-top.events-reveal,
+    .esports-reference .ph.events-reveal,
+    .esports-reference .pin.events-reveal,
+    .er-fields.events-reveal,
+    .er-team fieldset.events-reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    .cs26-root [data-glitch].events-glitch-enter .sl > .s,
+    .esports-reference .sht.events-dialog-enter {
+      animation: none;
+    }
+  }
+
+  .event-channel-page .channel-description {
+    max-width: 36em;
+    margin: 18px 0 0;
+    color: var(--dim);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .event-channel-page .channel-rules {
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--red);
+  }
+
+  .event-channel-page .channel-rules summary {
+    list-style: none;
+    cursor: pointer;
+    border: 0;
+    border-bottom: 1px solid transparent;
+  }
+
+  .event-channel-page .channel-rules summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .event-channel-page .channel-rules[open] summary {
+    border-bottom-color: var(--line);
+  }
+
+  .event-channel-page .channel-rules .rls {
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .events-root .hm {
+    margin-top: 12px;
+  }
+
+  .events-root .nm {
+    font-size: clamp(46px, 14vw, 100px);
+  }
+}

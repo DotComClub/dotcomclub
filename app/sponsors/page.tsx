@@ -710,7 +710,7 @@ export default function SponsorsPage() {
                 <h3>5,000+ TECH-FORWARD STUDENTS</h3>
                 <p>
                   Unmatched on-campus and digital brand impressions across
-                  Mumbai's premier colleges and computer science faculties.
+                  Mumbai&apos; premier colleges and computer science faculties.
                 </p>
               </div>
             </div>

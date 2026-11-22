@@ -157,6 +157,36 @@ const applicationTables = {
     updatedBy: v.optional(v.string()),
   }),
 
+  esportsRegistrations: defineTable({
+    game: v.string(),
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    ign: v.optional(v.string()),
+    collegeId: v.optional(v.string()),
+    collegeName: v.optional(v.string()),
+    playerTag: v.optional(v.string()),
+    teamName: v.optional(v.string()),
+    players: v.optional(v.array(v.object({
+      name: v.string(),
+      email: v.string(),
+      ign: v.string(),
+      collegeId: v.string(),
+      number: v.string(),
+      collegeName: v.string(),
+    }))),
+    submittedAt: v.number(),
+    verificationStatus: v.union(
+      v.literal("pending"),
+      v.literal("verified"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_game", ["game"])
+    .index("by_email", ["email"])
+    .index("by_phone", ["phone"])
+    .index("by_submitted", ["submittedAt"]),
+
   popups: defineTable({
     title: v.string(),
     description: v.string(),

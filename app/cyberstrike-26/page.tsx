@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
-  Big_Shoulders,
   Instrument_Serif,
   JetBrains_Mono,
   VT323,
@@ -11,13 +10,6 @@ import {
 import gsap from "gsap";
 import { animate } from "motion";
 import "./cyberstrike.css";
-
-const bigShoulders = Big_Shoulders({
-  subsets: ["latin"],
-  weight: ["500", "800", "900"],
-  variable: "--font-big-shoulders",
-  display: "swap",
-});
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -2106,7 +2098,7 @@ export default function Cyberstrike26Page() {
   return (
     <div
       ref={containerRef}
-      className={`cs26-root ${bigShoulders.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable}`}
+      className={`cs26-root ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable}`}
     >
       <div className="crt" aria-hidden="true" />
       <canvas id="fx" aria-hidden="true" />
@@ -2170,6 +2162,9 @@ export default function Cyberstrike26Page() {
               <Link href="/">Home</Link>
             </li>
             <li>
+              <Link href="/events">Events</Link>
+            </li>
+            <li>
               <a href="/cyberstrike-26" aria-current="page">
                 Cyberstrike
               </a>
@@ -2193,10 +2188,10 @@ export default function Cyberstrike26Page() {
               <a href="/contact-us">Contact</a>
             </li>
             <li className="gap">
-              <a href="/e-waste">E-waste</a>
+              <a href="/ewaste-26">E-waste</a>
             </li>
             <li className="sec first">
-              <a href="/cl-registration">CL Registration</a>
+              <a href="/cyberstrike-26/cl">CL Registration</a>
             </li>
             <li className="sec so">
               <a
@@ -2621,7 +2616,7 @@ export default function Cyberstrike26Page() {
                 <a href="/blogs">Blogs</a>
               </li>
               <li>
-                <a href="/events">Events</a>
+                <Link href="/events">Events</Link>
               </li>
               <li>
                 <a href="/about-us">About Us</a>

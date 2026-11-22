@@ -1,19 +1,16 @@
 "use client";
 
 import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
+
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+
+if (!convexUrl) {
+  throw new Error("NEXT_PUBLIC_CONVEX_URL is not configured");
+}
+
+const convex = new ConvexReactClient(convexUrl);
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
-  const convexUrl =
-    process.env.NEXT_PUBLIC_CONVEX_URL &&
-    process.env.NEXT_PUBLIC_CONVEX_URL !== "dummy" &&
-    !process.env.NEXT_PUBLIC_CONVEX_URL.includes("dummy.convex.cloud")
-      ? process.env.NEXT_PUBLIC_CONVEX_URL
-      : "https://happy-otter-123.convex.cloud";
-
-  const convex = useMemo(() => {
-    return new ConvexReactClient(convexUrl);
-  }, [convexUrl]);
-
   return <ConvexProvider client={convex}>{children}</ConvexProvider>;
 }

@@ -6,8 +6,6 @@ import { Menu, X } from "lucide-react";
 import {
   AnimatePresence,
   motion,
-  useMotionValueEvent,
-  useScroll,
 } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -46,71 +44,36 @@ const navItems = [
   {
     name: "E-waste",
     link: "/ewaste-26",
+  },
+  {
+    name: "Events",
+    link: "/events",
   }
 ];
 
 export const FloatingNav = ({ className }: { className?: string }) => {
   const pathname = usePathname();
-  const { scrollYProgress } = useScroll();
   const isMobile = useIsMobile();
-  const [visible, setVisible] = useState(true); // Changed initial state to true
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useMotionValueEvent(scrollYProgress, "change", (current: number) => {
-    const previous = scrollYProgress.getPrevious();
-
-    if (typeof current === "number") {
-      if (current < 0.05) {
-        setVisible(true); // Always visible at the top
-      } else {
-        // Only change visibility if previous is also available to determine direction
-        if (typeof previous === "number") {
-          const direction = current - previous;
-          if (direction > 0) {
-            // Scrolling down
-            setVisible(false);
-          } else if (direction < 0) {
-            // Scrolling up
-            setVisible(true);
-          }
-          // If direction is 0, visibility remains unchanged
-        }
-        // If previous is not a number (e.g., first event after initial load and not at top),
-        // visibility remains as is (true from initial state) until a scroll direction is established.
-      }
-    }
-  });
-
-  if (
-    pathname === "/" ||
-    pathname === "/blogs" ||
-    pathname === "/about-us" ||
-    pathname === "/sponsors" ||
-    pathname === "/contact-us" ||
-    pathname === "/magazines" ||
-    pathname === "/teams" ||
-    pathname?.startsWith("/cyberstrike-26")
-  )
-    return null;
+  if (pathname?.startsWith("/cyberstrike-26")) return null;
 
   return (
     <>
       <AnimatePresence mode="wait">
         <motion.div
           key="main-navbar"
-          initial={{
-            opacity: 1,
-            y: -100,
-          }}
+          initial={false}
           animate={{
-            y: visible ? 0 : -100,
-            opacity: visible ? 1 : 0,
+            y: 0,
+            opacity: 1,
           }}
+          style={{ position: "fixed", top: 20, zIndex: 6000 }}
           transition={{
             duration: 0.2,
           }}
           className={cn(
-            "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-border rounded-full bg-background z-[5000] shadow-[0px_0px_20px_2px_var(--primary)]/20",
+            "flex max-w-fit fixed top-5 inset-x-0 mx-auto border border-border rounded-full bg-background z-[5000] shadow-[0px_0px_20px_2px_var(--primary)]/20",
             isMobile ? "pr-4 pl-4 py-3" : "pr-2 pl-8 py-2",
             "items-center justify-center space-x-4",
             className,

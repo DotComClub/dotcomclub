@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState,  useMemo } from "react";
 import { Navbar } from "@/components/home/Navbar";
 import { FooterSection } from "@/components/home/FooterSection";
 import { CustomCursor } from "@/components/home/CustomCursor";
