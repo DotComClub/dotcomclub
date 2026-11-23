@@ -10,6 +10,7 @@
 
 import type * as clRegistrations from "../clRegistrations.js";
 import type * as contact from "../contact.js";
+import type * as culturalRegistrations from "../culturalRegistrations.js";
 import type * as esportsRegistrations from "../esportsRegistrations.js";
 import type * as ewaste from "../ewaste.js";
 import type * as newsletter from "../newsletter.js";
@@ -35,6 +36,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   clRegistrations: typeof clRegistrations;
   contact: typeof contact;
+  culturalRegistrations: typeof culturalRegistrations;
   esportsRegistrations: typeof esportsRegistrations;
   ewaste: typeof ewaste;
   newsletter: typeof newsletter;

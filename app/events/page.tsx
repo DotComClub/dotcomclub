@@ -1,6 +1,7 @@
 import { createMetadata } from "@/lib/metadata";
 import { Metadata } from "next";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import "../cyberstrike-26/cyberstrike.css";
 import "./events.css";
 
@@ -58,7 +59,7 @@ const Events = () => {
               <Link
                 className="hrow"
                 href="/events/esports"
-                style={{ "--i": 0, "--dx": "-.7" } as React.CSSProperties}
+                style={{ "--i": 0, "--dx": "-.7" } as CSSProperties}
               >
                 <span className="hl">
                   <span className="mono">Channel 01</span>
@@ -75,7 +76,7 @@ const Events = () => {
               <Link
                 className="hrow"
                 href="/events/technical"
-                style={{ "--i": 1, "--dx": ".6" } as React.CSSProperties}
+                style={{ "--i": 1, "--dx": ".6" } as CSSProperties}
               >
                 <span className="hl">
                   <span className="mono">Channel 02</span>
@@ -93,7 +94,7 @@ const Events = () => {
               <Link
                 className="hrow"
                 href="/events/cultural"
-                style={{ "--i": 2, "--dx": "-.4" } as React.CSSProperties}
+                style={{ "--i": 2, "--dx": "-.4" } as CSSProperties}
               >
                 <span className="hl">
                   <span className="mono">Channel 03</span>
@@ -102,9 +103,8 @@ const Events = () => {
                 <span className="hm">
                   <span className="mono">8 events</span>
                   <span className="hd">
-                    Blackout Empire, The Masked Truth, Red Handed, Beat Drop,
-                    The Static Carnival, Roll the Chaos, La Couture Nights,
-                    Debate: Dead Air
+                    Capture the Strike, Blackout Empire, The Masked Truth, Red
+                    Handed, Beat Drop, La Couture Nights, Escape Room, Debate
                   </span>
                   <i className="ar" aria-hidden="true">↗</i>
                 </span>
@@ -112,6 +112,25 @@ const Events = () => {
             </nav>
           </div>
         </section>
+
+        <footer className="ft events-ft">
+          <div className="wrap events-ft-wrap">
+            <div className="events-ft-brand">
+              <span className="mono events-ft-label">
+                CYBERSTRIKE 26 — EVENT CHANNELS
+              </span>
+              <p className="events-ft-sub">
+                Dot Com Club · Jai Hind College, Mumbai · 20 November 2026
+              </p>
+            </div>
+            <nav className="events-ft-nav" aria-label="Quick links">
+              <Link href="/cyberstrike-26">Cyberstrike</Link>
+              <Link href="/cyberstrike-26/cl">CL Registration</Link>
+              <Link href="/about-us">About</Link>
+              <Link href="/contact-us">Contact</Link>
+            </nav>
+          </div>
+        </footer>
       </main>
     </div>
   );

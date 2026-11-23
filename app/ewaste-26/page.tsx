@@ -227,6 +227,7 @@ function PaavniMascot() {
         delay: 0.8,
       }}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/paavni-mascot-final.png"
         alt="Paavni Mascot"

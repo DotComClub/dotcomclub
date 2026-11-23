@@ -197,6 +197,52 @@ const applicationTables = {
     showOnlyOnce: v.optional(v.boolean()),
     createdAt: v.optional(v.number()),
   }).index("by_active", ["isActive"]),
+
+  culturalRegistrations: defineTable({
+    event: v.string(),
+    collegeName: v.string(),
+    codeType: v.string(), // "PRNC" | "CC"
+    codeValue: v.string(), // The PRNC or CC code
+    teamName: v.optional(v.string()),
+    entryFormat: v.optional(v.string()), // e.g. "Solo" | "Team"
+    teamSize: v.optional(v.string()),
+
+    // Primary participant or Team Leader details
+    name: v.string(),
+    email: v.string(),
+    phone: v.string(),
+    classYear: v.optional(v.string()),
+    collegeIdUrl: v.optional(v.string()),
+
+    // Full participant roster
+    participants: v.optional(v.array(v.object({
+      role: v.string(), // "TEAM LEADER" | "TEAM MEMBER" | "INDIVIDUAL"
+      name: v.string(),
+      phone: v.string(),
+      email: v.string(),
+      classYear: v.string(),
+      collegeIdUrl: v.optional(v.string()),
+    }))),
+
+    // Payment details
+    registrationFee: v.string(),
+    paymentMethod: v.string(), // "UPI" | "Bank Transfer" | "Cash"
+    upiTransactionId: v.optional(v.string()),
+    paymentScreenshotUrl: v.optional(v.string()),
+    additionalPaymentInfo: v.optional(v.string()),
+    declarationAccepted: v.boolean(),
+
+    submittedAt: v.number(),
+    verificationStatus: v.union(
+      v.literal("pending"),
+      v.literal("verified"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_event", ["event"])
+    .index("by_email", ["email"])
+    .index("by_submitted", ["submittedAt"])
+    .index("by_verification", ["verificationStatus"]),
 };
 
 export default defineSchema({

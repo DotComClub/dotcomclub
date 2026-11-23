@@ -374,6 +374,7 @@ export default function MagazinesPage() {
                   <span>READ MORE →</span>
 
                   {/* Inline touch thumbnail for mobile */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className="tm"
                     alt={item.title}
@@ -402,6 +403,7 @@ export default function MagazinesPage() {
           <b id="hn">Vol {hoverVol}</b>
         </div>
         {hoverImg && (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             id="hi"
             src={hoverImg}

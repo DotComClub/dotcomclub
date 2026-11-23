@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   Instrument_Serif,
   JetBrains_Mono,
@@ -133,7 +133,7 @@ export default function EsportsPage() {
 
             <ol className="fds">
               {feeds.map((feed, index) => (
-                <li className="fd" key={feed.id} style={{ "--i": index, "--dx": index % 2 === 0 ? "-.7" : ".6" } as React.CSSProperties}>
+                <li className="fd" key={feed.id} style={{ "--i": index, "--dx": index % 2 === 0 ? "-.7" : ".6" } as CSSProperties}>
                   <span className="fdi mono-n"><small className="mono">Feed</small>{feed.number}</span>
                   <div className="fdm">
                     <h2 className="fdn" data-glitch>
