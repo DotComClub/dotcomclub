@@ -203,19 +203,135 @@ html {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  transform: translate(
-    calc(var(--dx) * var(--tear, 0) * 4vw),
-    calc(var(--dy) * var(--tear, 0) * .25vw)
-  );
-  opacity: calc(1 - var(--out, 0) * (.35 + var(--r) * .65));
+  transform: translate(0, 0) !important;
+  opacity: 1;
   text-shadow: calc(var(--ca, 0) * -1px) 0 rgba(155, 107, 255, .85), calc(var(--ca, 0) * 1px) 0 rgba(110, 242, 255, .75);
 }
 
-/* Restrained, premium text hover: crisp chromatic aberration glow with ZERO spatial jitter or displacement */
+.cs26-root #intro .sl > .s {
+  transform: translate(
+    calc(var(--dx) * var(--tear, 0) * 12px),
+    calc(var(--dy) * var(--tear, 0) * 2px)
+  );
+  opacity: calc(1 - var(--out, 0) * (.35 + var(--r) * .65));
+}
+
+/* Controlled minimal Cyberstrike glitch animation: text stays 100% visible and readable */
+@keyframes cs-glitch {
+  0% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, .85), 2px 0 rgba(110, 242, 255, .75);
+  }
+  18% {
+    transform: translate(-3px, 0);
+    text-shadow: 4px 0 rgba(155, 107, 255, .95), -4px 0 rgba(110, 242, 255, .85);
+  }
+  36% {
+    transform: translate(2.5px, 0);
+    text-shadow: -3px 0 rgba(155, 107, 255, .95), 3px 0 rgba(110, 242, 255, .85);
+  }
+  54% {
+    transform: translate(-1.5px, 0);
+    text-shadow: 2px 0 rgba(155, 107, 255, .85), -2px 0 rgba(110, 242, 255, .75);
+  }
+  72% {
+    transform: translate(1px, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, .85), 2px 0 rgba(110, 242, 255, .75);
+  }
+  100% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, .85), 2px 0 rgba(110, 242, 255, .75);
+  }
+}
+
+/* Ambient glitch running automatically by default across headings */
+@keyframes cs-ambient-glitch {
+  0%, 100% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  24% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  25% {
+    transform: translate(-2.5px, 0.5px);
+    text-shadow: 3.5px 0 rgba(155, 107, 255, 0.95), -3.5px 0 rgba(110, 242, 255, 0.85);
+  }
+  27% {
+    transform: translate(2px, -0.5px);
+    text-shadow: -3px 0 rgba(155, 107, 255, 0.95), 3px 0 rgba(110, 242, 255, 0.85);
+  }
+  29% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  62% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  63% {
+    transform: translate(2.5px, 0);
+    text-shadow: -3.5px 0 rgba(155, 107, 255, 0.95), 3.5px 0 rgba(110, 242, 255, 0.85);
+  }
+  65% {
+    transform: translate(-1.5px, 0);
+    text-shadow: 2.5px 0 rgba(155, 107, 255, 0.9), -2.5px 0 rgba(110, 242, 255, 0.8);
+  }
+  67% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  88% {
+    transform: translate(-3px, 0.5px);
+    text-shadow: 4px 0 rgba(155, 107, 255, 0.95), -4px 0 rgba(110, 242, 255, 0.85);
+  }
+  90% {
+    transform: translate(2.5px, -0.5px);
+    text-shadow: -3px 0 rgba(155, 107, 255, 0.95), 3px 0 rgba(110, 242, 255, 0.85);
+  }
+  92% {
+    transform: translate(-1px, 0);
+    text-shadow: 2px 0 rgba(155, 107, 255, 0.85), -2px 0 rgba(110, 242, 255, 0.75);
+  }
+  94% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+}
+
+.cs26-root .disp,
+.cs26-root [data-glitch],
+.cs26-root .h2 {
+  animation: cs-ambient-glitch 4.6s infinite ease-in-out;
+}
+
+.cs26-root .sl.glx > .s,
+.cs26-root [data-glitch].glx .sl > .s,
+.cs26-root .disp.glx,
+.cs26-root .h2.glx,
+.cs26-root [data-glitch].glx {
+  animation: cs-glitch 380ms steps(1) 1 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs26-root .disp,
+  .cs26-root [data-glitch],
+  .cs26-root .h2,
+  .cs26-root .sl.glx > .s,
+  .cs26-root [data-glitch].glx .sl > .s,
+  .cs26-root .disp.glx,
+  .cs26-root .h2.glx,
+  .cs26-root [data-glitch].glx {
+    animation: none !important;
+  }
+}
+
+/* Restrained, premium text hover: crisp chromatic aberration glow */
 .cs26-root .sl:hover > .s,
 .cs26-root [data-glitch]:hover .sl > .s,
 .cs26-root .hero h1:hover .sl > .s {
-  text-shadow: -1.5px 0 rgba(155, 107, 255, 0.8), 1.5px 0 rgba(110, 242, 255, 0.7);
+  text-shadow: -2px 0 rgba(155, 107, 255, 0.9), 2px 0 rgba(110, 242, 255, 0.85);
   transition: text-shadow 0.2s ease;
 }
 
@@ -588,22 +704,47 @@ body:has(.cs26-root) footer:not(.ft) {
 /* Navigation */
 .cs26-root nav.top {
   position: fixed;
-  z-index: 7000;
+  z-index: 4000;
   left: 0;
   right: 0;
   top: 0;
   padding-top: env(safe-area-inset-top, 0px);
   background: linear-gradient(var(--bg), rgba(7, 4, 26, 0));
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto;
-  transition: opacity .8s .6s;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .8s .4s;
 }
 
 .cs26-root.live nav.top,
-html:not(.js-intro) .cs26-root nav.top {
+.cs26-root:not(.js-intro) nav.top {
   opacity: 1 !important;
   visibility: visible !important;
+  pointer-events: auto !important;
+  z-index: 7000;
+}
+
+.cs26-root.js-intro nav.top,
+.cs26-root:has(#intro:not([hidden])) nav.top {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: none !important;
+}
+
+.cs26-root.js-intro main,
+.cs26-root.js-intro footer {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.cs26-root.live main,
+.cs26-root.live footer {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transition: opacity .6s ease;
 }
 
 .cs26-root nav.top .wrap {
@@ -676,8 +817,12 @@ html.navlock body {
   overflow: hidden;
 }
 
+/* Always show hamburger button — no inline desktop nav */
 .cs26-root .navbtn {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
   background: none;
   border: 0;
   padding: 0 4px;
@@ -689,135 +834,124 @@ html.navlock body {
   text-transform: none;
 }
 
+/* Desktop ul: overlay, hidden by default — same as mobile */
+.cs26-root nav.top ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  padding: calc(88px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+  background: var(--bg);
+  overflow-y: auto;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .25s ease, visibility 0s linear .25s;
+  counter-reset: n;
+}
+.cs26-root nav.top.open ul {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .25s ease;
+}
+.cs26-root nav.top ul li {
+  width: 100%;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .4s ease, transform .5s cubic-bezier(.2, .8, .2, 1);
+}
+.cs26-root nav.top.open ul li {
+  opacity: 1;
+  transform: none;
+}
+.cs26-root nav.top ul a {
+  color: var(--ink);
+  display: block;
+  padding: 0;
+  font: 900 clamp(34px, min(13vw, 7.6svh), 84px)/.92 var(--display);
+  text-transform: uppercase;
+  border: 0;
+}
+.cs26-root nav.top ul a:hover,
+.cs26-root nav.top ul a:active,
+.cs26-root nav.top ul a[aria-current="page"] {
+  color: var(--red);
+}
+.cs26-root nav.top ul a[aria-current="page"] {
+  font-weight: 900;
+}
+.cs26-root nav.top ul li:not(.sec) {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  counter-increment: n;
+}
+.cs26-root nav.top ul li:not(.sec)::before {
+  content: counter(n, decimal-leading-zero);
+  flex: none;
+  width: 2.2em;
+  padding-top: .55em;
+  font: 400 11px/1 var(--mono);
+  letter-spacing: .16em;
+  color: var(--dim);
+}
+.cs26-root nav.top ul li.sec {
+  width: auto;
+  margin: 0 22px 14px 0;
+}
+.cs26-root nav.top ul li.gap { margin-bottom: 34px; }
+.cs26-root nav.top ul li.so { display: block; }
+.cs26-root nav.top ul li.so { display: none; }
+.cs26-root nav.top ul li.sec a {
+  display: inline-block;
+  padding-bottom: 3px;
+  font: 500 17px/1.2 'DM Sans', system-ui, sans-serif;
+  text-transform: none;
+  border-bottom: 2px solid var(--red);
+}
+.cs26-root nav.top ul a[aria-current="page"]::after,
+.cs26-root nav.top ul a[aria-current="page"]::before { display: none; }
+.cs26-root nav.top.open ul li:not(.sec) a {
+  animation: mglitch .5s steps(1) backwards;
+}
+.cs26-root nav.top ul li:not(.sec) a:hover,
+.cs26-root nav.top ul li:not(.sec) a:focus-visible {
+  animation: mglitch2 .4s steps(1) backwards;
+  animation-delay: 0s;
+}
+
 @media (max-width: 1040px) {
   .cs26-root nav.top .wrap {
     height: 64px;
   }
-  .cs26-root .navbtn {
-    display: inline-flex;
-    align-items: center;
-    position: relative;
-    z-index: 2;
-  }
-  .cs26-root nav.top ul {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 0;
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    padding: calc(88px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
-    background: var(--bg);
-    overflow-y: auto;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .25s ease, visibility 0s linear .25s;
-  }
-  .cs26-root nav.top.open ul {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity .25s ease;
-  }
-  .cs26-root nav.top ul li {
-    width: 100%;
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity .4s ease, transform .5s cubic-bezier(.2, .8, .2, 1);
-  }
-  .cs26-root nav.top.open ul li {
-    opacity: 1;
-    transform: none;
-  }
-  .cs26-root nav.top.open ul li:nth-child(1) { transition-delay: 0.12s; }
-  .cs26-root nav.top.open ul li:nth-child(2) { transition-delay: 0.16s; }
-  .cs26-root nav.top.open ul li:nth-child(3) { transition-delay: 0.20s; }
-  .cs26-root nav.top.open ul li:nth-child(4) { transition-delay: 0.24s; }
-  .cs26-root nav.top.open ul li:nth-child(5) { transition-delay: 0.28s; }
-  .cs26-root nav.top.open ul li:nth-child(6) { transition-delay: 0.32s; }
-  .cs26-root nav.top.open ul li:nth-child(7) { transition-delay: 0.36s; }
-  .cs26-root nav.top.open ul li:nth-child(8) { transition-delay: 0.40s; }
-  .cs26-root nav.top.open ul li:nth-child(9) { transition-delay: 0.44s; }
-  .cs26-root nav.top.open ul li:nth-child(10) { transition-delay: 0.48s; }
-  .cs26-root nav.top.open ul li:nth-child(11) { transition-delay: 0.52s; }
-  .cs26-root nav.top.open ul li:nth-child(12) { transition-delay: 0.56s; }
-  .cs26-root nav.top.open ul li:nth-child(13) { transition-delay: 0.60s; }
-  .cs26-root nav.top.open ul li:nth-child(14) { transition-delay: 0.64s; }
-  .cs26-root nav.top ul a {
-    color: var(--ink);
-  }
-  .cs26-root nav.top ul a:hover,
-  .cs26-root nav.top ul a:active,
-  .cs26-root nav.top ul a[aria-current="page"] {
-    color: var(--red);
-  }
-  .cs26-root nav.top ul a[aria-current="page"] {
-    font-weight: 900;
-  }
-  .cs26-root nav.top ul a {
-    display: block;
-    padding: 0;
-    font: 900 clamp(34px, min(13vw, 7.6svh), 84px)/.92 var(--display);
-    text-transform: uppercase;
-    border: 0;
-  }
-  .cs26-root nav.top ul {
-    counter-reset: n;
-  }
-  .cs26-root nav.top ul li:not(.sec) {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    counter-increment: n;
-  }
-  .cs26-root nav.top ul li:not(.sec)::before {
-    content: counter(n, decimal-leading-zero);
-    flex: none;
-    width: 2.2em;
-    padding-top: .55em;
-    font: 400 11px/1 var(--mono);
-    letter-spacing: .16em;
-    color: var(--dim);
-  }
-  .cs26-root nav.top ul li.sec {
-    width: auto;
-    margin: 0 22px 14px 0;
-  }
-  .cs26-root nav.top ul li.gap {
-    margin-bottom: 34px;
-  }
-  .cs26-root nav.top ul li.so {
-    display: block;
-  }
-  .cs26-root nav.top ul li.sec a {
-    display: inline-block;
-    padding-bottom: 3px;
-    font: 500 17px/1.2 'DM Sans', system-ui, sans-serif;
-    text-transform: none;
-    border-bottom: 2px solid var(--red);
-  }
-  .cs26-root nav.top ul a[aria-current="page"]::after,
-  .cs26-root nav.top ul a[aria-current="page"]::before {
-    display: none;
-  }
-  .cs26-root nav.top.open ul li:not(.sec) a {
-    animation: mglitch .5s steps(1) backwards;
-  }
-  .cs26-root nav.top.open ul li:nth-child(1) a { animation-delay: 0.25s; }
-  .cs26-root nav.top.open ul li:nth-child(2) a { animation-delay: 0.30s; }
-  .cs26-root nav.top.open ul li:nth-child(3) a { animation-delay: 0.35s; }
-  .cs26-root nav.top.open ul li:nth-child(4) a { animation-delay: 0.40s; }
-  .cs26-root nav.top.open ul li:nth-child(5) a { animation-delay: 0.45s; }
-  .cs26-root nav.top.open ul li:nth-child(6) a { animation-delay: 0.50s; }
-  .cs26-root nav.top.open ul li:nth-child(7) a { animation-delay: 0.55s; }
-  .cs26-root nav.top.open ul li:nth-child(8) a { animation-delay: 0.60s; }
-  .cs26-root nav.top.open ul li:nth-child(9) a { animation-delay: 0.65s; }
-  .cs26-root nav.top ul li:not(.sec) a:hover,
-  .cs26-root nav.top ul li:not(.sec) a:focus-visible {
-    animation: mglitch2 .4s steps(1) backwards;
-    animation-delay: 0s;
-  }
 }
+
+/* Transition delays for staggered menu open animation */
+.cs26-root nav.top.open ul li:nth-child(1) { transition-delay: 0.12s; }
+.cs26-root nav.top.open ul li:nth-child(2) { transition-delay: 0.16s; }
+.cs26-root nav.top.open ul li:nth-child(3) { transition-delay: 0.20s; }
+.cs26-root nav.top.open ul li:nth-child(4) { transition-delay: 0.24s; }
+.cs26-root nav.top.open ul li:nth-child(5) { transition-delay: 0.28s; }
+.cs26-root nav.top.open ul li:nth-child(6) { transition-delay: 0.32s; }
+.cs26-root nav.top.open ul li:nth-child(7) { transition-delay: 0.36s; }
+.cs26-root nav.top.open ul li:nth-child(8) { transition-delay: 0.40s; }
+.cs26-root nav.top.open ul li:nth-child(9) { transition-delay: 0.44s; }
+.cs26-root nav.top.open ul li:nth-child(10) { transition-delay: 0.48s; }
+.cs26-root nav.top.open ul li:nth-child(11) { transition-delay: 0.52s; }
+.cs26-root nav.top.open ul li:nth-child(12) { transition-delay: 0.56s; }
+.cs26-root nav.top.open ul li:nth-child(13) { transition-delay: 0.60s; }
+.cs26-root nav.top.open ul li:nth-child(14) { transition-delay: 0.64s; }
+.cs26-root nav.top.open ul li:nth-child(1) a { animation-delay: 0.25s; }
+.cs26-root nav.top.open ul li:nth-child(2) a { animation-delay: 0.30s; }
+.cs26-root nav.top.open ul li:nth-child(3) a { animation-delay: 0.35s; }
+.cs26-root nav.top.open ul li:nth-child(4) a { animation-delay: 0.40s; }
+.cs26-root nav.top.open ul li:nth-child(5) a { animation-delay: 0.45s; }
+.cs26-root nav.top.open ul li:nth-child(6) a { animation-delay: 0.50s; }
+.cs26-root nav.top.open ul li:nth-child(7) a { animation-delay: 0.55s; }
+.cs26-root nav.top.open ul li:nth-child(8) a { animation-delay: 0.60s; }
+.cs26-root nav.top.open ul li:nth-child(9) a { animation-delay: 0.65s; }
 
 @keyframes mglitch {
   0% { transform: translate(-10px, 0) skewX(-8deg); text-shadow: -5px 0 rgba(155, 107, 255, .9), 5px 0 rgba(110, 242, 255, .8); }
@@ -961,9 +1095,21 @@ html.navlock body {
 }
 
 @media (max-width: 700px) {
+  .cs26-root .hero {
+    padding-block: clamp(68px, 10vw, 84px) 24px;
+  }
+  .cs26-root .hero .cue {
+    margin-top: 24px;
+  }
   .cs26-root .hero .foot { grid-template-columns: 1fr; }
   .cs26-root .hero .foot .meta { justify-self: start; text-align: left; }
   .cs26-root .hero h1 { font-size: 15.5vw; }
+  .cs26-root section.blk {
+    padding-block: clamp(40px, 8vw, 56px);
+  }
+  .cs26-root .tag {
+    margin-bottom: 16px;
+  }
 }
 
 /* Sections */
@@ -990,12 +1136,9 @@ html.navlock body {
   color: var(--red);
 }
 
-.cs26-root .pre .sl > .s {
-  --tear: 1;
-}
-
+/* Clean resting state for main content headings: zero permanent displacement */
 .cs26-root main [data-glitch] .sl > .s {
-  transition: transform 1.2s cubic-bezier(.2, .8, .1, 1);
+  transform: translate(0, 0);
 }
 
 /* 01 monitor */
@@ -1216,7 +1359,7 @@ html.navlock body {
 .cs26-root .s5 .sin {
   margin: 0 0 2.4em;
   color: var(--dim);
-  max-width: 24em;
+  max-width: 30em;
 }
 
 .cs26-root .chs {

@@ -12,6 +12,7 @@ import "../../cyberstrike-26/cyberstrike.css";
 import "../events.css";
 import "../esports/esports.css";
 import "./cultural.css";
+import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -219,8 +220,9 @@ export default function CulturalPage() {
 
   return (
     <div
-      className={`cs26-root esports-reference ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable} ${dmSans.variable}`}
+      className={`cs26-root esports-reference live ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable} ${dmSans.variable}`}
     >
+      <CyberstrikeBackground />
       <main id="main" tabIndex={-1}>
         <section className="pg">
           <div className="wrap">
@@ -232,7 +234,7 @@ export default function CulturalPage() {
                   <span aria-hidden="true">←</span>Events
                 </Link>
               </div>
-              <h1 className="ph" data-t="CULTURAL" data-events-sl>CULTURAL</h1>
+              <h1 className="ph disp" aria-label="CULTURAL">CULTURAL</h1>
               <p className="pin">
                 Eight stages for performers, detectives, strategists and speakers.
                 Complete institution and participant verification to secure entry.
@@ -256,8 +258,8 @@ export default function CulturalPage() {
                     {ev.number}
                   </span>
                   <div className="fdm">
-                    <h2 className="fdn" data-glitch>
-                      <span data-sl>{ev.name}</span>
+                    <h2 className="fdn">
+                      {ev.name}
                     </h2>
                     <p
                       className="mono"

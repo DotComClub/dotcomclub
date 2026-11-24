@@ -56,7 +56,8 @@ export const Footer = () => {
     pathname === "/contact-us" ||
     pathname === "/magazines" ||
     pathname === "/teams" ||
-    pathname?.startsWith("/cyberstrike-26")
+    pathname?.startsWith("/cyberstrike-26") ||
+    pathname?.startsWith("/events")
   )
     return null;
 

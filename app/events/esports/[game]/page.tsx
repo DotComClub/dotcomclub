@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import Link from "next/link";
-import { FormEvent, use, useState } from "react";
+import { FormEvent, use, useEffect, useState } from "react";
 import {
   Instrument_Serif,
   JetBrains_Mono,
@@ -13,6 +13,7 @@ import {
 import "../../../cyberstrike-26/cyberstrike.css";
 import "../esports.css";
 import "./registration.css";
+import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
 
 const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: ["400"], style: ["normal", "italic"], variable: "--font-instrument-serif" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-jetbrains-mono" });
@@ -119,6 +120,44 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
 
   const game = games[gameSlug];
 
+  useEffect(() => {
+    let disposed = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const titleEl = document.querySelector<HTMLElement>(".er-title");
+
+    const fireGlx = (el: HTMLElement | null) => {
+      if (!el || el.classList.contains("glx")) return;
+      el.classList.add("glx");
+      setTimeout(() => {
+        el.classList.remove("glx");
+      }, 420);
+    };
+
+    const tick = () => {
+      if (disposed) return;
+      if (!document.hidden && titleEl) {
+        fireGlx(titleEl);
+      }
+      timer = setTimeout(tick, 2000 + Math.random() * 2600);
+    };
+    timer = setTimeout(tick, 1800);
+
+    const onPointerOver = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      const target = e.target as HTMLElement | null;
+      const h = target?.closest(".er-title") as HTMLElement | null;
+      if (!h || h.contains(e.relatedTarget as Node | null)) return;
+      fireGlx(h);
+    };
+    document.addEventListener("pointerover", onPointerOver as EventListener);
+
+    return () => {
+      disposed = true;
+      if (timer) clearTimeout(timer);
+      document.removeEventListener("pointerover", onPointerOver as EventListener);
+    };
+  }, []);
+
   if (!game) {
     return null;
   }
@@ -224,7 +263,8 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
   };
 
   return (
-    <div className={`cs26-root esports-registration ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable} ${dmSans.variable}`}>
+    <div className={`cs26-root esports-registration live ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable} ${dmSans.variable}`}>
+      <CyberstrikeBackground />
       <main className="er-main">
         <header className="er-header">
           <div className="eh-top mono">
@@ -232,9 +272,8 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
             <span>{game.label}</span>
           </div>
           <h1
-            className={`ph${gameSlug === "real-cricket" ? " real-cricket-title" : ""}`}
-            data-t={game.title}
-            data-events-sl
+            className={`ph disp er-title${gameSlug === "real-cricket" ? " real-cricket-title" : ""}`}
+            aria-label={game.title}
           >
             {game.title}
           </h1>
@@ -244,7 +283,7 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
         {submitted ? (
           <section className="er-success" role="status">
             <span aria-hidden="true">✓</span>
-            <h2 data-events-sl>Registration received</h2>
+            <h2 className="disp er-success-title" aria-label="Registration received">Registration received</h2>
             <p>Your {game.title} entry has been submitted successfully.</p>
             <Link className="rgb" href="/events/esports"><span>Back to esports</span><b aria-hidden="true">↗</b></Link>
           </section>
@@ -319,8 +358,9 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
             )}
 
             {error && <p className="er-error" role="alert">{error}</p>}
-            <button className="event-submit er-submit" type="submit" disabled={submitting || uploadingField !== null}>
+            <button className="rgb er-submit" type="submit" disabled={submitting || uploadingField !== null}>
               <span>{uploadingField ? "Uploading college ID..." : submitting ? "Submitting..." : "Submit registration"}</span>
+              <b aria-hidden="true">↗</b>
             </button>
           </form>
         )}

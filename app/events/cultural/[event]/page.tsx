@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import Link from "next/link";
-import { FormEvent, use, useState } from "react";
+import { FormEvent, use, useEffect, useState } from "react";
 import {
   Instrument_Serif,
   JetBrains_Mono,
@@ -14,6 +14,7 @@ import "../../../cyberstrike-26/cyberstrike.css";
 import "../../events.css";
 import "../../esports/esports.css";
 import "../cultural.css";
+import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -361,6 +362,44 @@ export default function EventRegistrationPage({
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
 
+  useEffect(() => {
+    let disposed = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const titleEl = document.querySelector<HTMLElement>(".er-title");
+
+    const fireGlx = (el: HTMLElement | null) => {
+      if (!el || el.classList.contains("glx")) return;
+      el.classList.add("glx");
+      setTimeout(() => {
+        el.classList.remove("glx");
+      }, 420);
+    };
+
+    const tick = () => {
+      if (disposed) return;
+      if (!document.hidden && titleEl) {
+        fireGlx(titleEl);
+      }
+      timer = setTimeout(tick, 2000 + Math.random() * 2600);
+    };
+    timer = setTimeout(tick, 1800);
+
+    const onPointerOver = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      const target = e.target as HTMLElement | null;
+      const h = target?.closest(".er-title") as HTMLElement | null;
+      if (!h || h.contains(e.relatedTarget as Node | null)) return;
+      fireGlx(h);
+    };
+    document.addEventListener("pointerover", onPointerOver as EventListener);
+
+    return () => {
+      disposed = true;
+      if (timer) clearTimeout(timer);
+      document.removeEventListener("pointerover", onPointerOver as EventListener);
+    };
+  }, []);
+
   // Submission State
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -525,8 +564,9 @@ export default function EventRegistrationPage({
 
   return (
     <div
-      className={`cs26-root cultural-registration ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable} ${dmSans.variable}`}
+      className={`cs26-root cultural-registration live ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable} ${dmSans.variable}`}
     >
+      <CyberstrikeBackground />
       <main className="er-main" id="main" tabIndex={-1}>
         {/* Navigation Header */}
         <header className="er-header">
@@ -537,7 +577,7 @@ export default function EventRegistrationPage({
             <span>{ev.label}</span>
           </div>
 
-          <h1 className="ph" data-t={ev.title} data-events-sl>
+          <h1 className="ph disp er-title" aria-label={ev.title}>
             {ev.title}
           </h1>
 

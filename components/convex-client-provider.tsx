@@ -3,10 +3,12 @@
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { ReactNode } from "react";
 
-const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || "https://dummy.convex.cloud";
 
-if (!convexUrl) {
-  throw new Error("NEXT_PUBLIC_CONVEX_URL is not configured");
+if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
+  console.warn(
+    "⚠️ NEXT_PUBLIC_CONVEX_URL is not configured. Convex features will run in mock/offline mode. Add NEXT_PUBLIC_CONVEX_URL to your .env.local or run `npx convex dev`."
+  );
 }
 
 const convex = new ConvexReactClient(convexUrl);

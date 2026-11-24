@@ -16,7 +16,6 @@ export function AftermovieSection() {
           aria-label="Watch the Cyberstrike aftermovie on YouTube"
         >
           <div className="vp">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://img.youtube.com/vi/N73TbnTwxgU/maxresdefault.jpg"
               alt=""

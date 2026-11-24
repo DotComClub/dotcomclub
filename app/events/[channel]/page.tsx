@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import type { CSSProperties } from "react";
 import "../../cyberstrike-26/cyberstrike.css";
 import "../esports/esports.css";
 import "../events.css";
+import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
 
 type EventDetails = {
   name: string;
@@ -102,6 +101,70 @@ const channels: Record<
       },
     ],
   },
+  cultural: {
+    label: "Channel 03",
+    title: "Cultural",
+    intro:
+      "Eight stages for players, detectives, debaters and performers. Keep it respectful and college-appropriate.",
+    events: [
+      {
+        name: "Blackout Empire",
+        description:
+          "Tech-themed Monopoly. Buy big tech companies and survive the blackout.",
+        meta: ["Board game", "Timer-ended"],
+        rules: ["Everyone starts with equal Bits", "Own full colour groups to double rent and build servers", "Follow Packet Sniffer and Signal Ping cards", "Out of Bits means bankrupt", "No cheating or hiding cards"],
+      },
+      {
+        name: "The Masked Truth",
+        description:
+          "A game of secrets and trust. Find the Traitors hiding among the Faithful.",
+        meta: ["Social deduction", "Secret roles"],
+        rules: ["Secret roles: Faithful or Traitor", "Everyone votes; the most-voted player is eliminated", "Traitors eliminate one player in Night Round", "Eliminated players cannot give hints", "The Host's decision is final"],
+      },
+      {
+        name: "Red Handed",
+        description:
+          "Detectives examine evidence and question suspects. Murder or suicide, and if murder, who did it?",
+        meta: ["4 members"],
+        rules: ["Investigate the scene using the case file", "Question suspects only in the designated round", "Do not tamper with evidence", "Submit conclusions within the allotted time", "Judged on reasoning and accuracy"],
+      },
+      {
+        name: "Beat Drop",
+        description:
+          "A dance competition judged on skill, creativity and stage presence.",
+        meta: ["Solo or team", "4-5 players"],
+        rules: ["Register under one category only", "Bring college-appropriate music", "Follow the announced time limit", "Judges select advancing acts", "Judged on overall performance"],
+      },
+      {
+        name: "The Static Carnival",
+        description:
+          "An escape-room run through sequential Acts. Miss a clue and the final door stays shut.",
+        meta: ["4 members"],
+        rules: ["Timer starts in Act 1", "Deposit phones and smart devices", "Report 15 minutes early", "Do not tamper with props", "Report claustrophobia or photosensitivity beforehand"],
+      },
+      {
+        name: "Roll the Chaos",
+        description:
+          "Capture the best CYBERSTRIKE moments in a creative short reel.",
+        meta: ["Solo or 2-4", "30-90 seconds"],
+        rules: ["Reels must feature CYBERSTRIKE", "Keep content original and appropriate", "Do not disturb ongoing games", "Submit before the deadline", "Judged on creativity and editing"],
+      },
+      {
+        name: "La Couture Nights",
+        description:
+          "A themed fashion show: outfits and ramp performances on the organisers' theme.",
+        meta: ["6-8 members"],
+        rules: ["Follow the announced theme", "Arrange your own outfits", "Keep performances college-appropriate", "Report before your slot", "Winner and runner-up are selected"],
+      },
+      {
+        name: "Debate: Dead Air",
+        description:
+          "The Hijacked Frequency. A hijacker cuts in mid-argument and you have 30 seconds to respond.",
+        meta: ["2 members", "16 slots"],
+        rules: ["Round 1 topic released 24 hours ahead", "Cue-card restrictions apply", "Hijacks are mandatory", "No personal attacks or slurs", "Report 30 minutes before your slot"],
+      },
+    ],
+  },
 };
 
 export default async function ChannelPage({
@@ -110,14 +173,6 @@ export default async function ChannelPage({
   params: Promise<{ channel: string }>;
 }) {
   const { channel } = await params;
-
-  if (channel === "cultural") {
-    redirect("/events/cultural");
-  }
-  if (channel === "esports") {
-    redirect("/events/esports");
-  }
-
   const feed = channels[channel];
 
   if (!feed) {
@@ -125,20 +180,8 @@ export default async function ChannelPage({
       <div className="cs26-root esports-reference">
         <main className="pg">
           <div className="wrap">
-            <header>
-              <div className="eh-top mono">
-                <Link href="/events" className="navback">
-                  <span aria-hidden="true">←</span>Events
-                </Link>
-              </div>
-              <h1 className="ph" data-events-sl>
-                Channel not found
-              </h1>
-              <p className="pin">
-                The requested channel was not found.{" "}
-                <Link href="/events">Return to events</Link>
-              </p>
-            </header>
+            <h1 className="ph" data-events-sl>Channel not found</h1>
+            <Link href="/events">Back to events</Link>
           </div>
         </main>
       </div>
@@ -146,7 +189,8 @@ export default async function ChannelPage({
   }
 
   return (
-    <div className="cs26-root esports-reference event-channel-page">
+    <div className="cs26-root esports-reference event-channel-page live">
+      <CyberstrikeBackground />
       <main id="main" tabIndex={-1}>
         <section className="pg">
           <div className="wrap">
@@ -158,7 +202,7 @@ export default async function ChannelPage({
                   <span aria-hidden="true">←</span>Events
                 </Link>
               </div>
-              <h1 className="ph" data-t={feed.title.toUpperCase()} data-events-sl>
+              <h1 className="ph disp" aria-label={feed.title}>
                 {feed.title.toUpperCase()}
               </h1>
               <p className="pin">{feed.intro}</p>
@@ -169,35 +213,28 @@ export default async function ChannelPage({
                 <li
                   className="fd channel-event"
                   key={event.name}
-                  style={{ "--i": index } as CSSProperties}
+                  style={{ "--i": index } as React.CSSProperties}
                 >
                   <span className="fdi mono-n">
                     <small className="mono">Feed</small>
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div className="fdm">
-                    <h2 className="fdn" data-glitch>
-                      <span data-sl>{event.name}</span>
+                    <h2 className="fdn">
+                      {event.name}
                     </h2>
                     <p className="channel-description">{event.description}</p>
                   </div>
                   <div className="fdr">
                     <dl className="rd">
                       {event.meta.map((meta) => (
-                        <div key={meta}>
-                          <dt>Details</dt>
-                          <dd>{meta}</dd>
-                        </div>
+                        <div key={meta}><dt>Details</dt><dd>{meta}</dd></div>
                       ))}
                     </dl>
                     <details className="channel-rules">
-                      <summary className="rb mono">
-                        Rules<i aria-hidden="true" />
-                      </summary>
+                      <summary className="rb mono">Rules<i aria-hidden="true" /></summary>
                       <ol className="rls">
-                        {event.rules.map((rule) => (
-                          <li key={rule}>{rule}</li>
-                        ))}
+                        {event.rules.map((rule) => <li key={rule}>{rule}</li>)}
                       </ol>
                     </details>
                   </div>

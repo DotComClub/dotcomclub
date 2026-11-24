@@ -110,281 +110,8 @@ const FS = [
   "}",
 ].join("\n");
 
-// ================= 04 Event Channels Data =================
-const D = [
-  {
-    k: "E-Sports",
-    i: "Four tournaments. Report 15–20 minutes before your match, play on registered accounts, no cheats, macros or collusion. Entry fee and prize pool: to be announced.",
-    e: [
-      {
-        n: "BGMI",
-        c: "Squad mode in custom rooms. Points for where you finish and every elimination.",
-        m: [
-          ["Team", "4 players"],
-          ["Venue", "Class 1D or Lab 6A"],
-        ],
-        r: [
-          "Match points = placement points + 1 per finish",
-          "Placement: 1st 10, 2nd 6, 3rd 5, 4th 4, 5th 3, 6th 2, 7th–8th 1",
-          "Ties: most first-place finishes, then placement points, finishes, latest match",
-          "Use registered in-game names and the room ID and password from organisers",
-          "No teaming with opponents, modified clients or point manipulation",
-        ],
-      },
-      {
-        n: "VALORANT",
-        c: "Five-a-side knockout bracket. Win and advance.",
-        m: [
-          ["Team", "5 players + 1 optional sub"],
-          ["Venue", "Lab 2"],
-        ],
-        r: [
-          "BO1 in early rounds; the final may be BO3",
-          "Map pool and veto steps announced before the event",
-          "Report 20 minutes early; late teams may forfeit",
-          "One tactical timeout per half if enabled; pauses go through the referee",
-          "Own mouse and keyboard only if permitted; no cheats, macros or account sharing",
-        ],
-      },
-      {
-        n: "Clash Royale",
-        c: "Mega Draft 1v1 knockout. Both players draft their cards for every match.",
-        m: [
-          ["Team", "Solo"],
-          ["Venue", "Foyer"],
-        ],
-        r: [
-          "Best-of-1 or Best-of-3 announced beforehand",
-          "No outside help with card selection",
-          "Play on your own registered account",
-          "No restarts without an official’s approval; a disconnect is not an automatic rematch",
-          "Report 15 minutes early or risk a walkover",
-        ],
-      },
-      {
-        n: "FIFA 25",
-        c: "1v1 knockout on official club teams.",
-        m: [
-          ["Team", "Solo"],
-          ["Venue", "Foyer"],
-        ],
-        r: [
-          "Official club teams only; no custom squads, FUT or Volta",
-          "Tournament controllers only",
-          "Pause only when the ball is out of play or at half-time",
-          "Ties go to extra time, then penalties",
-          "Report 15 minutes early or forfeit the match",
-        ],
-      },
-    ],
-  },
-  {
-    k: "Technical",
-    i: "Six contests of code, prompts, puzzles and quick thinking. Approved tools only, no outside help.",
-    e: [
-      {
-        n: "Cyber Hunt",
-        c: "A digital treasure hunt. Solve cyber puzzles to unlock each password-protected file.",
-        m: [["Team", "Up to 20 participants"]],
-        r: [
-          "Every team starts with the same locked file",
-          "Each solved puzzle gives the next password; no skipping or borrowing passwords",
-          "Limited hints available at a predefined penalty",
-          "Report technical issues to the event coordinator",
-          "First correct final answer, after verification, wins",
-        ],
-      },
-      {
-        n: "AI Prompt Wars",
-        c: "Build sharp prompts, improve AI output and catch errors and hallucinations.",
-        m: [
-          ["Team", "2 members"],
-          ["Slots", "10 teams"],
-        ],
-        r: [
-          "Organiser-approved AI tools only",
-          "Save and submit your prompts when asked",
-          "No pre-prepared outputs or outside help",
-          "Same tasks and time limits for every team",
-          "Judged on prompt quality, accuracy, relevance, creativity and error detection",
-        ],
-      },
-      {
-        n: "Algorithm Auction",
-        c: "Bid virtual CyberCoins for the right to solve programming challenges.",
-        m: [
-          ["Team", "2 members"],
-          ["Slots", "10 teams"],
-        ],
-        r: [
-          "Every team starts with equal CyberCoins",
-          "The highest valid bid solves the challenge; accepted bids can’t be withdrawn",
-          "Submit within the time limit; no sharing solutions",
-          "Rewards, penalties and scoring announced beforehand",
-          "Highest final score wins; a predetermined tie-break applies",
-        ],
-      },
-      {
-        n: "Among Us: Cyberstrike Edition",
-        c: "Real-life social deduction. Crewmates finish tech tasks while Impostors sabotage.",
-        m: [["Players", "Up to 12, incl. 2 Impostors"]],
-        r: [
-          "The Game Master assigns secret roles; keep yours secret",
-          "Crewmates complete tasks at designated stations",
-          "Meetings and voting follow the Game Master",
-          "No real hacking, private file access or college network interference",
-          "Crew wins by finishing tasks or removing both Impostors; Game Master settles disputes",
-        ],
-      },
-      {
-        n: "Signal Sprint",
-        c: "A three-level tech quiz that tests knowledge, observation and quick thinking.",
-        m: [
-          ["Team", "4 members"],
-          ["Slots", "12 teams"],
-        ],
-        r: [
-          "Round 1, Signal Break: six survey-board questions per team; top six advance",
-          "Round 2, On Sight: one player per team names images on the projector; top three players advance",
-          "Round 3, Lock In: whistle or buzzer speed round; wait for permission to answer",
-          "No phones or outside help",
-          "The referee’s call on who signalled first is final",
-        ],
-      },
-      {
-        n: "Canva: Creative Override",
-        c: "A timed, AI-assisted design contest: a poster, then a promotional video.",
-        m: [
-          ["Team", "Solo"],
-          ["Slots", "20 participants"],
-        ],
-        r: [
-          "Round 1: AI-assisted poster on an assigned theme",
-          "Round 2: short promotional video on a new theme",
-          "Canva and organiser-approved AI tools only",
-          "Original work, submitted before each deadline",
-          "Highest combined score across both rounds wins",
-        ],
-      },
-    ],
-  },
-  {
-    k: "Cultural",
-    i: "Eight stages for players, detectives, debaters and performers. Keep it respectful and college-appropriate.",
-    e: [
-      {
-        n: "Blackout Empire",
-        c: "Tech-themed Monopoly. Buy big tech companies and survive the blackout.",
-        m: [["Ends", "When the timer runs out"]],
-        r: [
-          "Everyone starts with equal Bits; roll to move, then buy or auction an unowned company",
-          "Own a full colour group to double rent and build servers",
-          "Packet Sniffer and Signal Ping draw mystery cards",
-          "Sent to Server Down: roll doubles or pay a fee",
-          "Out of Bits means bankrupt; most total wealth (cash + companies) wins when time is up",
-          "No cheating, hiding cards or arguing with the Banker",
-        ],
-      },
-      {
-        n: "The Masked Truth",
-        c: "A game of secrets and trust. Find the Traitors hiding among the Faithful.",
-        m: [],
-        r: [
-          "Secret roles: Faithful or Traitor. Faithfuls get public missions, Traitors secret ones",
-          "Everyone votes; the player with the most votes is eliminated",
-          "Traitors eliminate one player in the Night Round",
-          "Eliminated players can’t give hints or help",
-          "Faithfuls win by removing all Traitors; Traitors win by equalling or outnumbering the Faithfuls",
-          "The Host’s decision is final",
-        ],
-      },
-      {
-        n: "Red Handed",
-        c: "Detectives examine evidence and question suspects. Murder or suicide, and if murder, who did it?",
-        m: [["Team", "4 members"]],
-        r: [
-          "Each team gets a case file and investigates the scene",
-          "Question suspects only in the designated round",
-          "Don’t tamper with evidence or share it with other teams",
-          "Submit your conclusion within the time allowed",
-          "Judged on evidence analysis, reasoning and accuracy",
-        ],
-      },
-      {
-        n: "Beat Drop",
-        c: "A dance competition judged on skill, creativity and stage presence.",
-        m: [["Category", "Solo or team of 4–5"]],
-        r: [
-          "Register under one category only",
-          "Each act performs once in the opening round; judges decide who advances",
-          "Bring your own music; keep it appropriate for a college event",
-          "Follow the organisers’ time limit",
-          "Winner and runner-up chosen on overall performance",
-        ],
-      },
-      {
-        n: "The Static Carnival",
-        c: "An escape-room run through sequential Acts. Clues carry forward; miss one and the final door stays shut.",
-        m: [["Team", "4 members"]],
-        r: [
-          "Timer starts when you enter Act 1; no skipping, no re-entry",
-          "Deposit phones, smartwatches and earphones before entry",
-          "Report 15 minutes before your slot or forfeit it",
-          "Don’t tamper with props; don’t share clues with other teams",
-          "Photosensitivity or claustrophobia? Tell the desk beforehand",
-        ],
-      },
-      {
-        n: "Roll the Chaos",
-        c: "Capture the best CYBERSTRIKE moments in a creative short reel.",
-        m: [
-          ["Team", "Solo or 2–4"],
-          ["Reel", "30–90 seconds"],
-        ],
-        r: [
-          "Reels must feature CYBERSTRIKE and its events",
-          "Use any editing app; keep it original and appropriate",
-          "Don’t disturb ongoing games while recording",
-          "Submit before the deadline",
-          "Judged on creativity, storytelling, entertainment, editing and event representation",
-        ],
-      },
-      {
-        n: "La Couture Nights",
-        c: "A themed fashion show: outfits and ramp performances on the organisers’ theme.",
-        m: [["Team", "6–8 members"]],
-        r: [
-          "Follow the announced theme and arrange your own outfits",
-          "Each participant walks and performs their own take on the theme",
-          "Keep outfits and performances college-appropriate",
-          "Report before your slot; don’t interfere with other performers",
-          "One winner and one runner-up",
-        ],
-      },
-      {
-        n: "Debate: Dead Air",
-        c: "The Hijacked Frequency. A hijacker cuts in mid-argument and you have 30 seconds to fold it in.",
-        m: [
-          ["Team", "2 members"],
-          ["Slots", "16, first come first served"],
-        ],
-        r: [
-          "Round 1 topic released 24 hours ahead; stance by live draw",
-          "Round 1 allows one 50-word cue card; no scripts in Rounds 2 and 3",
-          "Hijacks are mandatory: freezing costs points, handling them well earns a bonus",
-          "Keep crossfire respectful: no personal attacks, slurs or constant interruptions",
-          "Audience vote counts 10%, Round 2 only",
-          "Report 30 minutes before your slot; phones deposited before Round 3 prep",
-        ],
-      },
-    ],
-  },
-];
-
 export default function Cyberstrike26Page() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [activeChannel, setActiveChannel] = useState(0);
-  const [openEventId, setOpenEventId] = useState<string | null>("ev0_0");
 
   useEffect(() => {
     const rootEl = containerRef.current;
@@ -424,8 +151,12 @@ export default function Cyberstrike26Page() {
     // Always start the instant cinematic intro on page load (unless prefers-reduced-motion is on)
     const playIntro = !rm;
 
-    if (rm) root.classList.add("rm");
-    if (playIntro) root.classList.add("js-intro");
+    if (rm) {
+      root.classList.remove("js-intro");
+      root.classList.add("rm");
+    } else {
+      root.classList.add("js-intro");
+    }
 
     const prevBodyOverflow = document.body.style.overflow;
     if (playIntro) {
@@ -488,7 +219,7 @@ export default function Cyberstrike26Page() {
         s.className = "s";
         s.setAttribute("aria-hidden", "true");
         s.innerHTML = raw;
-        s.style.clipPath = `inset(${cuts[k] - 0.5}% -12% ${100 - cuts[k + 1] - 0.5}% -12%)`;
+        s.style.clipPath = `inset(${cuts[k] - 0.5}% 0% ${100 - cuts[k + 1] - 0.5}% 0%)`;
         s.style.setProperty("--dx", (Math.random() * 2 - 1).toFixed(3));
         s.style.setProperty("--dy", (Math.random() * 2 - 1).toFixed(3));
         s.style.setProperty("--r", Math.random().toFixed(3));
@@ -550,6 +281,16 @@ export default function Cyberstrike26Page() {
     safeTimeout(fitHero, 600);
     fitHero();
 
+    const fireGlx = (el: HTMLElement | null) => {
+      if (!el || el.classList.contains("glx")) return;
+      el.classList.add("glx");
+      el.querySelectorAll<HTMLElement>(".sl").forEach((s) => s.classList.add("glx"));
+      safeTimeout(() => {
+        el.classList.remove("glx");
+        el.querySelectorAll<HTMLElement>(".sl").forEach((s) => s.classList.remove("glx"));
+      }, 420);
+    };
+
     const glitchEls = root.querySelectorAll<HTMLElement>("[data-glitch]");
     let io: IntersectionObserver | null = null;
     if (!rm && "IntersectionObserver" in window) {
@@ -558,19 +299,49 @@ export default function Cyberstrike26Page() {
           es.forEach((en) => {
             if (en.isIntersecting) {
               en.target.classList.remove("pre");
+              fireGlx(en.target as HTMLElement);
               io?.unobserve(en.target);
             }
           });
         },
-        { threshold: 0.25 }
+        { threshold: 0.1 }
       );
       glitchEls.forEach((g) => {
-        const r = g.getBoundingClientRect();
-        if (r.top > window.innerHeight * 0.9) {
-          g.classList.add("pre");
-        }
+        g.classList.remove("pre");
         io?.observe(g);
       });
+    }
+
+    // Ambient + hover glitch on sliced headings
+    if (!rm) {
+      const isVisible = (el: HTMLElement) => {
+        const r = el.getBoundingClientRect();
+        return r.bottom > 0 && r.top < window.innerHeight && r.width > 0;
+      };
+
+      const tickGlitch = () => {
+        if (disposed) return;
+        if (!document.hidden && !root.classList.contains("js-intro")) {
+          const all = Array.from(root.querySelectorAll<HTMLElement>("main .disp, main .h2, main [data-glitch], main .sl")).filter(isVisible);
+          if (all.length) {
+            const count = 1 + (Math.random() < 0.35 ? 1 : 0);
+            for (let i = 0; i < count; i++) {
+              fireGlx(all[Math.floor(Math.random() * all.length)]);
+            }
+          }
+        }
+        safeTimeout(tickGlitch, 1800 + Math.random() * 2600);
+      };
+      safeTimeout(tickGlitch, 2500);
+
+      const onPointerOver = (e: PointerEvent) => {
+        if (e.pointerType === "touch") return;
+        const target = e.target as HTMLElement | null;
+        const h = target?.closest("main .disp, main .h2, main [data-glitch], main .sl") as HTMLElement | null;
+        if (!h || h.contains(e.relatedTarget as Node | null)) return;
+        fireGlx(h);
+      };
+      document.addEventListener("pointerover", onPointerOver as EventListener);
     }
 
     // ================= Audio =================
@@ -994,13 +765,13 @@ export default function Cyberstrike26Page() {
 
     const evA = [
       {
-        t: 40,
+        t: 0,
         f: () => {
           say("INITIALIZING CONNECTION...", "", 18);
-          burst = 0.25;
+          burst = 0.5;
           safeTimeout(() => {
             burst = 0;
-          }, 50);
+          }, 80);
           auBlip(320, 0.12, 0.05);
         },
       },
@@ -1072,20 +843,21 @@ export default function Cyberstrike26Page() {
       S.surge = 0;
       S.stat = 0.018 + 0.01 * Math.sin(t * 0.006);
 
-      // Beam: thin horizontal phosphor line flickers in, expands, tears
-      if (t >= 320 && t < 950) {
-        const u = t - 320;
+      // Beam: thin horizontal phosphor line flickers in immediately, expands, tears
+      if (t >= 0 && t < 950) {
+        const u = t;
         const fl =
-          u < 120 ? (Math.random() > 0.45 ? 0.5 : 0) : 0.8 + 0.2 * Math.random();
-        const len = u < 120 ? 0.28 : 0.28 + 0.72 * ease((u - 120) / 280);
+          u < 120 ? (Math.random() > 0.45 ? 0.7 : 0.3) : 0.8 + 0.2 * Math.random();
+        const len = u < 120 ? 0.35 : 0.35 + 0.65 * ease((u - 120) / 280);
         const col = u > 450 ? 1 - ease((u - 450) / 180) : 1;
         S.beam = fl * col;
         S.beamH = 0.0016 + (u > 450 ? 0.006 * ((u - 450) / 180) : 0);
         S.beamLen = u > 450 ? Math.max(0.02, len * col) : len;
-        if (u > 140 && u < 380) {
-          S.tear = 0.7 * (Math.random() > 0.25 ? 1 : 0.3);
+        if (u < 380) {
+          S.tear = Math.max(burst, 0.7 * (Math.random() > 0.25 ? 1 : 0.3));
           S.rgb = 2.8;
           S.stat = 0.06;
+          S.surge = Math.max(0, 0.35 * (1 - u / 380));
         }
       }
       if (t >= 1000 && phase === "A") {
@@ -1496,10 +1268,8 @@ export default function Cyberstrike26Page() {
       S.beamH = 0.002;
       S.beamLen = 1;
       auSet(false);
-      rafId = requestAnimationFrame((n) => {
-        last = n;
-        frame(n);
-      });
+      last = performance.now();
+      frame(last);
       safeTimeout(() => {
         try {
           skipBtn?.focus({ preventScroll: true });
@@ -2098,7 +1868,7 @@ export default function Cyberstrike26Page() {
   return (
     <div
       ref={containerRef}
-      className={`cs26-root ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable}`}
+      className={`cs26-root js-intro ${instrumentSerif.variable} ${jetbrainsMono.variable} ${vt323.variable}`}
     >
       <div className="crt" aria-hidden="true" />
       <canvas id="fx" aria-hidden="true" />
@@ -2281,20 +2051,9 @@ export default function Cyberstrike26Page() {
               <span className="tag mono">[ 01 — Transmission recovery ]</span>
               <h2
                 className="disp h2"
-                data-glitch
                 aria-label="Recovering the lost signal"
               >
-                <span data-sl aria-hidden="true">
-                  Recovering
-                </span>
-                <br />
-                <span data-sl aria-hidden="true">
-                  the <em>lost</em>
-                </span>
-                <br />
-                <span data-sl aria-hidden="true">
-                  signal
-                </span>
+                Recovering<br />the <em>lost</em><br />signal
               </h2>
               <p className="note">
                 Somewhere behind the static there is a feed that was never meant
@@ -2349,11 +2108,11 @@ export default function Cyberstrike26Page() {
             <span className="tag mono">[ 02 — Theme reveal ]</span>
             <div className="words">
               <div className="row">
-                <span className="disp w o" data-glitch>
-                  <span data-sl>Lost</span>
+                <span className="disp w o">
+                  Lost
                 </span>
-                <span className="disp w" data-glitch>
-                  <span data-sl>Signal</span>
+                <span className="disp w">
+                  Signal
                 </span>
               </div>
             </div>
@@ -2365,14 +2124,8 @@ export default function Cyberstrike26Page() {
           <div className="wrap s3">
             <div>
               <span className="tag mono">[ 03 — The hackathon ]</span>
-              <h2 className="disp h2" data-glitch aria-label="Join the Hackathon">
-                <span data-sl aria-hidden="true">
-                  Join the
-                </span>
-                <br />
-                <span data-sl aria-hidden="true">
-                  Hack<em>athon</em>
-                </span>
+              <h2 className="disp h2" aria-label="Join the Hackathon">
+                Join the<br />Hack<em>athon</em>
               </h2>
               <p>
                 Theme: Root Probe. Bring a team, break it open, build it back.
@@ -2409,134 +2162,25 @@ export default function Cyberstrike26Page() {
         <section className="blk s5" id="events">
           <div className="wrap">
             <span className="tag mono">[ 04 — Event channels ]</span>
-            <h2 className="disp h2" data-glitch aria-label="Tune into the events">
-              <span data-sl aria-hidden="true">
-                Tune into
-              </span>
-              <br />
-              <span data-sl aria-hidden="true">
-                the <em>events</em>
-              </span>
+            <h2 className="disp h2" aria-label="Tune into the events">
+              Tune into<br />the <em>events</em>
             </h2>
-            <div className="s5g">
-              <div className="side">
-                <p className="sin">
-                  Eighteen events on three channels. Pick a channel, open an
-                  event, read the rules before you register.
-                </p>
-                <div className="chs" role="tablist" aria-label="Event channels">
-                  {D.map((c, i) => (
-                    <button
-                      key={c.k}
-                      className="ch"
-                      type="button"
-                      role="tab"
-                      id={`ch${i}`}
-                      aria-controls="evp"
-                      aria-selected={activeChannel === i}
-                      tabIndex={activeChannel === i ? 0 : -1}
-                      data-i={i}
-                      onClick={() => {
-                        if (activeChannel !== i) {
-                          setActiveChannel(i);
-                          setOpenEventId(`ev${i}_0`);
-                          const fl = document.querySelector("#events .fl");
-                          if (fl) {
-                            fl.classList.remove("go");
-                            void (fl as HTMLElement).offsetWidth;
-                            fl.classList.add("go");
-                          }
-                        }
-                      }}
-                    >
-                      <span className="mono">Channel 0{i + 1}</span>
-                      <span className="nm">{c.k}</span>
-                      <span className="ct mono">{c.e.length} events</span>
-                    </button>
-                  ))}
-                </div>
-                <p className="cnote mono" aria-live="polite">
-                  {D[activeChannel].i}
-                </p>
-                <a className="btn red mono js-reg" href={REG_URL}>
-                  Register for events <span aria-hidden="true">↗</span>
-                </a>
-              </div>
-              <div className="evw">
-                <ul
-                  className="evs"
-                  id="evp"
-                  role="tabpanel"
-                  aria-labelledby={`ch${activeChannel}`}
-                >
-                  {D[activeChannel].e.map((e, i) => {
-                    const id = `ev${activeChannel}_${i}`;
-                    const isOpen = openEventId === id;
-                    return (
-                      <li
-                        key={e.n}
-                        className={`ev ${isOpen ? "open" : ""}`}
-                        style={
-                          {
-                            "--i": i,
-                            "--dx": "0.00",
-                          } as React.CSSProperties
-                        }
-                      >
-                        <button
-                          className="eh"
-                          type="button"
-                          aria-expanded={isOpen}
-                          aria-controls={id}
-                          onClick={() =>
-                            setOpenEventId(isOpen ? null : id)
-                          }
-                        >
-                          <span className="en">{e.n}</span>
-                          <span className="em mono">
-                            {e.m[0] ? e.m[0][1] : ""}
-                          </span>
-                          <i className="pm" aria-hidden="true" />
-                        </button>
-                        <div
-                          className="eb"
-                          id={id}
-                          role="region"
-                          aria-label={`${e.n} rules`}
-                        >
-                          <div>
-                            <div className="ei">
-                              <p className="cn">{e.c}</p>
-                              {e.m.length > 0 && (
-                                <p className="sp mono">
-                                  {e.m.map(([label, val]) => (
-                                    <span key={label}>
-                                      {label} <b>{val}</b>
-                                    </span>
-                                  ))}
-                                </p>
-                              )}
-                              <ul className="rl">
-                                {e.r.map((rule, rIdx) => (
-                                  <li key={rIdx}>{rule}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-                <div className="fl" aria-hidden="true" />
-              </div>
-            </div>
+            <p className="sin" style={{ marginTop: "3vw" }}>
+              Eighteen events on three channels. See every event, its rules and how to register.
+            </p>
+            <Link
+              className="btn red mono"
+              href="/events"
+              style={{ marginTop: "2em" }}
+            >
+              View all events <span aria-hidden="true">↗</span>
+            </Link>
           </div>
         </section>
 
         <section className="blk s4" id="timeline">
           <div className="wrap">
-            <span className="tag mono">[ 04 — Timeline synchronisation ]</span>
+            <span className="tag mono">[ 05 — Timeline synchronisation ]</span>
             <h2 className="disp h2" data-glitch aria-label="Launch in">
               <span data-sl aria-hidden="true">
                 Launch in
@@ -2569,14 +2213,8 @@ export default function Cyberstrike26Page() {
         <section className="blk final" id="access">
           <div className="wrap">
             <span className="tag mono">[ Access terminal ]</span>
-            <h2 className="disp" data-glitch aria-label="Ready to reconnect?">
-              <span data-sl aria-hidden="true">
-                Ready to
-              </span>
-              <br />
-              <span data-sl aria-hidden="true">
-                reconnect?
-              </span>
+            <h2 className="disp" aria-label="Ready to reconnect?">
+              Ready to<br />reconnect?
             </h2>
             <p>
               System waiting for input. Connection window closes 18 November
