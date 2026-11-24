@@ -113,24 +113,6 @@ const Events = () => {
           </div>
         </section>
 
-        <footer className="ft events-ft">
-          <div className="wrap events-ft-wrap">
-            <div className="events-ft-brand">
-              <span className="mono events-ft-label">
-                CYBERSTRIKE 26 — EVENT CHANNELS
-              </span>
-              <p className="events-ft-sub">
-                Dot Com Club · Jai Hind College, Mumbai · 20 November 2026
-              </p>
-            </div>
-            <nav className="events-ft-nav" aria-label="Quick links">
-              <Link href="/cyberstrike-26">Cyberstrike</Link>
-              <Link href="/cyberstrike-26/cl">CL Registration</Link>
-              <Link href="/about-us">About</Link>
-              <Link href="/contact-us">Contact</Link>
-            </nav>
-          </div>
-        </footer>
       </main>
     </div>
   );

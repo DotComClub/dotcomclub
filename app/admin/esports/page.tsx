@@ -29,7 +29,7 @@ export default function AdminEsportsRegistrations() {
           player.name,
           player.email,
           player.ign,
-          player.collegeId,
+          player.collegeIdUrl ?? player.collegeId ?? "",
           player.number,
           player.collegeName,
           registration.verificationStatus,
@@ -44,7 +44,7 @@ export default function AdminEsportsRegistrations() {
         registration.name ?? "",
         registration.email ?? "",
         registration.ign ?? "",
-        registration.collegeId ?? "",
+        registration.collegeIdUrl ?? registration.collegeId ?? "",
         registration.phone ?? "",
         registration.collegeName ?? "",
         registration.verificationStatus,
@@ -137,6 +137,20 @@ export default function AdminEsportsRegistrations() {
                                   )}
                                   <span className="block break-all text-gray-400">{player.email} · {player.number}</span>
                                   <span className="block text-gray-500">{player.ign} · {player.collegeName}</span>
+                                  {(player.collegeIdUrl || player.collegeId) && (
+                                    <a
+                                      href={player.collegeIdUrl || player.collegeId}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="mt-2 block"
+                                    >
+                                      <img
+                                        src={player.collegeIdUrl || player.collegeId}
+                                        alt={`College ID for ${player.name}`}
+                                        className="h-20 w-32 rounded border border-cyan-500/30 object-cover"
+                                      />
+                                    </a>
+                                  )}
                                 </div>
                               ))}
                             </div>
@@ -145,6 +159,26 @@ export default function AdminEsportsRegistrations() {
                               <span>{registration.ign || registration.playerTag || "-"}</span>
                               <span className="block text-gray-400">{registration.collegeName || "-"}</span>
                               <span className="block text-gray-500">{registration.phone || "-"}</span>
+                              {(registration.collegeIdUrl || registration.collegeId) && (
+                                <a
+                                  href={
+                                    registration.collegeIdUrl ||
+                                    registration.collegeId
+                                  }
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="mt-2 block"
+                                >
+                                  <img
+                                    src={
+                                      registration.collegeIdUrl ||
+                                      registration.collegeId
+                                    }
+                                    alt={`College ID for ${registration.name || "entrant"}`}
+                                    className="h-20 w-32 rounded border border-cyan-500/30 object-cover"
+                                  />
+                                </a>
+                              )}
                             </div>
                           )}
                         </td>

@@ -473,7 +473,7 @@ export default function EventRegistrationPage({
             phone: pPhone,
             email: pEmail,
             classYear: pYear,
-            collegeIdUrl: pCollegeIdUrl,
+            ...(pCollegeIdUrl ? { collegeIdUrl: pCollegeIdUrl } : {}),
           });
         }
       }
@@ -491,20 +491,26 @@ export default function EventRegistrationPage({
         collegeName,
         codeType,
         codeValue,
-        teamName,
+        ...(teamName ? { teamName } : {}),
         entryFormat: ev.isConditionalTeam ? beatDropFormat : ev.teamFormat,
         teamSize: String(totalParticipants),
         name: p1.name,
         email: p1.email,
         phone: p1.phone,
         classYear: p1.classYear,
-        collegeIdUrl: p1.collegeIdUrl,
+        ...(p1.collegeIdUrl ? { collegeIdUrl: p1.collegeIdUrl } : {}),
         participants: participantsList,
         registrationFee: calculatedFee,
         paymentMethod,
-        upiTransactionId: getVal("upiTransactionId") || undefined,
-        paymentScreenshotUrl: uploadedFiles["paymentScreenshot"] || undefined,
-        additionalPaymentInfo: getVal("additionalPaymentInfo") || undefined,
+        ...(getVal("upiTransactionId")
+          ? { upiTransactionId: getVal("upiTransactionId") }
+          : {}),
+        ...(uploadedFiles["paymentScreenshot"]
+          ? { paymentScreenshotUrl: uploadedFiles["paymentScreenshot"] }
+          : {}),
+        ...(getVal("additionalPaymentInfo")
+          ? { additionalPaymentInfo: getVal("additionalPaymentInfo") }
+          : {}),
         declarationAccepted: true,
       });
 
@@ -817,24 +823,27 @@ export default function EventRegistrationPage({
                         <span>
                           College ID Proof Upload (PDF / JPG / PNG) *
                         </span>
-                        <input
-                          type="file"
-                          accept=".pdf,.jpg,.jpeg,.png,.webp"
-                          onChange={(e) =>
-                            handleFileUpload(
-                              `p${pNum}_id`,
-                              e.target.files?.[0]
-                            )
-                          }
-                          disabled={uploadingField === `p${pNum}_id`}
-                        />
+                        <label className="event-upload">
+                          <span className="event-upload-icon" aria-hidden="true">↑</span>
+                          <span className="event-upload-copy">
+                            <b>Choose college ID</b>
+                            <small>PDF, JPG, PNG or WEBP · Max 4 MB</small>
+                          </span>
+                          <input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png,.webp"
+                            onChange={(e) =>
+                              handleFileUpload(
+                                `p${pNum}_id`,
+                                e.target.files?.[0]
+                              )
+                            }
+                            disabled={uploadingField === `p${pNum}_id`}
+                          />
+                        </label>
                         {uploadedFiles[`p${pNum}_id`] && (
-                          <span
-                            className="mono"
-                            style={{ color: "var(--cyan)", fontSize: "11px" }}
-                          >
-                            ✓ Document attached:{" "}
-                            {uploadedFiles[`p${pNum}_id`].split("/").pop()}
+                          <span className="event-upload-status">
+                            <b aria-hidden="true">✓</b> College ID uploaded
                           </span>
                         )}
                       </div>
@@ -897,25 +906,28 @@ export default function EventRegistrationPage({
 
                 <div className="er-field full">
                   <span>Payment Screenshot (PDF / JPG / PNG) *</span>
-                  <input
-                    type="file"
-                    accept=".pdf,.jpg,.jpeg,.png,.webp"
-                    required={!uploadedFiles["paymentScreenshot"]}
-                    onChange={(e) =>
-                      handleFileUpload(
-                        "paymentScreenshot",
-                        e.target.files?.[0]
-                      )
-                    }
-                    disabled={uploadingField === "paymentScreenshot"}
-                  />
+                  <label className="event-upload">
+                    <span className="event-upload-icon" aria-hidden="true">↑</span>
+                    <span className="event-upload-copy">
+                      <b>Choose payment screenshot</b>
+                      <small>PDF, JPG, PNG or WEBP · Max 4 MB</small>
+                    </span>
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png,.webp"
+                      required={!uploadedFiles["paymentScreenshot"]}
+                      onChange={(e) =>
+                        handleFileUpload(
+                          "paymentScreenshot",
+                          e.target.files?.[0]
+                        )
+                      }
+                      disabled={uploadingField === "paymentScreenshot"}
+                    />
+                  </label>
                   {uploadedFiles["paymentScreenshot"] && (
-                    <span
-                      className="mono"
-                      style={{ color: "var(--cyan)", fontSize: "11px" }}
-                    >
-                      ✓ Screenshot verified:{" "}
-                      {uploadedFiles["paymentScreenshot"].split("/").pop()}
+                    <span className="event-upload-status">
+                      <b aria-hidden="true">✓</b> Payment proof uploaded
                     </span>
                   )}
                 </div>
@@ -967,8 +979,8 @@ export default function EventRegistrationPage({
               <div className="submit-container">
                 <button
                   type="submit"
-                  className="er-submit-btn"
-                  disabled={submitting}
+                  className="event-submit er-submit-btn"
+                  disabled={submitting || uploadingField !== null}
                 >
                   <span>
                     <i className="pd" aria-hidden="true" />

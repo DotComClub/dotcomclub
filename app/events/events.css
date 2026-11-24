@@ -5,6 +5,133 @@ body:has(.cs26-root) footer:not(.ft) {
   display: none !important;
 }
 
+.cs26-root .event-upload {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  min-height: 72px;
+  overflow: hidden;
+  border: 1px solid rgba(155, 107, 255, 0.38);
+  border-radius: 8px;
+  background: rgba(155, 107, 255, 0.055);
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.cs26-root .event-upload:hover,
+.cs26-root .event-upload:focus-within {
+  border-color: rgba(155, 107, 255, 0.82);
+  background: rgba(155, 107, 255, 0.09);
+  transform: translateY(-1px);
+}
+
+.cs26-root .event-upload-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  margin-left: 10px;
+  place-items: center;
+  border: 1px solid rgba(155, 107, 255, 0.7);
+  border-radius: 6px;
+  color: #c9afff;
+  font: 500 16px/1 var(--mono);
+}
+
+.cs26-root .event-upload-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 10px 12px 10px 0;
+  pointer-events: none;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.cs26-root .event-upload-copy b {
+  color: var(--ink);
+  font: 600 13px/1.2 var(--mono);
+}
+
+.cs26-root .event-upload-copy small {
+  color: var(--dim);
+  font: 400 10px/1.4 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cs26-root .event-upload input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cs26-root .event-upload-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  color: #c9afff;
+  font: 500 10px/1.4 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cs26-root .event-upload-status b {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 1px solid rgba(155, 107, 255, 0.75);
+  border-radius: 50%;
+}
+
+body .cs26-root .event-submit {
+  width: min(260px, 100%);
+  min-height: 48px;
+  border: 1px solid rgba(155, 107, 255, 0.75);
+  border-radius: 8px;
+  background: rgba(155, 107, 255, 0.16);
+  color: #e8ddff;
+  box-shadow: none;
+  clip-path: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.cs26-root .event-submit:hover,
+.esports-registration .er-submit:hover:not(:disabled),
+.cultural-registration .er-submit-btn:hover:not(:disabled) {
+  border-color: #b99aff;
+  background: rgba(155, 107, 255, 0.24);
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+
+.esports-registration .er-submit b,
+.cultural-registration .er-submit-btn b,
+.cultural-registration .er-submit-btn .sn,
+.cultural-registration .er-submit-btn .pd {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-upload,
+  .event-submit {
+    animation: none;
+    transition: none;
+  }
+}
+
 .events-navbar-container {
   min-height: 0 !important;
   height: 0 !important;

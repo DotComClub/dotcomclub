@@ -34,8 +34,43 @@ export const createCulturalRegistration = mutation({
     declarationAccepted: v.boolean(),
   },
   handler: async (ctx, args) => {
+    const participants = args.participants?.map((participant) => ({
+      role: participant.role,
+      name: participant.name,
+      phone: participant.phone,
+      email: participant.email,
+      classYear: participant.classYear,
+      ...(participant.collegeIdUrl
+        ? { collegeIdUrl: participant.collegeIdUrl }
+        : {}),
+    }));
+
     return await ctx.db.insert("culturalRegistrations", {
-      ...args,
+      event: args.event,
+      collegeName: args.collegeName,
+      codeType: args.codeType,
+      codeValue: args.codeValue,
+      ...(args.teamName ? { teamName: args.teamName } : {}),
+      ...(args.entryFormat ? { entryFormat: args.entryFormat } : {}),
+      ...(args.teamSize ? { teamSize: args.teamSize } : {}),
+      name: args.name,
+      email: args.email,
+      phone: args.phone,
+      ...(args.classYear ? { classYear: args.classYear } : {}),
+      ...(args.collegeIdUrl ? { collegeIdUrl: args.collegeIdUrl } : {}),
+      ...(participants ? { participants } : {}),
+      registrationFee: args.registrationFee,
+      paymentMethod: args.paymentMethod,
+      ...(args.upiTransactionId
+        ? { upiTransactionId: args.upiTransactionId }
+        : {}),
+      ...(args.paymentScreenshotUrl
+        ? { paymentScreenshotUrl: args.paymentScreenshotUrl }
+        : {}),
+      ...(args.additionalPaymentInfo
+        ? { additionalPaymentInfo: args.additionalPaymentInfo }
+        : {}),
+      declarationAccepted: args.declarationAccepted,
       submittedAt: Date.now(),
       verificationStatus: "pending",
     });

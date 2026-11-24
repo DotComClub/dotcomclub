@@ -25,6 +25,10 @@ export default function AdminDashboard() {
   const members = useQuery(api.registration.listMembers);
   const contacts = useQuery(api.contact.listContacts);
   const esportsRegistrations = useQuery(api.esportsRegistrations.listRegistrations);
+  const culturalRegistrations = useQuery(
+    api.culturalRegistrations.listCulturalRegistrations,
+    {}
+  );
   const router = useRouter();
 
   // Show login screen if not authenticated
@@ -138,6 +142,30 @@ export default function AdminDashboard() {
               >
                 <Gamepad2 className="w-4 h-4 mr-2" />
                 View Esports Registrations
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-black border-pink-500/30">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-pink-400" />
+                Cultural Registrations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-400 mb-4">
+                View cultural event entrants, teams, payments and proof documents.
+              </p>
+              <p className="text-sm text-pink-400 mb-4">
+                {culturalRegistrations?.length || 0} total registrations
+              </p>
+              <Button
+                onClick={() => router.push("/admin/cultural")}
+                className="w-full bg-pink-700 hover:bg-pink-600 text-white"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                View Cultural Registrations
               </Button>
             </CardContent>
           </Card>
