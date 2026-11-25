@@ -3,13 +3,13 @@
 export interface TeamCard { id: string; team: string; image: string; width: number; height: number; kind: "individual" | "group"; category: TeamCardCategory; }
 
 export const TEAM_NAMES = [
-  "Celebrity Management",
   "Core",
+  "Faculty",
+  "Celebrity Management",
   "Creative",
   "Documentation",
   "Esports",
   "Events",
-  "Faculty",
   "Graphics",
   "Marketing",
   "Media",

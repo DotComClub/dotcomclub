@@ -13,20 +13,41 @@ const CLUB_SOCIALS = {
   li: "https://www.linkedin.com/company/dotcomclub/",
 };
 
+const CARD_CATEGORY_ORDER = {
+  heads: 0,
+  subheads: 1,
+  group: 2,
+};
+
 const STATEMENT_TEXT = "Innovate. Create. Collaborate. Every idea at DCC starts with a team that cares.";
 const STATEMENT_WORDS = STATEMENT_TEXT.split(" ");
 
 export default function TeamsPage() {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState("Core");
   const [statementProgress, setStatementProgress] = useState(0);
 
   const statementRef = useRef<HTMLParagraphElement>(null);
 
-  const allMembers = TEAM_CARDS;
+  const allMembers = useMemo(() => {
+    const teamOrder = new Map<string, number>();
+    TEAM_NAMES.forEach((team, index) => teamOrder.set(team, index));
+
+    return [...TEAM_CARDS].sort((left, right) => {
+      const teamDifference =
+        (teamOrder.get(left.team) ?? TEAM_NAMES.length) -
+        (teamOrder.get(right.team) ?? TEAM_NAMES.length);
+      if (teamDifference !== 0) return teamDifference;
+
+      return (
+        CARD_CATEGORY_ORDER[left.category] -
+        CARD_CATEGORY_ORDER[right.category]
+      );
+    });
+  }, []);
 
   const filterTabs = useMemo(() => {
-    return ["All", ...TEAM_NAMES];
+    return [...TEAM_NAMES, "All"];
   }, []);
 
   const marqueeTeams = useMemo(() => {
