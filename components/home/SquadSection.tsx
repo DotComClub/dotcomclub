@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { RevealHeading } from "./RevealHeading";
+import { getTeamPhoto } from "@/lib/team-photos";
 
 const SQUAD_MEMBERS = [
-  { name: "Ayush Gupta", role: "President" },
-  { name: "Aditya Sharma", role: "Vice President" },
-  { name: "Diya Mehta", role: "Technical Head" },
-  { name: "Rohan Patel", role: "Creative Head" },
+  { name: "Rahul Jat", role: "President" },
+  { name: "Diya Artani", role: "Vice President" },
+  { name: "Adithya Suvarna", role: "Technical Operations Co-ordinator" },
+  { name: "Ganesh Tiwari", role: "Vice President and Contingent Leader" },
 ];
 
 export function SquadSection() {
@@ -20,7 +21,14 @@ export function SquadSection() {
         <div className="squad">
           {SQUAD_MEMBERS.map((member) => (
             <div key={member.name} className="person">
-              <i />
+              <i
+                aria-hidden="true"
+                style={
+                  getTeamPhoto(member.name)
+                    ? { backgroundImage: `url("${getTeamPhoto(member.name)}")` }
+                    : undefined
+                }
+              />
               <b>{member.name}</b>
               <small>{member.role}</small>
             </div>

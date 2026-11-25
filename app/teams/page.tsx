@@ -5,6 +5,7 @@ import { Navbar } from "@/components/home/Navbar";
 import { FooterSection } from "@/components/home/FooterSection";
 import { CustomCursor } from "@/components/home/CustomCursor";
 import { anton, dmSans } from "@/fonts/font";
+import { getTeamPhoto } from "@/lib/team-photos";
 
 const CLUB_SOCIALS = {
   ig: "https://www.instagram.com/dotcomclubjhc/",
@@ -285,6 +286,7 @@ export default function TeamsPage() {
           <div className="grid">
             {allMembers.map((member) => {
               const isMatch = activeFilter === "All" || member.team === activeFilter;
+              const image = member.img || getTeamPhoto(member.name);
               return (
                 <article
                   key={member.id}
@@ -295,14 +297,14 @@ export default function TeamsPage() {
                   <div className="pw">
                     <i
                       style={
-                        member.img
+                        image
                           ? {
-                              background: `url('${member.img}') center/cover`,
+                              background: `url('${image}') center/cover`,
                             }
                           : undefined
                       }
                     >
-                      {!member.img && <span>{getInitials(member.name)}</span>}
+                      {!image && <span>{getInitials(member.name)}</span>}
                     </i>
 
                     {/* Social Hover Links */}
