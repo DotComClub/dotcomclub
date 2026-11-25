@@ -13,6 +13,7 @@ import "../events.css";
 import "../esports/esports.css";
 import "../cultural/cultural.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
+import { CyberstrikeFooter } from "@/components/cyberstrike/CyberstrikeFooter";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -315,6 +316,8 @@ export default function TechnicalPage() {
           </div>
         </section>
       </main>
+
+      <CyberstrikeFooter />
 
       {/* Cyberstrike Detail Modal Dialog */}
       <dialog

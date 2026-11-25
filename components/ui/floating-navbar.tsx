@@ -56,7 +56,17 @@ export const FloatingNav = ({ className }: { className?: string }) => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  if (pathname?.startsWith("/cyberstrike-26") || pathname?.startsWith("/events")) return null;
+  if (
+    pathname?.startsWith("/cyberstrike-26") ||
+    pathname?.startsWith("/events") ||
+    pathname === "/ewaste-26" ||
+    pathname?.startsWith("/ewaste") ||
+    pathname === "/register" ||
+    pathname === "/terms-and-conditions" ||
+    pathname === "/privacy-policy" ||
+    pathname === "/refund-policy"
+  )
+    return null;
 
   return (
     <>

@@ -35,6 +35,12 @@ export function Navbar() {
   // Active navigation link tracking based on current pathname
   const activeIndex = NAV_LINKS.findIndex((link) => {
     if (link.href === "/") return pathname === "/";
+    if (
+      link.href === "/ewaste-26" &&
+      (pathname === "/ewaste-26" || pathname === "/ewaste" || pathname?.startsWith("/ewaste/"))
+    ) {
+      return true;
+    }
     return pathname === link.href || pathname?.startsWith(link.href + "/");
   });
 
@@ -320,7 +326,7 @@ export function Navbar() {
       </div>
 
       {/* Floating CTA for Mobile */}
-      {pathname !== "/sponsors" && pathname !== "/about-us" && pathname !== "/contact-us" && pathname !== "/magazines" && pathname !== "/teams" && (
+      {pathname !== "/sponsors" && pathname !== "/about-us" && pathname !== "/contact-us" && pathname !== "/magazines" && pathname !== "/teams" && pathname !== "/ewaste-26" && !pathname?.startsWith("/ewaste") && pathname !== "/register" && pathname !== "/terms-and-conditions" && pathname !== "/privacy-policy" && pathname !== "/refund-policy" && (
         <Link
           className={`btn wh fab ${showFab ? "s" : ""}`}
           id="fab"

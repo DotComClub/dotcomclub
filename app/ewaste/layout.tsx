@@ -1,5 +1,7 @@
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
+import { Navbar } from "@/components/home/Navbar";
+import { anton, dmSans } from "@/fonts/font";
 
 export const metadata: Metadata = createMetadata({
   title: "E-waste Drive 2026 | JHC Dot Com Club",
@@ -17,5 +19,10 @@ export default function EwasteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <div className={`ewaste-root home-root ${anton.variable} ${dmSans.variable}`}>
+      <Navbar />
+      {children}
+    </div>
+  );
 }

@@ -13,6 +13,7 @@ import { animate } from "motion";
 import "../../cyberstrike-26/cyberstrike.css";
 import "./esports.css";
 import "../events.css";
+import { CyberstrikeFooter } from "@/components/cyberstrike/CyberstrikeFooter";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -955,6 +956,8 @@ export default function EsportsPage() {
           </div>
         </section>
       </main>
+
+      <CyberstrikeFooter />
 
       <dialog
         className="sht"

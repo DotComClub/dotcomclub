@@ -38,6 +38,8 @@ import { Badge } from "@/components/ui/badge";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { galleryImages } from "@/lib/gallery";
 import ImagesScrollingGallery from "@/components/ui/images-scrolling-gallery";
+import { Navbar } from "@/components/home/Navbar";
+import { anton, dmSans } from "@/fonts/font";
 import "./page.css";
 
 // ==========================================
@@ -431,7 +433,8 @@ export default function EWasteDrive2026() {
   }, [activeTab, individuals, organizations]);
 
   return (
-    <div className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#050505] text-neutral-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
+    <div className={`ewaste-root home-root relative min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#050505] text-neutral-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-300 ${anton.variable} ${dmSans.variable}`}>
+      <Navbar />
       {/* Modern Premium Background Layer System */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
         {/* 1. Subtle 1px grid pattern (1.5-2% opacity) */}
@@ -461,7 +464,7 @@ export default function EWasteDrive2026() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative z-10 min-h-[48vh] flex items-center justify-center pt-16 overflow-hidden border-b border-neutral-900">
+      <section className="relative z-10 min-h-[48vh] flex items-center justify-center pt-24 sm:pt-28 md:pt-32 overflow-hidden border-b border-neutral-900">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25 scale-105 filter blur-[2px]"
           style={{
