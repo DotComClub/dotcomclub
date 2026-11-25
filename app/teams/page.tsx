@@ -1,71 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState,  useMemo } from "react";
+import Image from "next/image";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Navbar } from "@/components/home/Navbar";
 import { FooterSection } from "@/components/home/FooterSection";
 import { CustomCursor } from "@/components/home/CustomCursor";
 import { anton, dmSans } from "@/fonts/font";
-import { getTeamPhoto } from "@/lib/team-photos";
+import { TEAM_CARDS, TEAM_NAMES } from "@/lib/teams-roster";
 
 const CLUB_SOCIALS = {
   ig: "https://www.instagram.com/dotcomclubjhc/",
   li: "https://www.linkedin.com/company/dotcomclub/",
 };
-
-interface Member {
-  id: string;
-  name: string;
-  role: string;
-  team: string;
-  img?: string;
-  ig?: string;
-  li?: string;
-}
-
-const TEAMS_DATA: { team: string; members: Member[] }[] = [
-  {
-    team: "Core",
-    members: [
-      { id: "core-1", name: "Ayush Gupta", role: "President", team: "Core" },
-      { id: "core-2", name: "Aditya Sharma", role: "Vice President", team: "Core" },
-      { id: "core-3", name: "Hussain Tinwala", role: "General Secretary", team: "Core" },
-      { id: "core-4", name: "Bhalchandra", role: "Treasurer", team: "Core" },
-    ],
-  },
-  {
-    team: "Technical",
-    members: [
-      { id: "tech-1", name: "Diya Mehta", role: "Technical Head", team: "Technical" },
-      { id: "tech-2", name: "Web-Ops Lead", role: "Web-Ops Lead", team: "Technical" },
-      { id: "tech-3", name: "Frontend Lead", role: "Frontend Developer", team: "Technical" },
-      { id: "tech-4", name: "Cybersecurity Lead", role: "Cybersecurity Lead", team: "Technical" },
-    ],
-  },
-  {
-    team: "Creative",
-    members: [
-      { id: "creat-1", name: "Rohan Patel", role: "Creative Head", team: "Creative" },
-      { id: "creat-2", name: "Graphic Designer", role: "Graphic Designer", team: "Creative" },
-      { id: "creat-3", name: "Video Editor", role: "Video Editor", team: "Creative" },
-    ],
-  },
-  {
-    team: "Marketing",
-    members: [
-      { id: "mkt-1", name: "Marketing Head", role: "Marketing Head", team: "Marketing" },
-      { id: "mkt-2", name: "Social Media Manager", role: "Social Media Manager", team: "Marketing" },
-      { id: "mkt-3", name: "Content Writer", role: "Content Writer", team: "Marketing" },
-    ],
-  },
-  {
-    team: "Operations",
-    members: [
-      { id: "ops-1", name: "Operations Head", role: "Operations Head", team: "Operations" },
-      { id: "ops-2", name: "Logistics Lead", role: "Logistics Lead", team: "Operations" },
-      { id: "ops-3", name: "Sponsorship Lead", role: "Sponsorship Lead", team: "Operations" },
-    ],
-  },
-];
 
 const STATEMENT_TEXT = "Innovate. Create. Collaborate. Every idea at DCC starts with a team that cares.";
 const STATEMENT_WORDS = STATEMENT_TEXT.split(" ");
@@ -77,34 +23,20 @@ export default function TeamsPage() {
 
   const statementRef = useRef<HTMLParagraphElement>(null);
 
-  // All team members flattened
-  const allMembers = useMemo(() => {
-    return TEAMS_DATA.flatMap((t) => t.members);
-  }, []);
+  const allMembers = TEAM_CARDS;
 
-  // Filter tabs: 'All' + team names
   const filterTabs = useMemo(() => {
-    return ["All", ...TEAMS_DATA.map((t) => t.team)];
+    return ["All", ...TEAM_NAMES];
   }, []);
 
-  // Marquee teams list
   const marqueeTeams = useMemo(() => {
-    return TEAMS_DATA.map((t) => t.team);
+    return TEAM_NAMES;
   }, []);
 
-  // Filtered members count
-  const visibleMembersCount = useMemo(() => {
+  const visibleCardsCount = useMemo(() => {
     if (activeFilter === "All") return allMembers.length;
     return allMembers.filter((m) => m.team === activeFilter).length;
   }, [activeFilter, allMembers]);
-
-  // Initials generator for member circle avatar
-  const getInitials = (name: string) => {
-    if (!name || name === "Name") return "DCC";
-    const parts = name.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -277,8 +209,8 @@ export default function TeamsPage() {
 
           {/* Member Count Announcement */}
           <p className="fcnt" aria-live="polite">
-            Showing {visibleMembersCount}{" "}
-            {visibleMembersCount === 1 ? "member" : "members"}
+            Showing {visibleCardsCount}{" "}
+            {visibleCardsCount === 1 ? "card" : "cards"}
             {activeFilter === "All" ? "" : ` from ${activeFilter}`}
           </p>
 
@@ -286,65 +218,25 @@ export default function TeamsPage() {
           <div className="grid">
             {allMembers.map((member) => {
               const isMatch = activeFilter === "All" || member.team === activeFilter;
-              const image = member.img || getTeamPhoto(member.name);
               return (
                 <article
                   key={member.id}
                   className={`person ${!isMatch ? "out" : ""}`}
                   hidden={!isMatch}
                   data-team={member.team}
+                  data-category={member.category}
                 >
                   <div className="pw">
-                    <i
-                      style={
-                        image
-                          ? {
-                              background: `url('${image}') center/cover`,
-                            }
-                          : undefined
-                      }
-                    >
-                      {!image && <span>{getInitials(member.name)}</span>}
-                    </i>
-
-                    {/* Social Hover Links */}
-                    <div className="so">
-                      <a
-                        href={member.ig || CLUB_SOCIALS.ig}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`${member.name} on Instagram`}
-                      >
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          aria-hidden="true"
-                        >
-                          <rect x="3" y="3" width="18" height="18" rx="5" />
-                          <circle cx="12" cy="12" r="4" />
-                          <circle cx="17.5" cy="6.5" r=".8" fill="currentColor" />
-                        </svg>
-                      </a>
-                      <a
-                        href={member.li || CLUB_SOCIALS.li}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`${member.name} on LinkedIn`}
-                      >
-                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                          <circle cx="5" cy="5" r="2.2" />
-                          <rect x="2.9" y="9.3" width="4.2" height="11.8" />
-                          <path d="M9.5 9.3h4v1.7c.6-1.1 2-2 3.9-2 3.7 0 4.6 2.4 4.6 5.6V21h-4.2v-5.6c0-1.4-.3-2.5-1.8-2.5-1.6 0-2.1 1.1-2.1 2.6V21H9.5z" />
-                        </svg>
-                      </a>
+                    <div className="poster">
+                      <Image
+                        src={member.image}
+                        alt={`${member.team} ${member.category === "group" ? "all-members group photo" : `${member.category} poster`} with names and positions`}
+                        fill
+                        sizes="(max-width: 639px) 44vw, (max-width: 999px) 30vw, 22vw"
+                        quality={75}
+                      />
                     </div>
                   </div>
-
-                  <b>{member.name}</b>
-                  <small>{member.role}</small>
-                  <em className="tag">{member.team}</em>
                 </article>
               );
             })}
