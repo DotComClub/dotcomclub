@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import { Navbar } from "@/components/home/Navbar";
 import { FooterSection } from "@/components/home/FooterSection";
 import { CustomCursor } from "@/components/home/CustomCursor";
@@ -12,7 +13,8 @@ interface SponsorItem {
   name: string;
   urlPath: string;
   logo: string;
-  category?: string;
+  category: string;
+  tier: "01 / Title Sponsor" | "02 / Powered By" | "03 / Associate" | "04 / Partner";
 }
 
 const TITLE_SPONSOR: SponsorItem = {
@@ -21,6 +23,7 @@ const TITLE_SPONSOR: SponsorItem = {
   urlPath: "cyberstrike.dcc/redbull",
   logo: "/2024/Sponsor37.jpeg",
   category: "Headline Title Partner",
+  tier: "01 / Title Sponsor",
 };
 
 const POWERED_BY: SponsorItem[] = [
@@ -30,6 +33,7 @@ const POWERED_BY: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/omen",
     logo: "/2024/Sponsor19.png",
     category: "Gaming Tech Partner",
+    tier: "02 / Powered By",
   },
   {
     id: "pwr-2",
@@ -37,6 +41,7 @@ const POWERED_BY: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/yt-fanfest",
     logo: "/2024/Sponsor15.jpg",
     category: "Digital Media Partner",
+    tier: "02 / Powered By",
   },
 ];
 
@@ -47,6 +52,7 @@ const ASSOCIATE_SPONSORS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/coding-blocks",
     logo: "/2024/Sponsor13.png",
     category: "EdTech Partner",
+    tier: "03 / Associate",
   },
   {
     id: "asc-2",
@@ -54,6 +60,7 @@ const ASSOCIATE_SPONSORS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/college-rivals",
     logo: "/2024/Sponsor14.jpg",
     category: "Esports Arena Partner",
+    tier: "03 / Associate",
   },
   {
     id: "asc-3",
@@ -61,6 +68,7 @@ const ASSOCIATE_SPONSORS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/smaaash",
     logo: "/2024/Sponsor41.png",
     category: "Entertainment Partner",
+    tier: "03 / Associate",
   },
   {
     id: "asc-4",
@@ -68,6 +76,7 @@ const ASSOCIATE_SPONSORS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/zero-latency",
     logo: "/2024/Sponsor45.jpg",
     category: "VR Gaming Partner",
+    tier: "03 / Associate",
   },
 ];
 
@@ -78,6 +87,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/amity",
     logo: "/2025/Sp02.png",
     category: "Academic Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-2",
@@ -85,6 +95,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/carnival-cinemas",
     logo: "/2024/Sponsor10.webp",
     category: "Entertainment Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-3",
@@ -92,6 +103,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/bounce-inc",
     logo: "/2024/Sponsor08.jpeg",
     category: "Activity Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-4",
@@ -99,6 +111,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/the-j",
     logo: "/2024/Sponsor21.jpeg",
     category: "F&B Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-5",
@@ -106,6 +119,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/gamers-retreat",
     logo: "/2024/Sponsor17.png",
     category: "Esports Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-6",
@@ -113,6 +127,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/parabolica",
     logo: "/2025/Sp09.jpg",
     category: "Social Gaming",
+    tier: "04 / Partner",
   },
   {
     id: "prt-7",
@@ -120,6 +135,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/no-escape",
     logo: "/2024/Sponsor31.webp",
     category: "Mystery Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-8",
@@ -127,6 +143,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/sports-qvest",
     logo: "/2024/Sponsor42.png",
     category: "Merch Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-9",
@@ -134,6 +151,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/big-scoop",
     logo: "/2024/Sponsor04.jpg",
     category: "Hospitality Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-10",
@@ -141,6 +159,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/rio",
     logo: "/2024/Sponsor38.png",
     category: "Beverage Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-11",
@@ -148,6 +167,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/the-ranch",
     logo: "/2024/Sponsor36.png",
     category: "Youth Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-12",
@@ -155,6 +175,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/chip-n-dip",
     logo: "/2024/Sponsor22.png",
     category: "Snacks Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-13",
@@ -162,6 +183,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/peculiar-photobooths",
     logo: "/2024/Sponsor33.png",
     category: "Photobooth Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-14",
@@ -169,6 +191,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/art-esthetique",
     logo: "/2024/Sponsor05.png",
     category: "Creative Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-15",
@@ -176,6 +199,7 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/chatore",
     logo: "/2024/Sponsor12.jpeg",
     category: "Food Partner",
+    tier: "04 / Partner",
   },
   {
     id: "prt-16",
@@ -183,11 +207,147 @@ const PARTNERS: SponsorItem[] = [
     urlPath: "cyberstrike.dcc/dreq",
     logo: "/2024/Sponsor01.webp",
     category: "Apparel Partner",
+    tier: "04 / Partner",
   },
 ];
 
+const ALL_SPONSORS: SponsorItem[] = [
+  TITLE_SPONSOR,
+  ...POWERED_BY,
+  ...ASSOCIATE_SPONSORS,
+  ...PARTNERS,
+];
+
+type MarqueePill =
+  | { kind: "sponsor"; sponsor: SponsorItem }
+  | { kind: "cta"; id: string; label: string; href: string; lime?: boolean };
+
+const ROW_1: MarqueePill[] = [
+  TITLE_SPONSOR,
+  ...POWERED_BY,
+  ...ASSOCIATE_SPONSORS,
+  PARTNERS[0],
+].map((sponsor) => ({ kind: "sponsor", sponsor }));
+
+const ROW_2: MarqueePill[] = [
+  { kind: "sponsor", sponsor: PARTNERS[1] },
+  { kind: "sponsor", sponsor: PARTNERS[2] },
+  {
+    kind: "cta",
+    id: "cta-ecosystem",
+    label: "23+ Brand Partners",
+    href: "#join",
+    lime: true,
+  },
+  { kind: "sponsor", sponsor: PARTNERS[3] },
+  { kind: "sponsor", sponsor: PARTNERS[4] },
+  { kind: "sponsor", sponsor: PARTNERS[5] },
+  { kind: "sponsor", sponsor: PARTNERS[6] },
+];
+
+const ROW_3: MarqueePill[] = [
+  {
+    kind: "cta",
+    id: "cta-and-more",
+    label: "And Others",
+    href: "#join",
+  },
+  ...PARTNERS.slice(7).map(
+    (sponsor): MarqueePill => ({ kind: "sponsor", sponsor })
+  ),
+];
+
+const MARQUEE_ROWS: {
+  id: string;
+  items: MarqueePill[];
+  reverse?: boolean;
+  duration: string;
+}[] = [
+  { id: "row-1", items: ROW_1, duration: "40s" },
+  { id: "row-2", items: ROW_2, reverse: true, duration: "44s" },
+  { id: "row-3", items: ROW_3, duration: "46s" },
+];
+
+interface MarqueeRowProps {
+  items: MarqueePill[];
+  reverse?: boolean;
+  duration: string;
+  activeId: string;
+  onSelectSponsor: (sponsor: SponsorItem) => void;
+}
+
+/**
+ * Infinite horizontal sponsor pill row with smooth pause-on-hover and edge fade.
+ */
+function MarqueeRow({
+  items,
+  reverse,
+  duration,
+  activeId,
+  onSelectSponsor,
+}: MarqueeRowProps) {
+  const renderPill = (item: MarqueePill, keyPrefix: string) => {
+    if (item.kind === "cta") {
+      return (
+        <a
+          key={`${keyPrefix}-${item.id}`}
+          href={item.href}
+          className={`sp-pill ${item.lime ? "is-lime" : "is-text"}`}
+        >
+          {item.label}
+        </a>
+      );
+    }
+
+    const { sponsor } = item;
+    const isActive = sponsor.id === activeId;
+    return (
+      <button
+        key={`${keyPrefix}-${sponsor.id}`}
+        type="button"
+        className="sp-pill"
+        data-active={isActive ? "true" : "false"}
+        onMouseEnter={() => onSelectSponsor(sponsor)}
+        onClick={() => onSelectSponsor(sponsor)}
+        title={`${sponsor.name} — ${sponsor.category}`}
+      >
+        <span>{sponsor.name}</span>
+        <span className="sp-ico">
+          <Image
+            src={sponsor.logo}
+            alt={sponsor.name}
+            width={40}
+            height={40}
+            className="object-contain"
+          />
+        </span>
+      </button>
+    );
+  };
+
+  return (
+    <div className={`sp-row ${reverse ? "rev" : ""}`}>
+      <div
+        className="sp-track"
+        style={{ "--sp-dur": duration } as React.CSSProperties}
+      >
+        {[0, 1].map((halfIdx) => (
+          <div
+            key={halfIdx}
+            className="sp-half"
+            aria-hidden={halfIdx === 1 ? true : undefined}
+          >
+            {items.map((item) => renderPill(item, `h${halfIdx}`))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function SponsorsPage() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [activeSponsor, setActiveSponsor] = useState<SponsorItem>(TITLE_SPONSOR);
   const cxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -230,6 +390,12 @@ export default function SponsorsPage() {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [handleMouseMove]);
+
+  const cycleSponsor = (dir: -1 | 1) => {
+    const idx = ALL_SPONSORS.findIndex((s) => s.id === activeSponsor.id);
+    const nextIdx = (idx + dir + ALL_SPONSORS.length) % ALL_SPONSORS.length;
+    setActiveSponsor(ALL_SPONSORS[nextIdx]);
+  };
 
   return (
     <div
@@ -319,8 +485,12 @@ export default function SponsorsPage() {
         </div>
       </section>
 
-      {/* ── BACKED BY THE BEST: TITLE & POWERED BY SPONSORS ─────────────── */}
-      <section className="tier t-dk" id="backers">
+      {/* ── BACKED BY THE BEST: ANIMATED 3-ROW PILL MARQUEE WALL ───────── */}
+      <section
+        className="tier t-dk"
+        id="backers"
+        style={{ background: "#0E0819" }}
+      >
         {/* Floating 3D Cubes */}
         <div className="cx" ref={cxRef} aria-hidden="true">
           <div
@@ -471,218 +641,76 @@ export default function SponsorsPage() {
               </div>
             </div>
           </div>
-          <div
-            className="cs"
-            style={
-              {
-                "--px": "5",
-                "--py": "42",
-                "--k": "0.05",
-                left: "4%",
-                top: "72%",
-              } as React.CSSProperties
-            }
-          >
-            <div
-              className="fd"
-              style={
-                {
-                  "--t": "21s",
-                  "--dx": "16px",
-                  "--dy": "20px",
-                } as React.CSSProperties
-              }
-            >
-              <div
-                className="cube"
-                style={
-                  { "--s": "20px", "--t": "21s" } as React.CSSProperties
-                }
-              >
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </div>
-            </div>
-          </div>
-          <div
-            className="cs"
-            style={
-              {
-                "--px": "-4",
-                "--py": "50",
-                "--k": "0.06",
-                right: "5%",
-                top: "88%",
-              } as React.CSSProperties
-            }
-          >
-            <div
-              className="fd"
-              style={
-                {
-                  "--t": "24s",
-                  "--dx": "-22px",
-                  "--dy": "-18px",
-                } as React.CSSProperties
-              }
-            >
-              <div
-                className="cube"
-                style={
-                  { "--s": "28px", "--t": "24s" } as React.CSSProperties
-                }
-              >
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="wrap">
           <h2 className="hd rv">Backed by the best.</h2>
           <p className="lead" style={{ color: "#B3A5D6", maxWidth: 640 }}>
-            From leading tech pioneers to hyper-growth innovators, meet the
-            visionary brands standing behind Cyberstrike 2025-2026.
+            From leading tech pioneers to hyper-growth innovators standing
+            behind Cyberstrike 2025-2026 — hover or click any brand pill below
+            to inspect their partnership.
           </p>
 
-          {/* 01 / Title Sponsor */}
-          <div className="tl">
-            01 / Title Sponsor <span>Exclusive Headline Partner</span>
+          {/* Animated 3-Row Sponsor Pill Marquee Container */}
+          <div className="sp-wall">
+            {MARQUEE_ROWS.map((row) => (
+              <MarqueeRow
+                key={row.id}
+                items={row.items}
+                reverse={row.reverse}
+                duration={row.duration}
+                activeId={activeSponsor.id}
+                onSelectSponsor={setActiveSponsor}
+              />
+            ))}
           </div>
-          <div className="sg g1">
-            <div className="sw dk">
-              <div className="sb">
-                <b />
-                <b />
-                <b />
-                <em>{TITLE_SPONSOR.urlPath}</em>
-              </div>
-              <div className="ss" style={{ padding: "16px 28px" }}>
+
+          {/* Interactive Selected Sponsor Spotlight Bar */}
+          <div className="sp-spot">
+            <div className="sp-spot-brand">
+              <div className="sp-spot-logo">
                 <Image
-                  src={TITLE_SPONSOR.logo}
-                  alt={TITLE_SPONSOR.name}
-                  width={420}
-                  height={180}
-                  priority
+                  src={activeSponsor.logo}
+                  alt={activeSponsor.name}
+                  width={96}
+                  height={64}
                   className="object-contain"
                 />
               </div>
+              <div className="sp-spot-meta">
+                <span className="sp-spot-tier">{activeSponsor.tier}</span>
+                <h3>{activeSponsor.name}</h3>
+                <p className="sp-spot-cat">
+                  {activeSponsor.category} • {activeSponsor.urlPath}
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* 02 / Powered By */}
-          <div className="tl">
-            02 / Powered By <span>Co-Presenting Partners</span>
-          </div>
-          <div className="sg g2">
-            {POWERED_BY.map((sponsor) => (
-              <div className="sw dk" key={sponsor.id}>
-                <div className="sb">
-                  <b />
-                  <b />
-                  <b />
-                  <em>{sponsor.urlPath}</em>
-                </div>
-                <div className="ss">
-                  <Image
-                    src={sponsor.logo}
-                    alt={sponsor.name}
-                    width={260}
-                    height={140}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── ASSOCIATE SPONSORS & PARTNERS ─────────────────────────────────── */}
-      <section className="tier cnt">
-        <div className="wrap">
-          {/* 03 / Associate Sponsors */}
-          <div className="tl">
-            03 / Associate Sponsors <span>Track & Category Leaders</span>
-          </div>
-          <div className="sg g4">
-            {ASSOCIATE_SPONSORS.map((sponsor) => (
-              <div className="sw" key={sponsor.id} title={sponsor.name}>
-                <div className="sb">
-                  <b />
-                  <b />
-                  <b />
-                  <em>{sponsor.urlPath}</em>
-                </div>
-                <div className="ss">
-                  <Image
-                    src={sponsor.logo}
-                    alt={sponsor.name}
-                    width={220}
-                    height={130}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 04 / Partners & Supporters */}
-          <div className="tl">
-            04 / Partners & Supporters <span>Community & Ecosystem</span>
-          </div>
-          <div className="sg g12">
-            {PARTNERS.map((partner) => (
-              <div className="sw" key={partner.id} title={partner.name}>
-                <div className="sb">
-                  <b />
-                  <b />
-                  <b />
-                  <em>{partner.urlPath}</em>
-                </div>
-                <div className="ss">
-                  <Image
-                    src={partner.logo}
-                    alt={partner.name}
-                    width={180}
-                    height={110}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            ))}
-
-            {/* Inquire New Partner Slot */}
-            <a
-              href="mailto:jhcdotcomclub.official@gmail.com?subject=Partner%20Inquiry%20Cyberstrike%202026"
-              className="sw"
-              style={{ textDecoration: "none" }}
-              title="Become a Partner"
-            >
-              <div className="sb">
-                <b />
-                <b />
-                <b />
-                <em>cyberstrike.dcc/your-brand</em>
-              </div>
-              <div className="ss empty">
-                <div>
-                  <b style={{ fontSize: "clamp(20px, 2.4vw, 28px)" }}>+ JOIN US</b>
-                  <span style={{ fontSize: 10, marginTop: 4, display: "block" }}>
-                    Partner Slot Open
-                  </span>
-                </div>
-              </div>
-            </a>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                aria-label="Previous sponsor"
+                onClick={() => cycleSponsor(-1)}
+                className="w-10 h-10 rounded-full border border-[#9E71FF]/40 bg-[#1A1230] text-[#F4EEFF] flex items-center justify-center hover:border-[#9E71FF] transition-colors cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                aria-label="Next sponsor"
+                onClick={() => cycleSponsor(1)}
+                className="w-10 h-10 rounded-full border border-[#9E71FF]/40 bg-[#1A1230] text-[#F4EEFF] flex items-center justify-center hover:border-[#9E71FF] transition-colors cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              <a
+                href="mailto:jhcdotcomclub.official@gmail.com?subject=Partner%20Inquiry%20Cyberstrike%202026"
+                className="sp-cta-lime"
+              >
+                <span>+ Become a Partner</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -710,7 +738,7 @@ export default function SponsorsPage() {
                 <h3>5,000+ TECH-FORWARD STUDENTS</h3>
                 <p>
                   Unmatched on-campus and digital brand impressions across
-                  Mumbai&apos; premier colleges and computer science faculties.
+                  Mumbai&apos;s premier colleges and computer science faculties.
                 </p>
               </div>
             </div>

@@ -31,7 +31,7 @@ export const satoshi = localFont({
   variable: "--font-satoshi",
 });
 
-import { Anton, DM_Sans, Dancing_Script } from "next/font/google";
+import { Anton, Dancing_Script } from "next/font/google";
 
 export const anton = Anton({
   subsets: ["latin"],
@@ -40,10 +40,93 @@ export const anton = Anton({
   display: "swap",
 });
 
-export const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
+export const dmSans = localFont({
+  src: [
+    {
+      path: "../public/fonts/dm-sans-400.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/dm-sans-500.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/dm-sans-700.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-dm",
+  display: "swap",
+});
+
+export const dmSansFull = localFont({
+  src: [
+    {
+      path: "../public/fonts/dm-sans-400.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/dm-sans-500.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/dm-sans-700.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+export const instrumentSerif = localFont({
+  src: [
+    {
+      path: "../public/fonts/instrument-serif-400.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/instrument-serif-400-italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+
+export const jetbrainsMono = localFont({
+  src: [
+    {
+      path: "../public/fonts/jetbrains-mono-400.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/jetbrains-mono-500.ttf",
+      weight: "500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+export const vt323 = localFont({
+  src: [
+    {
+      path: "../public/fonts/vt323-400.ttf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-vt323",
   display: "swap",
 });
 

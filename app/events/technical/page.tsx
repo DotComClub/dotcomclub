@@ -3,156 +3,18 @@
 import React, { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import {
-  Instrument_Serif,
-  JetBrains_Mono,
-  VT323,
-  DM_Sans,
-} from "next/font/google";
+  dmSansFull as dmSans,
+  instrumentSerif,
+  jetbrainsMono,
+  vt323,
+} from "@/fonts/font";
 import "../../cyberstrike-26/cyberstrike.css";
 import "../events.css";
 import "../esports/esports.css";
 import "../cultural/cultural.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
 import { CyberstrikeFooter } from "@/components/cyberstrike/CyberstrikeFooter";
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-});
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
-});
-const vt323 = VT323({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-vt323",
-});
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-});
-
-export const TECHNICAL_EVENTS = [
-  {
-    id: "cyber-hunt",
-    number: "01",
-    name: "Cyber Hunt",
-    tagline: "Aim, decrypt, unlock.",
-    team: "Solo / Individual",
-    fee: "₹50 / person",
-    venue: "Lab 1",
-    capacity: "Max 20 participants",
-    description:
-      "A digital treasure hunt. Solve cyber puzzles, cryptic ciphers and decode security locks to unlock each password-protected file. First correct final answer after verification wins.",
-    rules: [
-      "Every participant starts with the same locked file.",
-      "Each solved puzzle gives the next password; no skipping or borrowing passwords.",
-      "Limited hints available at a predefined penalty.",
-      "Report technical issues to the event coordinator immediately.",
-      "First correct final answer, after verification, wins.",
-    ],
-  },
-  {
-    id: "ai-prompt-wars",
-    number: "02",
-    name: "AI Prompt Wars",
-    tagline: "Out-prompt, out-think, out-create.",
-    team: "2 members per team",
-    fee: "₹100 / team",
-    venue: "Lab 3",
-    capacity: "Max 10 teams",
-    description:
-      "Build sharp prompts, improve AI output and catch subtle errors and hallucinations under strict time constraints. Test your prompt engineering mastery.",
-    rules: [
-      "Organiser-approved AI tools only.",
-      "Save and submit your prompts when asked.",
-      "No pre-prepared outputs or outside help.",
-      "Same tasks and time limits for every team.",
-      "Judged on prompt quality, accuracy, relevance, creativity and error detection.",
-    ],
-  },
-  {
-    id: "algorithm-auction",
-    number: "03",
-    name: "Algorithm Auction",
-    tagline: "Bid wisely. Code ruthlessly.",
-    team: "2 members per team",
-    fee: "₹100 / team",
-    venue: "Lab 4",
-    capacity: "Max 10 teams",
-    description:
-      "Bid virtual CyberCoins for the right to solve programming challenges. Balance your budget and code efficiently under pressure. Highest score wins.",
-    rules: [
-      "Every team starts with equal CyberCoins.",
-      "The highest valid bid solves the challenge; accepted bids cannot be withdrawn.",
-      "Submit within the time limit; no sharing solutions.",
-      "Rewards, penalties and scoring announced beforehand.",
-      "Highest final score wins.",
-    ],
-  },
-  {
-    id: "among-us",
-    number: "04",
-    name: "Among Us: Cyberstrike Edition",
-    tagline: "Trust no one. Spot the imposter.",
-    team: "Solo (Up to 12 players)",
-    fee: "₹50 / person",
-    venue: "Lab 6A / Corridor",
-    capacity: "Max 12 players",
-    description:
-      "Real-life social deduction. Crewmates finish tech tasks while Impostors sabotage the system. Decipher cues, call emergency meetings and survive the purge.",
-    rules: [
-      "The Game Master assigns secret roles; keep yours secret.",
-      "Crewmates complete tasks at designated stations.",
-      "Meetings and voting follow the Game Master's cue.",
-      "No real hacking, private file access or physical interference.",
-      "The Game Master settles all disputes.",
-    ],
-  },
-  {
-    id: "signal-sprint",
-    number: "05",
-    name: "Signal Sprint",
-    tagline: "Fast mind. Quick buzzer. Total dominance.",
-    team: "4 members per team",
-    fee: "₹160 / team (₹40 / person)",
-    venue: "Seminar Hall",
-    capacity: "Max 12 teams",
-    description:
-      "A three-level tech quiz that tests knowledge, observation, algorithmic logic and quick reflexes under buzzer pressure.",
-    rules: [
-      "Round 1: survey-board questions per team; top six advance.",
-      "Round 2: one player per team identifies projected visual tech cues.",
-      "Round 3: buzzer speed round with direct point scoring.",
-      "No phones, smart watches or outside help allowed.",
-      "The referee's decision is final.",
-    ],
-  },
-  {
-    id: "canva-override",
-    number: "06",
-    name: "Canva: Creative Override",
-    tagline: "Prompt. Design. Render the future.",
-    team: "Solo participation",
-    fee: "₹50 / person",
-    venue: "Lab 5",
-    capacity: "Max 20 participants",
-    description:
-      "A timed, AI-assisted design contest: generate an aesthetic cyber poster, then create a promotional motion graphic. Showcase visual mastery.",
-    rules: [
-      "Round 1: AI-assisted poster on an assigned theme.",
-      "Round 2: short promotional video/graphic on a secondary theme.",
-      "Canva and approved generative tools only.",
-      "Original work only, submitted before each deadline.",
-      "Highest combined score across both rounds wins.",
-    ],
-  },
-];
+import { TECHNICAL_EVENTS } from "@/lib/technical-events";
 
 export default function TechnicalPage() {
   const [openFeed, setOpenFeed] = useState<string | null>(null);
@@ -227,7 +89,7 @@ export default function TechnicalPage() {
             <header>
               <div className="eh-top mono">
                 <span>Ch 02</span>
-                <span>6 feeds</span>
+                <span>{TECHNICAL_EVENTS.length} feeds</span>
                 <Link href="/events" className="navback">
                   <span aria-hidden="true">←</span>Events
                 </Link>
@@ -237,7 +99,8 @@ export default function TechnicalPage() {
               </h1>
               <p className="pin">
                 Six arenas of code, promptcraft, algorithms and rapid reflexes.
-                Approved tools only, no outside assistance. Verify credentials to compete.
+                Select a sub-event below to review its flow and submit your
+                registration form.
               </p>
             </header>
 
@@ -254,47 +117,48 @@ export default function TechnicalPage() {
                   </span>
 
                   <div className="fdm">
-                    <span className="fdn">
-                      <span className="s disp" aria-hidden="true">
-                        {feed.name}
-                      </span>
-                      <span className="s disp" aria-hidden="true">
-                        {feed.name}
-                      </span>
-                      <span className="s disp" aria-hidden="true">
-                        {feed.name}
-                      </span>
-                      <span className="disp">{feed.name}</span>
-                    </span>
+                    <h2 className="fdn">{feed.title}</h2>
+                    <p
+                      className="mono"
+                      style={{
+                        color: "var(--dim)",
+                        marginTop: "8px",
+                        fontSize: "12px",
+                        letterSpacing: "0.08em",
+                      }}
+                    >
+                      {feed.tagline}
+                    </p>
 
-                    <button
-                      type="button"
+                    <Link
                       className="rgb"
-                      onClick={() => setOpenFeed(feed.id)}
+                      href={`/events/technical/${feed.id}`}
                     >
                       <span>
                         <i className="pd" aria-hidden="true" />
-                        REGISTER
-                        <em className="fn"> FOR {feed.name.toUpperCase()}</em>
+                        Register
+                        <em className="fn"> for {feed.title}</em>
                       </span>
                       <b aria-hidden="true">↗</b>
                       <s className="sn" aria-hidden="true" />
-                    </button>
+                    </Link>
                   </div>
 
                   <div className="fdr">
                     <dl className="rd">
                       <div>
                         <dt>Format</dt>
-                        <dd>{feed.team}</dd>
+                        <dd>{feed.teamFormat}</dd>
                       </div>
                       <div>
                         <dt>Fee</dt>
-                        <dd>{feed.fee}</dd>
+                        <dd>{feed.feeDesc}</dd>
                       </div>
                       <div>
-                        <dt>Venue</dt>
-                        <dd>{feed.venue}</dd>
+                        <dt>Venue / Day</dt>
+                        <dd>
+                          {feed.venue} · {feed.day}
+                        </dd>
                       </div>
                       <div>
                         <dt>Capacity</dt>
@@ -304,9 +168,10 @@ export default function TechnicalPage() {
                     <button
                       type="button"
                       className="rb mono"
+                      aria-haspopup="dialog"
                       onClick={() => setOpenFeed(feed.id)}
                     >
-                      Briefing &amp; Rules
+                      Event Flow &amp; Rules
                       <i aria-hidden="true" />
                     </button>
                   </div>
@@ -319,47 +184,37 @@ export default function TechnicalPage() {
 
       <CyberstrikeFooter />
 
-      {/* Cyberstrike Detail Modal Dialog */}
+      {/* Cyberstrike CRT Detail Modal Dialog */}
       <dialog
         ref={dialogRef}
-        className="sh"
+        className="sht"
+        aria-labelledby="tech-feed-modal-title"
+        onCancel={(event) => {
+          event.preventDefault();
+          closeDialog();
+        }}
         onClick={(e) => {
-          if (e.target === dialogRef.current) closeDialog();
+          if (e.target === e.currentTarget) closeDialog();
         }}
       >
         {activeFeed && (
           <>
             <header className="sh-h">
-              <div>
-                <p className="mono">
-                  Channel 02 / Feed {activeFeed.number} · {activeFeed.team}
-                </p>
-                <h3 className="disp" style={{ fontSize: "28px", margin: "4px 0" }}>
-                  {activeFeed.name}
-                </h3>
-                <p
-                  style={{
-                    color: "var(--red)",
-                    fontFamily: "var(--font-instrument-serif)",
-                    fontStyle: "italic",
-                    fontSize: "17px",
-                    margin: 0,
-                  }}
-                >
-                  &ldquo;{activeFeed.tagline}&rdquo;
-                </p>
-              </div>
+              <span className="mono">
+                Feed {activeFeed.number} / {activeFeed.title}
+              </span>
               <button
                 type="button"
-                className="sh-x"
-                aria-label="Close dialog"
+                className="sh-x mono"
                 onClick={closeDialog}
               >
-                ×
+                Close
+                <i aria-hidden="true" />
               </button>
             </header>
-            <div className="sh-b">
-              <h4 className="mono">Transmission Brief</h4>
+            <div className="sh-b" tabIndex={-1}>
+              <h3 id="tech-feed-modal-title">{activeFeed.title}</h3>
+              <p className="cn">&ldquo;{activeFeed.tagline}&rdquo;</p>
               <p
                 style={{
                   fontSize: "14px",
@@ -368,27 +223,41 @@ export default function TechnicalPage() {
                   marginBottom: "24px",
                 }}
               >
-                {activeFeed.description}
+                {activeFeed.intro}
               </p>
               <dl className="rd">
                 <div>
                   <dt>Format</dt>
-                  <dd>{activeFeed.team}</dd>
+                  <dd>{activeFeed.teamFormat}</dd>
                 </div>
                 <div>
                   <dt>Fee</dt>
-                  <dd>{activeFeed.fee}</dd>
+                  <dd>{activeFeed.feeDesc}</dd>
                 </div>
                 <div>
                   <dt>Venue</dt>
                   <dd>{activeFeed.venue}</dd>
                 </div>
                 <div>
+                  <dt>Day</dt>
+                  <dd>{activeFeed.day}</dd>
+                </div>
+                <div>
                   <dt>Capacity</dt>
                   <dd>{activeFeed.capacity}</dd>
                 </div>
               </dl>
+
               <h4 className="mono" style={{ marginTop: "24px" }}>
+                Event Flow
+              </h4>
+              <ol className="rls">
+                {activeFeed.eventFlow.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+
+              <h4 className="mono" style={{ marginTop: "28px" }}>
                 Rules &amp; Regulations
               </h4>
               <ol className="rls">
@@ -406,7 +275,7 @@ export default function TechnicalPage() {
                 <span>
                   <i className="pd" aria-hidden="true" />
                   Proceed to Register
-                  <em className="fn"> for {activeFeed.name}</em>
+                  <em className="fn"> for {activeFeed.title}</em>
                 </span>
                 <b aria-hidden="true">↗</b>
                 <s className="sn" aria-hidden="true" />

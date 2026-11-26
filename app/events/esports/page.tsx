@@ -3,39 +3,17 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
-  Instrument_Serif,
-  JetBrains_Mono,
-  VT323,
-  DM_Sans,
-} from "next/font/google";
+  dmSansFull as dmSans,
+  instrumentSerif,
+  jetbrainsMono,
+  vt323,
+} from "@/fonts/font";
 import gsap from "gsap";
 import { animate } from "motion";
 import "../../cyberstrike-26/cyberstrike.css";
 import "./esports.css";
 import "../events.css";
 import { CyberstrikeFooter } from "@/components/cyberstrike/CyberstrikeFooter";
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-});
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
-});
-const vt323 = VT323({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-vt323",
-});
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-});
 
 const VS =
   "attribute vec2 a;varying vec2 vUv;void main(){vUv=a*.5+.5;gl_Position=vec4(a,0.,1.);}";

@@ -5,213 +5,18 @@ import { useMutation } from "convex/react";
 import Link from "next/link";
 import { FormEvent, use, useEffect, useState } from "react";
 import {
-  Instrument_Serif,
-  JetBrains_Mono,
-  VT323,
-  DM_Sans,
-} from "next/font/google";
+  dmSansFull as dmSans,
+  instrumentSerif,
+  jetbrainsMono,
+  vt323,
+} from "@/fonts/font";
 import "../../../cyberstrike-26/cyberstrike.css";
 import "../../events.css";
 import "../../esports/esports.css";
 import "../../cultural/cultural.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-});
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
-});
-const vt323 = VT323({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-vt323",
-});
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-});
-
-type TechEventSchema = {
-  id: string;
-  title: string;
-  label: string;
-  tagline: string;
-  feeDesc: string;
-  baseFeeNum: number;
-  feeMode: "flat" | "per_person";
-  teamFormat: string;
-  venue: string;
-  capacity: string;
-  intro: string;
-  rules: string[];
-  confirmation: string;
-  isSolo: boolean;
-  isFixedTeam: boolean;
-  teamSize?: number;
-};
-
-const TECH_EVENTS_DATA: Record<string, TechEventSchema> = {
-  "cyber-hunt": {
-    id: "cyber-hunt",
-    title: "CYBER HUNT",
-    label: "Feed 01",
-    tagline: "Aim, decrypt, unlock.",
-    feeDesc: "₹50 per person",
-    baseFeeNum: 50,
-    feeMode: "per_person",
-    teamFormat: "Solo / Individual",
-    venue: "Lab 1",
-    capacity: "Maximum participation: 20 Participants",
-    intro:
-      "A digital treasure hunt. Solve cyber puzzles, cryptic ciphers and decode security locks to unlock each password-protected file. Registration is subject to availability and verification.",
-    rules: [
-      "Solo participants.",
-      "Every participant starts with the same locked file.",
-      "Each solved puzzle yields the next password; no skipping or borrowing.",
-      "Limited hints available at a predefined penalty.",
-      "First verified correct final answer wins.",
-    ],
-    confirmation:
-      "Thank you for registering for CYBER HUNT. Your details will be reviewed by the technical committee. Venue: Lab 1.",
-    isSolo: true,
-    isFixedTeam: false,
-  },
-  "ai-prompt-wars": {
-    id: "ai-prompt-wars",
-    title: "AI PROMPT WARS",
-    label: "Feed 02",
-    tagline: "Out-prompt, out-think, out-create.",
-    feeDesc: "₹100 per team",
-    baseFeeNum: 100,
-    feeMode: "flat",
-    teamFormat: "Exactly 2 participants",
-    venue: "Lab 3",
-    capacity: "Maximum 10 teams",
-    intro:
-      "Build sharp prompts, improve AI output and catch subtle errors and hallucinations under strict time constraints. Test your prompt engineering mastery.",
-    rules: [
-      "Team must have exactly 2 participants.",
-      "One participant must be identified as Team Leader.",
-      "Both members must provide details and college ID proof.",
-      "Organiser-approved AI tools only.",
-      "Judged on prompt quality, accuracy, relevance, and error detection.",
-    ],
-    confirmation:
-      "Thank you for registering for AI PROMPT WARS. Your details will be reviewed by the organizing committee. Venue: Lab 3.",
-    isSolo: false,
-    isFixedTeam: true,
-    teamSize: 2,
-  },
-  "algorithm-auction": {
-    id: "algorithm-auction",
-    title: "ALGORITHM AUCTION",
-    label: "Feed 03",
-    tagline: "Bid wisely. Code ruthlessly.",
-    feeDesc: "₹100 per team",
-    baseFeeNum: 100,
-    feeMode: "flat",
-    teamFormat: "Exactly 2 participants",
-    venue: "Lab 4",
-    capacity: "Maximum 10 teams",
-    intro:
-      "Bid virtual CyberCoins for the right to solve programming challenges. Balance your budget and code efficiently under pressure. Highest score wins.",
-    rules: [
-      "Team must have exactly 2 participants.",
-      "One participant must be identified as Team Leader.",
-      "Both members must provide details and college ID proof.",
-      "Accepted bids cannot be withdrawn; submit solutions within time limit.",
-      "Highest final score wins.",
-    ],
-    confirmation:
-      "Thank you for registering for ALGORITHM AUCTION. Your details will be reviewed by the technical committee. Venue: Lab 4.",
-    isSolo: false,
-    isFixedTeam: true,
-    teamSize: 2,
-  },
-  "among-us": {
-    id: "among-us",
-    title: "AMONG US: CYBERSTRIKE",
-    label: "Feed 04",
-    tagline: "Trust no one. Spot the imposter.",
-    feeDesc: "₹50 per participant",
-    baseFeeNum: 50,
-    feeMode: "per_person",
-    teamFormat: "Solo participation",
-    venue: "Lab 6A / Corridor",
-    capacity: "Maximum 12 players per lobby",
-    intro:
-      "Real-life social deduction. Crewmates finish tech tasks while Impostors sabotage the system. Decipher cues, call emergency meetings and survive the purge.",
-    rules: [
-      "Individual registration; roles assigned secretly by the Game Master.",
-      "Crewmates complete tasks at designated tech stations.",
-      "Meetings and voting follow official protocols.",
-      "No real hacking, private file access or physical interference.",
-      "The Game Master settles all disputes.",
-    ],
-    confirmation:
-      "Thank you for registering for AMONG US: CYBERSTRIKE EDITION. Your details will be reviewed by the organizing committee. Venue: Lab 6A / Corridor.",
-    isSolo: true,
-    isFixedTeam: false,
-  },
-  "signal-sprint": {
-    id: "signal-sprint",
-    title: "SIGNAL SPRINT",
-    label: "Feed 05",
-    tagline: "Fast mind. Quick buzzer. Total dominance.",
-    feeDesc: "₹160 per team (₹40 / person)",
-    baseFeeNum: 160,
-    feeMode: "flat",
-    teamFormat: "Exactly 4 participants",
-    venue: "Seminar Hall",
-    capacity: "Maximum 12 teams",
-    intro:
-      "A three-level tech quiz that tests knowledge, observation, algorithmic logic and quick reflexes under buzzer pressure.",
-    rules: [
-      "Team must have exactly 4 participants.",
-      "One participant must be identified as Team Leader.",
-      "All four participants must provide details and college ID proof.",
-      "Three rounds: survey-board questions, visual recognition, speed buzzer.",
-      "Referee's decision is final.",
-    ],
-    confirmation:
-      "Thank you for registering for SIGNAL SPRINT. Your details will be reviewed by the organizing committee. Venue: Seminar Hall.",
-    isSolo: false,
-    isFixedTeam: true,
-    teamSize: 4,
-  },
-  "canva-override": {
-    id: "canva-override",
-    title: "CANVA: CREATIVE OVERRIDE",
-    label: "Feed 06",
-    tagline: "Prompt. Design. Render the future.",
-    feeDesc: "₹50 per person",
-    baseFeeNum: 50,
-    feeMode: "per_person",
-    teamFormat: "Solo participation",
-    venue: "Lab 5",
-    capacity: "Maximum 20 participants",
-    intro:
-      "A timed, AI-assisted design contest: generate an aesthetic cyber poster, then create a promotional motion graphic. Showcase visual mastery.",
-    rules: [
-      "Solo participants.",
-      "Round 1: AI-assisted poster on an assigned cyber theme.",
-      "Round 2: short promotional motion graphic on a secondary theme.",
-      "Canva and approved generative tools only; original work submitted before deadlines.",
-      "Highest combined score across rounds wins.",
-    ],
-    confirmation:
-      "Thank you for registering for CANVA: CREATIVE OVERRIDE. Your details will be reviewed by the organizing committee. Venue: Lab 5.",
-    isSolo: true,
-    isFixedTeam: false,
-  },
-};
+import { CyberstrikeFooter } from "@/components/cyberstrike/CyberstrikeFooter";
+import { TECHNICAL_EVENTS_BY_ID } from "@/lib/technical-events";
 
 export default function TechEventRegistrationPage({
   params,
@@ -219,16 +24,45 @@ export default function TechEventRegistrationPage({
   params: Promise<{ event: string }>;
 }) {
   const { event: slug } = use(params);
-  const ev = TECH_EVENTS_DATA[slug] || TECH_EVENTS_DATA["cyber-hunt"];
+  const ev =
+    TECHNICAL_EVENTS_BY_ID[slug] || TECHNICAL_EVENTS_BY_ID["cyber-hunt"];
 
   // Form State
+  const [collegeName, setCollegeName] = useState("");
   const [codeType, setCodeType] = useState<"PRNC" | "CC">("PRNC");
   const [paymentMethod, setPaymentMethod] = useState<string>("UPI");
   const [declaration, setDeclaration] = useState(false);
 
+  // Per-participant college names (auto-populated from Section 1 unless edited)
+  const [participantColleges, setParticipantColleges] = useState<
+    Record<number, string>
+  >({});
+  const [editedColleges, setEditedColleges] = useState<Record<number, boolean>>(
+    {}
+  );
+
   // File Upload States
   const [uploadingField, setUploadingField] = useState<string | null>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>(
+    {}
+  );
+
+  // Submission State
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  const createRegistration = useMutation(
+    api.culturalRegistrations.createCulturalRegistration
+  );
+
+  // Reset transient state when switching between sub-events
+  useEffect(() => {
+    setSubmitted(false);
+    setError("");
+    setDeclaration(false);
+    setUploadedFiles({});
+  }, [ev.id]);
 
   useEffect(() => {
     let disposed = false;
@@ -264,18 +98,29 @@ export default function TechEventRegistrationPage({
     return () => {
       disposed = true;
       if (timer) clearTimeout(timer);
-      document.removeEventListener("pointerover", onPointerOver as EventListener);
+      document.removeEventListener(
+        "pointerover",
+        onPointerOver as EventListener
+      );
     };
   }, []);
 
-  // Submission State
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
+  const totalParticipants = ev.isSolo ? 1 : ev.teamSize;
+  const isTeamEntry = !ev.isSolo;
 
-  const createRegistration = useMutation(
-    api.culturalRegistrations.createCulturalRegistration
-  );
+  // Keep unedited participant college fields synced with Section 1 College Name
+  const handleInstitutionChange = (val: string) => {
+    setCollegeName(val);
+    setParticipantColleges((prev) => {
+      const next = { ...prev };
+      for (let i = 1; i <= totalParticipants; i++) {
+        if (!editedColleges[i]) {
+          next[i] = val;
+        }
+      }
+      return next;
+    });
+  };
 
   // File Upload Helper
   const handleFileUpload = async (
@@ -302,110 +147,115 @@ export default function TechEventRegistrationPage({
 
       setUploadedFiles((prev) => ({ ...prev, [fieldKey]: data.url! }));
     } catch (err: unknown) {
-      console.warn("Cloudinary upload failed, using local file name preview:", err);
-      setUploadedFiles((prev) => ({
-        ...prev,
-        [fieldKey]: `file://${file.name}`,
-      }));
+      setError(
+        err instanceof Error
+          ? err.message
+          : "File upload failed. Please use a PDF, JPG, or PNG under 4 MB."
+      );
     } finally {
       setUploadingField(null);
     }
   };
-
-  const totalParticipants = ev.isSolo ? 1 : ev.teamSize || 2;
-  const isTeamEntry = !ev.isSolo;
-
-  // Calculated Fee
-  let calculatedFee = ev.feeDesc;
-  if (ev.feeMode === "per_person") {
-    calculatedFee = `₹${ev.baseFeeNum * totalParticipants} (₹${ev.baseFeeNum} × ${totalParticipants})`;
-  } else {
-    calculatedFee = `₹${ev.baseFeeNum} flat fee`;
-  }
 
   // Form Submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
+    for (let i = 1; i <= totalParticipants; i++) {
+      if (!uploadedFiles[`p${i}_id`]) {
+        setError(
+          `Please upload College ID Proof (PDF/JPG/PNG) for Participant ${i}.`
+        );
+        return;
+      }
+    }
+
+    if (!uploadedFiles["paymentScreenshot"]) {
+      setError(
+        "Please upload your Payment Screenshot / Proof (PDF/JPG/PNG) before submitting."
+      );
+      return;
+    }
+
     if (!declaration) {
-      setError("Please confirm the final declaration checkbox before submitting.");
+      setError(
+        "Please confirm the final declaration checkbox before submitting."
+      );
       return;
     }
 
     setSubmitting(true);
-    const form = new FormData(e.currentTarget);
-    const getVal = (name: string) => String(form.get(name) ?? "").trim();
+    const formData = new FormData(e.currentTarget);
+    const getVal = (name: string) => String(formData.get(name) ?? "").trim();
 
     try {
-      const collegeName = getVal("collegeName");
+      const institution = getVal("collegeName");
       const codeValue = getVal("codeValue");
       const teamName = isTeamEntry ? getVal("teamName") : undefined;
 
       const participantsList = [];
       for (let i = 1; i <= totalParticipants; i++) {
-        const role =
-          ev.isSolo || (!isTeamEntry && i === 1)
-            ? "INDIVIDUAL"
-            : i === 1
-            ? "TEAM LEADER"
-            : "TEAM MEMBER";
+        const role = ev.isSolo
+          ? "INDIVIDUAL"
+          : i === 1
+          ? "TEAM LEADER"
+          : "TEAM MEMBER";
 
         const pName = getVal(`p${i}_name`);
         const pPhone = getVal(`p${i}_phone`);
         const pEmail = getVal(`p${i}_email`);
         const pYear = getVal(`p${i}_year`);
-        const pCollegeIdUrl = uploadedFiles[`p${i}_id`] || undefined;
+        const pCollege = getVal(`p${i}_college`) || institution;
+        const pCollegeIdUrl = uploadedFiles[`p${i}_id`];
 
-        if (pName) {
-          participantsList.push({
-            role,
-            name: pName,
-            phone: pPhone,
-            email: pEmail,
-            classYear: pYear,
-            ...(pCollegeIdUrl ? { collegeIdUrl: pCollegeIdUrl } : {}),
-          });
-        }
+        participantsList.push({
+          role,
+          name: pName,
+          phone: pPhone,
+          email: pEmail,
+          classYear: `${pYear} · ${pCollege}`,
+          ...(pCollegeIdUrl ? { collegeIdUrl: pCollegeIdUrl } : {}),
+        });
       }
 
-      const p1 = participantsList[0] || {
-        name: getVal("p1_name"),
-        phone: getVal("p1_phone"),
-        email: getVal("p1_email"),
-        classYear: getVal("p1_year"),
-        collegeIdUrl: uploadedFiles["p1_id"],
-      };
+      const p1 = participantsList[0];
 
       await createRegistration({
         event: ev.title,
-        collegeName,
+        collegeName: institution,
         codeType,
         codeValue,
-        teamName,
-        entryFormat: isTeamEntry ? "Team" : "Solo",
+        ...(teamName ? { teamName } : {}),
+        entryFormat: ev.teamFormat,
         teamSize: String(totalParticipants),
         name: p1.name,
         email: p1.email,
         phone: p1.phone,
         classYear: p1.classYear,
-        collegeIdUrl: p1.collegeIdUrl,
+        ...(p1.collegeIdUrl ? { collegeIdUrl: p1.collegeIdUrl } : {}),
         participants: participantsList,
-        registrationFee: calculatedFee,
+        registrationFee: ev.feeDesc,
         paymentMethod,
-        upiTransactionId: getVal("upiTxnId") || undefined,
-        paymentScreenshotUrl: uploadedFiles["payment_ss"] || undefined,
-        additionalPaymentInfo: getVal("additionalPaymentInfo") || undefined,
+        ...(getVal("upiTransactionId")
+          ? { upiTransactionId: getVal("upiTransactionId") }
+          : {}),
+        ...(uploadedFiles["paymentScreenshot"]
+          ? { paymentScreenshotUrl: uploadedFiles["paymentScreenshot"] }
+          : {}),
+        ...(getVal("additionalPaymentInfo")
+          ? { additionalPaymentInfo: getVal("additionalPaymentInfo") }
+          : {}),
         declarationAccepted: true,
       });
 
       setSubmitted(true);
     } catch (err: unknown) {
-      console.error(err);
+      console.error("Submission error:", err);
       setError(
         err instanceof Error
           ? err.message
-          : "Registration failed. Please check required fields."
+          : "Registration could not be submitted. Please check all required fields."
       );
     } finally {
       setSubmitting(false);
@@ -419,12 +269,15 @@ export default function TechEventRegistrationPage({
       <CyberstrikeBackground />
 
       <main className="er-main" id="main" tabIndex={-1}>
+        {/* Sub-Event Navigation Bar */}
         <header className="er-header">
           <div className="eh-top mono">
             <Link href="/events/technical" className="navback">
               <span aria-hidden="true">←</span> Technical Events
             </Link>
-            <span>{ev.label}</span>
+            <span>
+              Feed {ev.number} · {ev.day}
+            </span>
           </div>
 
           <h1 className="ph disp er-title" aria-label={ev.title}>
@@ -444,6 +297,9 @@ export default function TechEventRegistrationPage({
               VENUE: <b>{ev.venue}</b>
             </span>
             <span>
+              DAY: <b>{ev.day}</b>
+            </span>
+            <span>
               CAPACITY: <b>{ev.capacity}</b>
             </span>
           </div>
@@ -452,374 +308,410 @@ export default function TechEventRegistrationPage({
         </header>
 
         {submitted ? (
-          <div className="confirmation-card">
-            <div className="mono success-badge">
-              <span aria-hidden="true">✓</span> REGISTRATION SECURED
+          <section className="er-success" role="status">
+            <span className="check-icon" aria-hidden="true">
+              ✓
+            </span>
+            <h2 data-events-sl>Registration Received</h2>
+            <div className="success-message">
+              <p>{ev.confirmation}</p>
             </div>
-            <h2 className="disp confirm-heading">{ev.title}</h2>
-            <p className="confirm-text">{ev.confirmation}</p>
-            <div className="confirm-meta mono">
-              <div>
-                <span>FEE ASSESSED</span>
-                <b>{calculatedFee}</b>
-              </div>
-              <div>
-                <span>PAYMENT METHOD</span>
-                <b>{paymentMethod}</b>
-              </div>
-              <div>
-                <span>STATUS</span>
-                <b style={{ color: "var(--cyan)" }}>PENDING VERIFICATION</b>
-              </div>
-            </div>
-            <div className="confirm-actions">
-              <Link href="/events/technical" className="rgb action-btn">
-                <span>
-                  <i className="pd" aria-hidden="true" />
-                  Return to Technical Events
-                </span>
-                <b aria-hidden="true">↗</b>
-                <s className="sn" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
+            <Link className="rgb" href="/events/technical">
+              <span>
+                <i className="pd" aria-hidden="true" />
+                Return to Technical Events
+              </span>
+              <b aria-hidden="true">↗</b>
+              <s className="sn" aria-hidden="true" />
+            </Link>
+          </section>
         ) : (
-          <form className="er-form" onSubmit={handleSubmit}>
-            {/* College & Institution Details */}
-            <fieldset className="er-section">
-              <legend className="mono">01 / Institution Credentials</legend>
-              <div className="er-grid">
-                <label className="er-field col-full">
-                  <span>College / Institution Name *</span>
+          <form key={ev.id} onSubmit={handleSubmit} className="er-form">
+            {/* ========================================================
+                SECTION 1 – COLLEGE DETAILS
+                ======================================================== */}
+            <div className="cr-section">
+              <div className="cr-sec-tag mono">[ 01 — College Details ]</div>
+              <h3 className="cr-sec-title">College Details</h3>
+              <p className="cr-sec-desc">
+                Please provide your institution details.
+              </p>
+
+              <div className="er-fields">
+                <label className="er-field">
+                  <span>College Name *</span>
                   <input
                     name="collegeName"
                     type="text"
                     required
-                    placeholder="Enter full college name"
+                    value={collegeName}
+                    onChange={(e) => handleInstitutionChange(e.target.value)}
+                    placeholder="e.g. Jai Hind College, Mumbai"
                   />
                 </label>
 
-                <div className="code-selector col-full">
-                  <span className="mono code-label">Verification Code Type *</span>
-                  <div className="code-options">
-                    <label className={`code-opt ${codeType === "PRNC" ? "active" : ""}`}>
-                      <input
-                        type="radio"
-                        name="codeTypeRadio"
-                        value="PRNC"
-                        checked={codeType === "PRNC"}
-                        onChange={() => setCodeType("PRNC")}
-                      />
-                      <span className="opt-title mono">PRNC Code</span>
-                      <small>Permanent Registration Number / College Roll</small>
-                    </label>
-                    <label className={`code-opt ${codeType === "CC" ? "active" : ""}`}>
-                      <input
-                        type="radio"
-                        name="codeTypeRadio"
-                        value="CC"
-                        checked={codeType === "CC"}
-                        onChange={() => setCodeType("CC")}
-                      />
-                      <span className="opt-title mono">Contingent Code (CC)</span>
-                      <small>College Contingent / Group Code</small>
-                    </label>
-                  </div>
-                </div>
-
-                <label className="er-field col-full">
-                  <span>
-                    {codeType === "PRNC"
-                      ? "Enter PRNC / Roll Number *"
-                      : "Enter Contingent Code (CC) *"}
+                <div className="er-field prnc-cc-toggle-group">
+                  <span className="prnc-cc-toggle-label">
+                    PRNC / CC Code *
                   </span>
+                  <div
+                    className="prnc-cc-toggle"
+                    role="group"
+                    aria-label="Code Type Toggle"
+                  >
+                    <button
+                      type="button"
+                      className={`prnc-cc-btn ${
+                        codeType === "PRNC" ? "active" : ""
+                      }`}
+                      onClick={() => setCodeType("PRNC")}
+                    >
+                      PRNC Code
+                    </button>
+                    <button
+                      type="button"
+                      className={`prnc-cc-btn ${
+                        codeType === "CC" ? "active" : ""
+                      }`}
+                      onClick={() => setCodeType("CC")}
+                    >
+                      CC Code
+                    </button>
+                  </div>
                   <input
                     name="codeValue"
                     type="text"
                     required
                     placeholder={
                       codeType === "PRNC"
-                        ? "e.g. 2024-BScIT-084"
-                        : "e.g. CC-DCC-2026"
+                        ? "Enter PRNC Code"
+                        : "Enter CC (Contingent) Code"
                     }
                   />
-                </label>
+                </div>
               </div>
-            </fieldset>
+            </div>
 
-            {/* Team Details (If Team Event) */}
-            {isTeamEntry && (
-              <fieldset className="er-section">
-                <legend className="mono">02 / Team Credentials</legend>
-                <div className="er-grid">
-                  <label className="er-field col-full">
+            {/* ========================================================
+                SECTION 2 – PARTICIPANT DETAILS
+                ======================================================== */}
+            <div className="cr-section">
+              <div className="cr-sec-tag mono">
+                [ 02 — Participant Details ]
+              </div>
+              <h3 className="cr-sec-title">
+                {isTeamEntry ? "Team & Participants" : "Participant Details"}
+              </h3>
+              <p className="cr-sec-desc">
+                Entry format: {ev.teamFormat}.{" "}
+                {isTeamEntry
+                  ? "Participant 1 is the Team Leader. All member fields and College ID proofs are mandatory."
+                  : "Individual entry — collect Participant 1 details only."}
+              </p>
+
+              {isTeamEntry && (
+                <div className="er-fields" style={{ marginBottom: "28px" }}>
+                  <label className="er-field full">
                     <span>Team Name *</span>
                     <input
                       name="teamName"
                       type="text"
                       required
-                      placeholder="e.g. Cipher Syndicate"
+                      placeholder="Enter your team name"
                     />
                   </label>
                 </div>
-              </fieldset>
-            )}
+              )}
 
-            {/* Participant Rosters */}
-            <fieldset className="er-section">
-              <legend className="mono">
-                {isTeamEntry
-                  ? `03 / Participant Roster (${totalParticipants} Members)`
-                  : "02 / Participant Details"}
-              </legend>
+              {Array.from({ length: totalParticipants }, (_, idx) => {
+                const pNum = idx + 1;
+                const isLeader = isTeamEntry && pNum === 1;
 
-              <div className="participants-stack">
-                {Array.from({ length: totalParticipants }, (_, idx) => {
-                  const num = idx + 1;
-                  const isLeader = isTeamEntry && num === 1;
-                  const roleLabel = isLeader
-                    ? "Team Leader"
-                    : isTeamEntry
-                    ? `Team Member ${num}`
-                    : "Primary Participant";
-
-                  return (
-                    <div key={num} className="participant-card">
-                      <div className="p-header mono">
-                        <span>P{String(num).padStart(2, "0")}</span>
-                        <b>{roleLabel}</b>
-                      </div>
-
-                      <div className="er-grid">
-                        <label className="er-field">
-                          <span>Full Name *</span>
-                          <input
-                            name={`p${num}_name`}
-                            type="text"
-                            required
-                            placeholder="John Doe"
-                          />
-                        </label>
-
-                        <label className="er-field">
-                          <span>Phone Number *</span>
-                          <input
-                            name={`p${num}_phone`}
-                            type="tel"
-                            required
-                            placeholder="10-digit mobile"
-                            pattern="[0-9]{10}"
-                          />
-                        </label>
-
-                        <label className="er-field">
-                          <span>Email Address *</span>
-                          <input
-                            name={`p${num}_email`}
-                            type="email"
-                            required
-                            placeholder="user@domain.com"
-                          />
-                        </label>
-
-                        <label className="er-field">
-                          <span>Class / Year *</span>
-                          <input
-                            name={`p${num}_year`}
-                            type="text"
-                            required
-                            placeholder="e.g. FYBSc IT / SYBCA"
-                          />
-                        </label>
-
-                        {/* College ID Upload */}
-                        <div className="er-field col-full">
-                          <span>College ID Photo Proof *</span>
-                          <label className="event-upload">
-                            <span className="event-upload-icon" aria-hidden="true">
-                              ↑
-                            </span>
-                            <span className="event-upload-copy">
-                              <b>Upload College ID Card</b>
-                              <small>JPG, PNG, WEBP or PDF · Max 5 MB</small>
-                            </span>
-                            <input
-                              type="file"
-                              accept=".jpg,.jpeg,.png,.webp,.pdf"
-                              disabled={uploadingField === `p${num}_id`}
-                              onChange={(e) =>
-                                handleFileUpload(`p${num}_id`, e.target.files?.[0])
-                              }
-                            />
-                          </label>
-                          {uploadedFiles[`p${num}_id`] && (
-                            <span className="event-upload-status mono">
-                              <b aria-hidden="true">✓</b> ID Proof Attached
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                return (
+                  <div key={pNum} className="participant-card">
+                    <div className="participant-card-header">
+                      <span
+                        className={`participant-card-title ${
+                          isLeader ? "leader" : ""
+                        }`}
+                      >
+                        {ev.isSolo
+                          ? "Participant 1 — Individual"
+                          : isLeader
+                          ? "Participant 1 — TEAM LEADER"
+                          : `Participant ${pNum} — TEAM MEMBER`}
+                      </span>
+                      <span
+                        className={`participant-badge ${
+                          isLeader ? "leader" : ""
+                        }`}
+                      >
+                        {isLeader ? "TEAM LEADER · REQUIRED" : "ALL REQUIRED"}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
-            </fieldset>
 
-            {/* Payment & Settlement */}
-            <fieldset className="er-section">
-              <legend className="mono">04 / Registration Fee &amp; Payment</legend>
-              <div className="fee-summary-box">
-                <div className="fee-row">
-                  <span className="mono">Total Payable Amount</span>
-                  <b className="fee-amount">{calculatedFee}</b>
-                </div>
-                <p className="fee-note">
-                  * All registrations are verified against transaction records.
-                </p>
-              </div>
-
-              <div className="er-grid" style={{ marginTop: "24px" }}>
-                <div className="code-selector col-full">
-                  <span className="mono code-label">Payment Mode *</span>
-                  <div className="code-options">
-                    <label className={`code-opt ${paymentMethod === "UPI" ? "active" : ""}`}>
-                      <input
-                        type="radio"
-                        name="payMethodRadio"
-                        value="UPI"
-                        checked={paymentMethod === "UPI"}
-                        onChange={() => setPaymentMethod("UPI")}
-                      />
-                      <span className="opt-title mono">UPI / QR Code</span>
-                      <small>GPay, PhonePe, Paytm</small>
-                    </label>
-                    <label
-                      className={`code-opt ${
-                        paymentMethod === "Bank Transfer" ? "active" : ""
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="payMethodRadio"
-                        value="Bank Transfer"
-                        checked={paymentMethod === "Bank Transfer"}
-                        onChange={() => setPaymentMethod("Bank Transfer")}
-                      />
-                      <span className="opt-title mono">Bank Transfer</span>
-                      <small>IMPS / NEFT Transfer</small>
-                    </label>
-                    <label className={`code-opt ${paymentMethod === "Cash" ? "active" : ""}`}>
-                      <input
-                        type="radio"
-                        name="payMethodRadio"
-                        value="Cash"
-                        checked={paymentMethod === "Cash"}
-                        onChange={() => setPaymentMethod("Cash")}
-                      />
-                      <span className="opt-title mono">Cash Desk</span>
-                      <small>On-spot desk verification</small>
-                    </label>
-                  </div>
-                </div>
-
-                {paymentMethod !== "Cash" && (
-                  <>
-                    <label className="er-field">
-                      <span>UPI Reference / UTR Number *</span>
-                      <input
-                        name="upiTxnId"
-                        type="text"
-                        required
-                        placeholder="12-digit transaction ID"
-                      />
-                    </label>
-
-                    <div className="er-field">
-                      <span>Payment Screenshot Proof *</span>
-                      <label className="event-upload">
-                        <span className="event-upload-icon" aria-hidden="true">
-                          ↑
-                        </span>
-                        <span className="event-upload-copy">
-                          <b>Attach Payment Screenshot</b>
-                          <small>JPG, PNG or WEBP</small>
-                        </span>
+                    <div className="er-fields">
+                      <label className="er-field">
+                        <span>Full Name *</span>
                         <input
-                          type="file"
-                          accept=".jpg,.jpeg,.png,.webp"
-                          disabled={uploadingField === "payment_ss"}
-                          onChange={(e) =>
-                            handleFileUpload("payment_ss", e.target.files?.[0])
-                          }
+                          name={`p${pNum}_name`}
+                          type="text"
+                          required
+                          placeholder="Full name as on ID"
                         />
                       </label>
-                      {uploadedFiles["payment_ss"] && (
-                        <span className="event-upload-status mono">
-                          <b aria-hidden="true">✓</b> Payment Screenshot Attached
+
+                      <label className="er-field">
+                        <span>Contact Number *</span>
+                        <input
+                          name={`p${pNum}_phone`}
+                          type="tel"
+                          required
+                          placeholder="10-digit mobile number"
+                        />
+                      </label>
+
+                      <label className="er-field">
+                        <span>Email Address *</span>
+                        <input
+                          name={`p${pNum}_email`}
+                          type="email"
+                          required
+                          placeholder="name@example.com"
+                        />
+                      </label>
+
+                      <label className="er-field">
+                        <span>Class / Year *</span>
+                        <input
+                          name={`p${pNum}_year`}
+                          type="text"
+                          required
+                          placeholder="e.g. FYBSc IT / SYBCom"
+                        />
+                      </label>
+
+                      <label className="er-field full">
+                        <span>College *</span>
+                        <input
+                          name={`p${pNum}_college`}
+                          type="text"
+                          required
+                          value={participantColleges[pNum] ?? ""}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setEditedColleges((prev) => ({
+                              ...prev,
+                              [pNum]: true,
+                            }));
+                            setParticipantColleges((prev) => ({
+                              ...prev,
+                              [pNum]: val,
+                            }));
+                          }}
+                          placeholder="Participant's college name"
+                        />
+                      </label>
+
+                      <div className="er-field full">
+                        <span>
+                          College ID Proof Upload (PDF / JPG / PNG) *
                         </span>
-                      )}
+                        <label className="event-upload">
+                          <span className="event-upload-icon" aria-hidden="true">
+                            ↑
+                          </span>
+                          <span className="event-upload-copy">
+                            <b>Choose college ID</b>
+                            <small>PDF, JPG or PNG · Max 4 MB</small>
+                          </span>
+                          <input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            disabled={uploadingField === `p${pNum}_id`}
+                            onChange={(e) =>
+                              handleFileUpload(
+                                `p${pNum}_id`,
+                                e.target.files?.[0]
+                              )
+                            }
+                          />
+                        </label>
+                        {uploadingField === `p${pNum}_id` && (
+                          <span className="event-upload-status">
+                            Uploading College ID...
+                          </span>
+                        )}
+                        {uploadedFiles[`p${pNum}_id`] && (
+                          <span className="event-upload-status">
+                            <b aria-hidden="true">✓</b> College ID uploaded
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </>
-                )}
+                  </div>
+                );
+              })}
+            </div>
 
-                <label className="er-field col-full">
-                  <span>Additional Notes / Reference (Optional)</span>
-                  <input
-                    name="additionalPaymentInfo"
-                    type="text"
-                    placeholder="Any comments, payer name or transaction notes"
-                  />
-                </label>
+            {/* ========================================================
+                SECTION 3 – EVENT FLOW, PAYMENT & RULES
+                ======================================================== */}
+            <div className="cr-section">
+              <div className="cr-sec-tag mono">
+                [ 03 — Event Flow, Payment &amp; Rules ]
               </div>
-            </fieldset>
+              <h3 className="cr-sec-title">Flow, Payment &amp; Declaration</h3>
+              <p className="cr-sec-desc">
+                Review the official event flow and regulations, then complete
+                your payment details below.
+              </p>
 
-            {/* Rules & Compliance Declaration */}
-            <fieldset className="er-section">
-              <legend className="mono">05 / Rules &amp; Declaration</legend>
-              <div className="rules-summary">
-                <h4 className="mono">Event Guidelines</h4>
-                <ol className="rls">
-                  {ev.rules.map((r, i) => (
-                    <li key={i}>{r}</li>
+              {/* A. Event Flow */}
+              <div className="event-flow-box">
+                <h4>A. Event Flow</h4>
+                <ol>
+                  {ev.eventFlow.map((step, fIdx) => (
+                    <li key={fIdx}>{step}</li>
                   ))}
                 </ol>
               </div>
 
+              {/* B. Payment Details */}
+              <div className="fee-display-card">
+                <div>
+                  <div className="fee-display-label">Registration Fee</div>
+                  <div style={{ fontSize: "12px", color: "var(--dim)" }}>
+                    {ev.teamFormat} · {ev.venue} ({ev.day})
+                  </div>
+                </div>
+                <div className="fee-display-amount">{ev.feeDesc}</div>
+              </div>
+
+              <div className="er-fields" style={{ marginBottom: "28px" }}>
+                <label className="er-field">
+                  <span>Payment Method *</span>
+                  <select
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  >
+                    <option value="UPI">UPI</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Cash">Cash (only if accepted)</option>
+                  </select>
+                </label>
+
+                <label className="er-field">
+                  <span>
+                    UPI Transaction ID / Reference Number{" "}
+                    {paymentMethod !== "Cash" ? "*" : "(If applicable)"}
+                  </span>
+                  <input
+                    name="upiTransactionId"
+                    type="text"
+                    required={paymentMethod !== "Cash"}
+                    placeholder="Enter transaction or reference number"
+                  />
+                </label>
+
+                <div className="er-field full">
+                  <span>Payment Screenshot (PDF / JPG / PNG) *</span>
+                  <label className="event-upload">
+                    <span className="event-upload-icon" aria-hidden="true">
+                      ↑
+                    </span>
+                    <span className="event-upload-copy">
+                      <b>Choose payment screenshot</b>
+                      <small>PDF, JPG or PNG · Max 4 MB</small>
+                    </span>
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      disabled={uploadingField === "paymentScreenshot"}
+                      onChange={(e) =>
+                        handleFileUpload(
+                          "paymentScreenshot",
+                          e.target.files?.[0]
+                        )
+                      }
+                    />
+                  </label>
+                  {uploadingField === "paymentScreenshot" && (
+                    <span className="event-upload-status">
+                      Uploading payment proof...
+                    </span>
+                  )}
+                  {uploadedFiles["paymentScreenshot"] && (
+                    <span className="event-upload-status">
+                      <b aria-hidden="true">✓</b> Payment screenshot uploaded
+                    </span>
+                  )}
+                </div>
+
+                <label className="er-field full">
+                  <span>Additional Payment Information (Optional)</span>
+                  <textarea
+                    name="additionalPaymentInfo"
+                    placeholder="Any notes regarding payer name, transfer reference, or cash desk confirmation..."
+                  />
+                </label>
+              </div>
+
+              {/* C. Rules & Regulations */}
+              <div className="rules-box">
+                <h4>C. Rules &amp; Regulations</h4>
+                <ul>
+                  {ev.rules.map((rule, rIdx) => (
+                    <li key={rIdx}>{rule}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* E. Final Declaration */}
               <label className="declaration-label">
                 <input
                   type="checkbox"
                   checked={declaration}
                   onChange={(e) => setDeclaration(e.target.checked)}
+                  required
                 />
                 <span>
-                  I declare that all participant details, PRNC / Contingent credentials
-                  and payment records provided are authentic. I agree to abide by the
-                  official CYBERSTRIKE &apos;26 technical regulations.
+                  <b>Final Declaration:</b> I confirm that the registration
+                  format and participant details are accurate; all participants
+                  agree to follow the event rules and organiser instructions;
+                  and I understand that participation is subject to event
+                  capacity and payment verification.
                 </span>
               </label>
-            </fieldset>
 
-            {error && <div className="er-error mono">{error}</div>}
+              {error && (
+                <div className="er-error" role="alert">
+                  {error}
+                </div>
+              )}
 
-            <div className="form-submit-row">
-              <button
-                type="submit"
-                className="rgb er-submit"
-                disabled={submitting || Boolean(uploadingField)}
-              >
-                <span>
-                  <i className="pd" aria-hidden="true" />
-                  {submitting
-                    ? "TRANSMITTING REGISTRATION..."
-                    : `SUBMIT REGISTRATION · ${calculatedFee}`}
-                </span>
-                <b aria-hidden="true">↗</b>
-                <s className="sn" aria-hidden="true" />
-              </button>
+              <div className="submit-container">
+                <button
+                  type="submit"
+                  className="event-submit er-submit-btn"
+                  disabled={submitting || uploadingField !== null}
+                >
+                  <span>
+                    <i className="pd" aria-hidden="true" />
+                    {submitting
+                      ? "TRANSMITTING REGISTRATION..."
+                      : `SUBMIT ${ev.title} REGISTRATION`}
+                  </span>
+                  <b aria-hidden="true">↗</b>
+                  <s className="sn" aria-hidden="true" />
+                </button>
+              </div>
             </div>
           </form>
         )}
       </main>
+
+      <CyberstrikeFooter />
     </div>
   );
 }

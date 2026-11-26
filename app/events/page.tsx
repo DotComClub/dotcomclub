@@ -3,44 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
-  DM_Sans,
-  Instrument_Serif,
-  JetBrains_Mono,
-  VT323,
-} from "next/font/google";
+  dmSansFull as dmSans,
+  instrumentSerif,
+  jetbrainsMono,
+  vt323,
+} from "@/fonts/font";
 import gsap from "gsap";
 import { animate } from "motion";
 import "../cyberstrike-26/cyberstrike.css";
 import "./events.css";
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
-});
-
-const vt323 = VT323({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-vt323",
-  display: "swap",
-});
 
 const VS =
   "attribute vec2 a;varying vec2 vUv;void main(){vUv=a*.5+.5;gl_Position=vec4(a,0.,1.);}";

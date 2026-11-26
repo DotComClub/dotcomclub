@@ -3244,6 +3244,261 @@ body:has(nav.hide) .about-root,
   color: #B3A5D6;
 }
 
+/* ── Animated 3-Row Sponsor Pill Marquee Wall ── */
+.sponsor-root .sp-wall {
+  position: relative;
+  margin-top: 34px;
+  border-radius: 26px;
+  padding: clamp(24px, 4vw, 44px) 0;
+  background: radial-gradient(120% 100% at 50% 0%, #160B33 0%, #070312 72%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.6vw, 18px);
+}
+
+.sponsor-root .sp-wall::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, rgba(158, 113, 255, 0.55) 0%, rgba(158, 113, 255, 0.16) 45%, rgba(92, 225, 230, 0.55) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.sponsor-root .sp-wall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #070312 0%,
+    rgba(7, 3, 18, 0.72) 5%,
+    transparent 12%,
+    transparent 88%,
+    rgba(7, 3, 18, 0.72) 95%,
+    #070312 100%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+.sponsor-root .sp-row {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.sponsor-root .sp-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+  animation: spMarquee var(--sp-dur, 38s) linear infinite;
+}
+
+.sponsor-root .sp-row.rev .sp-track {
+  animation-direction: reverse;
+}
+
+.sponsor-root .sp-row:hover .sp-track {
+  animation-play-state: paused;
+}
+
+.sponsor-root .sp-half {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-right: 14px;
+}
+
+@keyframes spMarquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.sponsor-root .sp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  height: 54px;
+  padding: 6px 8px 6px 22px;
+  border-radius: 999px;
+  background: #33196B;
+  border: 1px solid rgba(158, 113, 255, 0.28);
+  color: #F4EEFF;
+  font: 700 13.5px/1 var(--font-dm), 'DM Sans', system-ui, sans-serif;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.2, 1), background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.sponsor-root .sp-pill:hover,
+.sponsor-root .sp-pill[data-active="true"] {
+  background: #472394;
+  border-color: #9E71FF;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(158, 113, 255, 0.28);
+}
+
+.sponsor-root .sp-pill.is-lime,
+.sponsor-root a.sp-pill.is-lime {
+  background: #D8FF62;
+  border-color: #D8FF62;
+  color: #1B1030;
+  font-weight: 800;
+  padding: 6px 26px;
+  box-shadow: 0 6px 24px rgba(216, 255, 98, 0.22);
+  text-decoration: none;
+}
+
+.sponsor-root .sp-pill.is-lime:hover,
+.sponsor-root a.sp-pill.is-lime:hover {
+  background: #E5FF8C;
+  border-color: #E5FF8C;
+  color: #1B1030;
+  box-shadow: 0 10px 28px rgba(216, 255, 98, 0.35);
+}
+
+.sponsor-root .sp-pill.is-text {
+  padding: 6px 22px;
+  text-decoration: none;
+}
+
+.sponsor-root .sp-ico {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  padding: 4px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(27, 16, 48, 0.08);
+}
+
+.sponsor-root .sp-ico img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sponsor-root .sp-spot {
+  margin-top: 22px;
+  border-radius: 22px;
+  padding: clamp(18px, 2.6vw, 28px);
+  background: rgba(14, 8, 25, 0.85);
+  border: 1.5px solid rgba(158, 113, 255, 0.32);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sponsor-root .sp-spot-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.sponsor-root .sp-spot-logo {
+  width: 96px;
+  height: 64px;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 8px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sponsor-root .sp-spot-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.sponsor-root .sp-spot-meta h3 {
+  font: 400 clamp(26px, 3.2vw, 38px)/1 var(--font-anton), Anton, Impact, sans-serif;
+  text-transform: uppercase;
+  color: #F4EEFF;
+  margin: 4px 0;
+}
+
+.sponsor-root .sp-spot-tier {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9E71FF;
+}
+
+.sponsor-root .sp-spot-cat {
+  font-size: 14px;
+  color: #B3A5D6;
+  margin: 0;
+}
+
+.sponsor-root a.sp-cta-lime {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  background: #D8FF62;
+  color: #1B1030;
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 11px 22px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.sponsor-root a.sp-cta-lime:hover {
+  background: #E5FF8C;
+  color: #1B1030;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .sponsor-root .sp-pill {
+    height: 46px;
+    padding: 5px 6px 5px 16px;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .sponsor-root .sp-ico {
+    width: 34px;
+    height: 34px;
+  }
+  .sponsor-root .sp-pill.is-lime,
+  .sponsor-root .sp-pill.is-text {
+    padding: 5px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-root .sp-track {
+    animation: none;
+  }
+  .sponsor-root .sp-row {
+    overflow-x: auto;
+  }
+}
+
 /* ── Stacking Impact Cards ── */
 .sponsor-root .rs {
   display: block;

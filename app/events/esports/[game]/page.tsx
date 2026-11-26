@@ -5,20 +5,15 @@ import { useMutation } from "convex/react";
 import Link from "next/link";
 import { FormEvent, use, useEffect, useState } from "react";
 import {
-  Instrument_Serif,
-  JetBrains_Mono,
-  VT323,
-  DM_Sans,
-} from "next/font/google";
+  dmSansFull as dmSans,
+  instrumentSerif,
+  jetbrainsMono,
+  vt323,
+} from "@/fonts/font";
 import "../../../cyberstrike-26/cyberstrike.css";
 import "../esports.css";
 import "./registration.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
-
-const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: ["400"], style: ["normal", "italic"], variable: "--font-instrument-serif" });
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-jetbrains-mono" });
-const vt323 = VT323({ subsets: ["latin"], weight: ["400"], variable: "--font-vt323" });
-const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-dm-sans" });
 
 const games: Record<string, { title: string; label: string; roster: "bgmi" | "valorant" | "solo" }> = {
   bgmi: { title: "BGMI", label: "Feed 01", roster: "bgmi" },

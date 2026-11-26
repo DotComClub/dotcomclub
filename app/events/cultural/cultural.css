@@ -322,6 +322,137 @@
   resize: vertical;
 }
 
+/* File Upload Boxes */
+.cultural-registration .event-upload {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 12px 14px;
+  border: 1px dashed rgba(110, 242, 255, 0.45);
+  background: rgba(13, 9, 32, 0.7);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.15s ease;
+}
+
+.cultural-registration .event-upload:hover,
+.cultural-registration .event-upload:focus-within {
+  border-color: var(--cyan);
+  background: rgba(22, 14, 52, 0.85);
+  transform: translateY(-1px);
+}
+
+.cultural-registration .event-upload-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font: 400 20px/1 var(--mono);
+}
+
+.cultural-registration .event-upload-copy {
+  display: grid;
+  gap: 3px;
+  pointer-events: none;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.cultural-registration .event-upload-copy b {
+  color: #efe9ff;
+  font: 600 13px/1.2 var(--mono);
+}
+
+.cultural-registration .event-upload-copy small {
+  color: var(--dim);
+  font: 400 10px/1.4 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cultural-registration .event-upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cultural-registration .event-upload-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  color: var(--cyan);
+  font: 500 11px/1.4 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+.cultural-registration .event-upload-status b {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  font-size: 11px;
+}
+
+/* Technical Event Flow */
+.event-flow-box {
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--cyan);
+  background: rgba(13, 9, 32, 0.5);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.event-flow-box h4 {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0 0 14px;
+}
+
+.event-flow-box ol {
+  counter-reset: flowstep;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.event-flow-box li {
+  counter-increment: flowstep;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: baseline;
+  font-size: 13px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--ink) 88%, transparent);
+}
+
+.event-flow-box li::before {
+  content: counter(flowstep, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+}
+
 .cultural-registration .er-field select {
   appearance: none;
   -webkit-appearance: none;

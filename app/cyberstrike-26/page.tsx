@@ -2,36 +2,10 @@
 
 import { useEffect, useRef,  } from "react";
 import Link from "next/link";
-import {
-  Instrument_Serif,
-  JetBrains_Mono,
-  VT323,
-} from "next/font/google";
+import { instrumentSerif, jetbrainsMono, vt323 } from "@/fonts/font";
 import gsap from "gsap";
 import { animate } from "motion";
 import "./cyberstrike.css";
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
-});
-
-const vt323 = VT323({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-vt323",
-  display: "swap",
-});
 
 const REG_URL = "/register";
 const FLAG = "cs26_intro_seen";
