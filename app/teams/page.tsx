@@ -440,9 +440,12 @@ export default function TeamsPage() {
               <div className="teams-lightbox-bar">
                 <div className="teams-lightbox-meta">
                   <span className="teams-lightbox-team">{selectedMember.team}</span>
-                  <span className="teams-lightbox-cat">
-                    {selectedMember.category}
-                  </span>
+                  {(!["Core", "Faculty"].includes(selectedMember.team) ||
+                    selectedMember.category === "group") && (
+                    <span className="teams-lightbox-cat">
+                      {selectedMember.category}
+                    </span>
+                  )}
                 </div>
 
                 <div className="teams-lightbox-actions">
