@@ -34,7 +34,6 @@ const vt323 = VT323({
 });
 
 const REG_URL = "/register";
-const LAUNCH = new Date("2026-11-20T00:00:00+05:30").getTime();
 const FLAG = "cs26_intro_seen";
 
 const VS =
@@ -191,10 +190,6 @@ export default function Cyberstrike26Page() {
     const humStBtn = $("humSt");
     const replayBtn = $("replay");
     const osdClock = $("osdClock");
-    const cdD = $("cdD");
-    const cdH = $("cdH");
-    const cdM = $("cdM");
-    const cdS = $("cdS");
 
     // ================= Sliced Type =================
     function rnd(a: number, b: number) {
@@ -1378,18 +1373,6 @@ export default function Cyberstrike26Page() {
     updateClock();
     safeInterval(updateClock, 15000);
 
-    function updateCountdown() {
-      const ms = Math.max(0, LAUNCH - Date.now());
-      const s = Math.floor(ms / 1000);
-      const z = (n: number) => (n < 10 ? "0" + n : "" + n);
-      if (cdD) cdD.textContent = z(Math.floor(s / 86400));
-      if (cdH) cdH.textContent = z(Math.floor(s / 3600) % 24);
-      if (cdM) cdM.textContent = z(Math.floor(s / 60) % 60);
-      if (cdS) cdS.textContent = z(s % 60);
-    }
-    updateCountdown();
-    safeInterval(updateCountdown, 1000);
-
     // ================= Corrupted Signal Cursor =================
     let cleanupCursor = () => {};
     if (!coarse) {
@@ -2130,9 +2113,9 @@ export default function Cyberstrike26Page() {
               <p>
                 Theme: Root Probe. Bring a team, break it open, build it back.
               </p>
-              <a className="btn red mono js-reg" href={REG_URL}>
+              <Link className="btn red mono" href="/events">
                 Join the hackathon <span aria-hidden="true">↗</span>
-              </a>
+              </Link>
             </div>
             <dl className="spec mono">
               <div>
@@ -2145,7 +2128,7 @@ export default function Cyberstrike26Page() {
               </div>
               <div>
                 <dt>When</dt>
-                <dd>November 2026</dd>
+                <dd>December 15 &amp; 16, 2026</dd>
               </div>
               <div>
                 <dt>Team size</dt>
@@ -2153,7 +2136,7 @@ export default function Cyberstrike26Page() {
               </div>
               <div>
                 <dt>Prizes</dt>
-                <dd>₹50,000</dd>
+                <dd>???</dd>
               </div>
             </dl>
           </div>
@@ -2175,38 +2158,6 @@ export default function Cyberstrike26Page() {
             >
               View all events <span aria-hidden="true">↗</span>
             </Link>
-          </div>
-        </section>
-
-        <section className="blk s4" id="timeline">
-          <div className="wrap">
-            <span className="tag mono">[ 05 — Timeline synchronisation ]</span>
-            <h2 className="disp h2" data-glitch aria-label="Launch in">
-              <span data-sl aria-hidden="true">
-                Launch in
-              </span>
-            </h2>
-            <div className="cd" role="timer" aria-label="Time until launch">
-              <div>
-                <b id="cdD">--</b>
-                <span className="mono">Days</span>
-              </div>
-              <div>
-                <b id="cdH">--</b>
-                <span className="mono">Hours</span>
-              </div>
-              <div>
-                <b id="cdM">--</b>
-                <span className="mono">Minutes</span>
-              </div>
-              <div>
-                <b id="cdS">--</b>
-                <span className="mono">Seconds</span>
-              </div>
-            </div>
-            <p className="when mono">
-              Jai Hind College, Mumbai &nbsp;|&nbsp; 20 November 2026
-            </p>
           </div>
         </section>
 

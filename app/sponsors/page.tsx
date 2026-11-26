@@ -551,7 +551,7 @@ export default function SponsorsPage() {
           <h2 className="hd rv">Backed by the best.</h2>
           <p className="lead" style={{ color: "#B3A5D6", maxWidth: 640 }}>
             From leading tech pioneers to hyper-growth innovators, meet the
-            visionary brands standing behind Cyberstrike 2026.
+            visionary brands standing behind Cyberstrike 2025-2026.
           </p>
 
           {/* 01 / Title Sponsor */}

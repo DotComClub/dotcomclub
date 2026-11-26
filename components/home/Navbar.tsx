@@ -191,8 +191,17 @@ export function Navbar() {
         className={`${isAtTop ? "at" : ""} ${isMenuOpen ? "mo" : ""} ${isHidden ? "hide" : ""}`}
       >
         <div className="bar">
-          <Link className="stt" href="/" prefetch={true}>
-            Theme Reveal Soon
+          <Link
+            className="stt"
+            href="/cyberstrike-26"
+            prefetch={true}
+            onClick={() => {
+              if (pathname !== "/cyberstrike-26") {
+                setIsNavigating(true);
+              }
+            }}
+          >
+            Cyberstrike 26
           </Link>
 
           <div
