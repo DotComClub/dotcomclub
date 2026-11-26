@@ -9,6 +9,7 @@ import { useQuery } from "convex/react";
 import {
   Calendar,
   CreditCard,
+  Code2,
   Database,
   FileText,
   GraduationCap,
@@ -19,15 +20,22 @@ import {
   Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { TECHNICAL_EVENT_TITLES } from "@/lib/technical-events";
 
 export default function AdminDashboard() {
   const { isAuthenticated, login, logout } = useAdminAuth();
   const members = useQuery(api.registration.listMembers);
   const contacts = useQuery(api.contact.listContacts);
   const esportsRegistrations = useQuery(api.esportsRegistrations.listRegistrations);
-  const culturalRegistrations = useQuery(
+  const eventRegistrations = useQuery(
     api.culturalRegistrations.listCulturalRegistrations,
     {}
+  );
+  const technicalRegistrations = useQuery(
+    api.technicalRegistrations.listTechnicalRegistrations
+  );
+  const culturalRegistrations = eventRegistrations?.filter(
+    (registration) => !TECHNICAL_EVENT_TITLES.has(registration.event)
   );
   const router = useRouter();
 
@@ -166,6 +174,30 @@ export default function AdminDashboard() {
               >
                 <Calendar className="w-4 h-4 mr-2" />
                 View Cultural Registrations
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-black border-violet-500/30">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Code2 className="w-5 h-5 mr-2 text-violet-400" />
+                Technical Registrations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-400 mb-4">
+                View technical event entrants, teams, payments and proof documents.
+              </p>
+              <p className="text-sm text-violet-400 mb-4">
+                {technicalRegistrations?.length || 0} total registrations
+              </p>
+              <Button
+                onClick={() => router.push("/admin/technical")}
+                className="w-full bg-violet-700 hover:bg-violet-600 text-white"
+              >
+                <Code2 className="w-4 h-4 mr-2" />
+                View Technical Registrations
               </Button>
             </CardContent>
           </Card>

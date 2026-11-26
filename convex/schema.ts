@@ -247,6 +247,49 @@ const applicationTables = {
     .index("by_email", ["email"])
     .index("by_submitted", ["submittedAt"])
     .index("by_verification", ["verificationStatus"]),
+
+  technicalRegistrations: defineTable({
+    event: v.string(),
+    collegeName: v.string(),
+    codeType: v.string(),
+    codeValue: v.string(),
+    teamName: v.optional(v.string()),
+    entryFormat: v.optional(v.string()),
+    teamSize: v.optional(v.string()),
+
+    name: v.string(),
+    email: v.string(),
+    phone: v.string(),
+    classYear: v.optional(v.string()),
+    collegeIdUrl: v.optional(v.string()),
+
+    participants: v.optional(v.array(v.object({
+      role: v.string(),
+      name: v.string(),
+      phone: v.string(),
+      email: v.string(),
+      classYear: v.string(),
+      collegeIdUrl: v.optional(v.string()),
+    }))),
+
+    registrationFee: v.string(),
+    paymentMethod: v.string(),
+    upiTransactionId: v.optional(v.string()),
+    paymentScreenshotUrl: v.optional(v.string()),
+    additionalPaymentInfo: v.optional(v.string()),
+    declarationAccepted: v.boolean(),
+
+    submittedAt: v.number(),
+    verificationStatus: v.union(
+      v.literal("pending"),
+      v.literal("verified"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_event", ["event"])
+    .index("by_email", ["email"])
+    .index("by_submitted", ["submittedAt"])
+    .index("by_verification", ["verificationStatus"]),
 };
 
 export default defineSchema({

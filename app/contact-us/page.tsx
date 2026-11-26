@@ -397,11 +397,62 @@ export default function ContactUsPage() {
                 </a>
               </div>
             </li>
+            <li>
+              <em>Leadership</em>
+              <div className="leadership-grid">
+                <div className="v">
+                  <small>President</small>
+                  <span>Rahul Jat</span>
+                  <a
+                    className="call-btn"
+                    href="tel:+918591878366"
+                    data-cursor="call"
+                    aria-label="Call Rahul Jat at +91 85918 78366"
+                  >
+                    <span className="call-ico-wrap" aria-hidden="true">
+                      <Phone size={22} strokeWidth={2.2} className="call-ico" />
+                    </span>
+                    <span className="call-num">+91 85918 78366</span>
+                  </a>
+                </div>
+                <div className="v">
+                  <small>Events Coordinator</small>
+                  <span>Sagar Shetty</span>
+                  <a
+                    className="call-btn"
+                    href="tel:+917208729296"
+                    data-cursor="call"
+                    aria-label="Call Sagar Shetty at +91 72087 29296"
+                  >
+                    <span className="call-ico-wrap" aria-hidden="true">
+                      <Phone size={22} strokeWidth={2.2} className="call-ico" />
+                    </span>
+                    <span className="call-num">+91 72087 29296</span>
+                  </a>
+                </div>
+                <div className="v">
+                  <small>Celebrity Management Coordinator</small>
+                  <span>Shrehan Chatterjee</span>
+                  <a
+                    className="call-btn"
+                    href="tel:+919833883318"
+                    data-cursor="call"
+                    aria-label="Call Shrehan Chatterjee at +91 98338 83318"
+                  >
+                    <span className="call-ico-wrap" aria-hidden="true">
+                      <Phone size={22} strokeWidth={2.2} className="call-ico" />
+                    </span>
+                    <span className="call-num">+91 98338 83318</span>
+                  </a>
+                </div>
+              </div>
+            </li>
             <li className="ir-phone">
               <em>Phone</em>
               <div className="ph2">
                 <div className="v">
-                  Hussain Tinwala
+                  <small>Treasurer</small>
+                  <span>Hussain Tinwala</span>
                   <a
                     className="call-btn"
                     href="tel:+919867069971"
@@ -415,7 +466,8 @@ export default function ContactUsPage() {
                   </a>
                 </div>
                 <div className="v">
-                  Bhalchandra
+                  <small>Treasurer</small>
+                  <span>Bhalchandra</span>
                   <a
                     className="call-btn"
                     href="tel:+919152854203"

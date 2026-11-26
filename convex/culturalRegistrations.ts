@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { TECHNICAL_EVENT_TITLE_SET } from "./technicalEventNames";
 
 export const createCulturalRegistration = mutation({
   args: {
@@ -45,7 +46,7 @@ export const createCulturalRegistration = mutation({
         : {}),
     }));
 
-    return await ctx.db.insert("culturalRegistrations", {
+    const registration = {
       event: args.event,
       collegeName: args.collegeName,
       codeType: args.codeType,
@@ -73,7 +74,13 @@ export const createCulturalRegistration = mutation({
       declarationAccepted: args.declarationAccepted,
       submittedAt: Date.now(),
       verificationStatus: "pending",
-    });
+    } as const;
+
+    if (TECHNICAL_EVENT_TITLE_SET.has(args.event)) {
+      return await ctx.db.insert("technicalRegistrations", registration);
+    }
+
+    return await ctx.db.insert("culturalRegistrations", registration);
   },
 });
 

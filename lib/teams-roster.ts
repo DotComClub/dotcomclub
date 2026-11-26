@@ -68,7 +68,7 @@ export const TEAM_CARDS: TeamCard[] = [
   { id: "photography-002", team: "Photography", image: "/images/teams/photography/photography.png", width: 1081, height: 1350, kind: "individual", category: "subheads" },
   { id: "photography-005", team: "Photography", image: "/images/teams/photography/photography-4.png", width: 1081, height: 1350, kind: "individual", category: "subheads" },
   { id: "photography-001", team: "Photography", image: "/images/teams/photography/photography-1.png", width: 1081, height: 1350, kind: "group", category: "group" },
-  { id: "pr-003", team: "PR", image: "/images/teams/pr/pr-3.png", width: 1080, height: 1350, kind: "individual", category: "heads" },
+  { id: "pr-003", team: "PR", image: "/images/teams/pr/pr-3.png", width: 1080, height: 1350, kind: "individual", category: "subheads" },
   { id: "pr-004", team: "PR", image: "/images/teams/pr/pr-4.png", width: 1080, height: 1350, kind: "individual", category: "heads" },
   { id: "pr-002", team: "PR", image: "/images/teams/pr/prsubsan.jpg", width: 1080, height: 1350, kind: "individual", category: "subheads" },
   { id: "pr-001", team: "PR", image: "/images/teams/pr/prnewone.jpg", width: 1080, height: 1350, kind: "group", category: "group" },

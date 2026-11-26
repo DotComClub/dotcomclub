@@ -9,12 +9,16 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { CalendarDays, Download, LogOut, Trash2 } from "lucide-react";
+import { TECHNICAL_EVENT_TITLES } from "@/lib/technical-events";
 
 export default function AdminCulturalRegistrations() {
   const { isAuthenticated, login, logout } = useAdminAuth();
-  const registrations = useQuery(
+  const allRegistrations = useQuery(
     api.culturalRegistrations.listCulturalRegistrations,
     {}
+  );
+  const registrations = allRegistrations?.filter(
+    (registration) => !TECHNICAL_EVENT_TITLES.has(registration.event)
   );
   const deleteRegistration = useMutation(
     api.culturalRegistrations.deleteCulturalRegistration

@@ -2141,10 +2141,6 @@ export default function Cyberstrike26Page() {
             <h2 className="disp" aria-label="Ready to reconnect?">
               Ready to<br />reconnect?
             </h2>
-            <p>
-              System waiting for input. Connection window closes 18 November
-              2026.
-            </p>
             <a className="btn red mono js-reg" href={REG_URL}>
               Register now <span aria-hidden="true">→</span>
             </a>

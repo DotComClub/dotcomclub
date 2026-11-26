@@ -1,3 +1,5 @@
+import { TECHNICAL_EVENT_TITLE_SET } from "@/convex/technicalEventNames";
+
 export interface TechnicalEventSpec {
   id: string;
   number: string;
@@ -230,3 +232,5 @@ export const TECHNICAL_EVENTS: TechnicalEventSpec[] = [
 
 export const TECHNICAL_EVENTS_BY_ID: Record<string, TechnicalEventSpec> =
   Object.fromEntries(TECHNICAL_EVENTS.map((ev) => [ev.id, ev]));
+
+export const TECHNICAL_EVENT_TITLES = TECHNICAL_EVENT_TITLE_SET;

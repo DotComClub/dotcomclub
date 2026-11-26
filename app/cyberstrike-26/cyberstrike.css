@@ -1781,10 +1781,8 @@ html.navlock body {
   font-size: clamp(70px, 15vw, 260px);
 }
 
-.cs26-root .final p {
-  color: var(--dim);
-  max-width: 28em;
-  margin: 2.4em 0;
+.cs26-root .final .btn {
+  margin-top: 2.4em;
 }
 
 /* Footer */

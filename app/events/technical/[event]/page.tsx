@@ -53,7 +53,7 @@ export default function TechEventRegistrationPage({
   const [error, setError] = useState("");
 
   const createRegistration = useMutation(
-    api.culturalRegistrations.createCulturalRegistration
+    api.technicalRegistrations.createTechnicalRegistration
   );
 
   // Reset transient state when switching between sub-events

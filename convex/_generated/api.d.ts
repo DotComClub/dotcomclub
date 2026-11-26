@@ -18,6 +18,8 @@ import type * as polls from "../polls.js";
 import type * as popups from "../popups.js";
 import type * as registration from "../registration.js";
 import type * as sonyRegistrations from "../sonyRegistrations.js";
+import type * as technicalEventNames from "../technicalEventNames.js";
+import type * as technicalRegistrations from "../technicalRegistrations.js";
 
 import type {
   ApiFromModules,
@@ -44,6 +46,8 @@ declare const fullApi: ApiFromModules<{
   popups: typeof popups;
   registration: typeof registration;
   sonyRegistrations: typeof sonyRegistrations;
+  technicalEventNames: typeof technicalEventNames;
+  technicalRegistrations: typeof technicalRegistrations;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 
