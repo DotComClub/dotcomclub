@@ -449,6 +449,60 @@
   margin-bottom: 24px;
 }
 
+/* PRNC / CC Toggle Component */
+.esports-registration .er-code-block {
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+.esports-registration .prnc-cc-toggle-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 2px;
+}
+
+.esports-registration .prnc-cc-toggle {
+  display: inline-flex;
+  width: fit-content;
+  justify-self: start;
+  border: 1px solid var(--line);
+  background: #0d0920;
+  border-radius: 0;
+  padding: 4px;
+  gap: 4px;
+}
+
+.esports-registration .prnc-cc-btn {
+  padding: 10px 22px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.esports-registration .prnc-cc-btn:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.esports-registration .prnc-cc-btn.active {
+  background: var(--red);
+  color: #07041a;
+  border-color: var(--red);
+  font-weight: 700;
+  box-shadow: 0 0 16px rgba(155, 107, 255, 0.4);
+}
+
 @media (max-width: 700px) {
   .esports-registration .er-main {
     padding-inline: 16px;

@@ -109,6 +109,7 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [codeType, setCodeType] = useState<"PRNC" | "CC">("PRNC");
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const createRegistration = useMutation(api.esportsRegistrations.createRegistration);
@@ -195,6 +196,11 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
     const value = (name: string) => String(data.get(name) ?? "").trim();
 
     try {
+      const codeValue = value("codeValue");
+      if (!codeValue) {
+        throw new Error(`Enter your ${codeType} code.`);
+      }
+
       if (game.roster === "bgmi" || game.roster === "valorant") {
         const requiredCount = game.roster === "bgmi" ? 4 : 5;
         const players = [];
@@ -217,12 +223,14 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
             collegeName: value(`player${playerNumber}CollegeName`),
           });
         }
-        await createRegistration({ game: game.title, teamName: value("teamName"), players });
+        await createRegistration({ game: game.title, codeType, codeValue, teamName: value("teamName"), players });
       } else if (gameSlug === "clash-royale") {
         const collegeIdUrl = uploadedFiles.collegeIdPhoto;
         if (!collegeIdUrl) throw new Error("Upload your college ID photo.");
         await createRegistration({
           game: game.title,
+          codeType,
+          codeValue,
           name: value("name"),
           email: value("email"),
           phone: value("phone"),
@@ -236,6 +244,8 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
         if (!collegeIdUrl) throw new Error("Upload your college ID photo.");
         await createRegistration({
           game: game.title,
+          codeType,
+          codeValue,
           name: value("name"),
           email: value("email"),
           phone: value("phone"),
@@ -284,6 +294,49 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
           </section>
         ) : (
           <form className="er-form" onSubmit={submit}>
+            <div className="er-field prnc-cc-toggle-group er-code-block">
+              <span className="prnc-cc-toggle-label">
+                Registration Code Type *
+              </span>
+              <div
+                className="prnc-cc-toggle"
+                role="group"
+                aria-label="Code Type Toggle"
+              >
+                <button
+                  type="button"
+                  className={`prnc-cc-btn ${
+                    codeType === "PRNC" ? "active" : ""
+                  }`}
+                  onClick={() => setCodeType("PRNC")}
+                  aria-pressed={codeType === "PRNC"}
+                >
+                  PRNC Code
+                </button>
+                <button
+                  type="button"
+                  className={`prnc-cc-btn ${
+                    codeType === "CC" ? "active" : ""
+                  }`}
+                  onClick={() => setCodeType("CC")}
+                  aria-pressed={codeType === "CC"}
+                >
+                  CC Code
+                </button>
+              </div>
+              <input
+                name="codeValue"
+                type="text"
+                required
+                autoComplete="off"
+                placeholder={
+                  codeType === "PRNC"
+                    ? "Enter PRNC Code (e.g. PRNC-1042)"
+                    : "Enter Contingent Code (e.g. CC-JHC)"
+                }
+              />
+            </div>
+
             {game.roster === "bgmi" && (
               <>
                 <p className="er-roster-note">BGMI roster: 4 players + 1 substitute.</p>

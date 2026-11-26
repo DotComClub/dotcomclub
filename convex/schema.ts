@@ -159,6 +159,8 @@ const applicationTables = {
 
   esportsRegistrations: defineTable({
     game: v.string(),
+    codeType: v.optional(v.string()), // "PRNC" | "CC"
+    codeValue: v.optional(v.string()), // The PRNC or CC code
     name: v.optional(v.string()),
     email: v.optional(v.string()),
     phone: v.optional(v.string()),

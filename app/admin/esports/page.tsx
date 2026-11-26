@@ -24,6 +24,8 @@ export default function AdminEsportsRegistrations() {
         return registration.players.map((player, playerIndex) => [
           index + 1,
           registration.game,
+          registration.codeType ?? "",
+          registration.codeValue ?? "",
           registration.teamName ?? "",
           playerIndex + 1,
           player.name,
@@ -39,6 +41,8 @@ export default function AdminEsportsRegistrations() {
       return [[
         index + 1,
         registration.game,
+        registration.codeType ?? "",
+        registration.codeValue ?? "",
         "",
         "",
         registration.name ?? "",
@@ -52,7 +56,7 @@ export default function AdminEsportsRegistrations() {
       ]];
     });
 
-    const headers = ["S.No", "Game", "Team Name", "Player No", "Name", "Email", "IGN", "College ID", "Number", "College Name", "Status", "Submitted"];
+    const headers = ["S.No", "Game", "Code Type", "Code", "Team Name", "Player No", "Name", "Email", "IGN", "College ID", "Number", "College Name", "Status", "Submitted"];
     const csv = [headers, ...rows]
       .map((row) => row.map((field) => `"${String(field).replaceAll('"', '""')}"`).join(","))
       .join("\n");
@@ -124,6 +128,11 @@ export default function AdminEsportsRegistrations() {
                               <span className="font-medium">{registration.name ?? "-"}</span>
                               <span className="block text-gray-400">{registration.email ?? registration.phone ?? "-"}</span>
                             </>
+                          )}
+                          {registration.codeType && registration.codeValue && (
+                            <span className="mt-1 inline-block rounded border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 text-xs text-cyan-300">
+                              {registration.codeType}: {registration.codeValue}
+                            </span>
                           )}
                         </td>
                         <td className="p-3">

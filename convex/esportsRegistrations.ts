@@ -4,6 +4,8 @@ import { mutation, query } from "./_generated/server";
 export const createRegistration = mutation({
   args: {
     game: v.string(),
+    codeType: v.string(), // "PRNC" | "CC"
+    codeValue: v.string(),
     name: v.optional(v.string()),
     email: v.optional(v.string()),
     phone: v.optional(v.string()),
