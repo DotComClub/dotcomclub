@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { Navbar } from "@/components/home/Navbar";
 import { FooterSection } from "@/components/home/FooterSection";
 import { CustomCursor } from "@/components/home/CustomCursor";
 import { anton, dmSans } from "@/fonts/font";
-import { TEAM_CARDS, TEAM_NAMES } from "@/lib/teams-roster";
+import { TEAM_CARDS, TEAM_NAMES, type TeamCard } from "@/lib/teams-roster";
 
 const CLUB_SOCIALS = {
   ig: "https://www.instagram.com/dotcomclubjhc/",
@@ -26,6 +28,14 @@ export default function TeamsPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeFilter, setActiveFilter] = useState("Core");
   const [statementProgress, setStatementProgress] = useState(0);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [originRect, setOriginRect] = useState<{
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  } | null>(null);
 
   const statementRef = useRef<HTMLParagraphElement>(null);
 
@@ -54,10 +64,93 @@ export default function TeamsPage() {
     return TEAM_NAMES;
   }, []);
 
-  const visibleCardsCount = useMemo(() => {
-    if (activeFilter === "All") return allMembers.length;
-    return allMembers.filter((m) => m.team === activeFilter).length;
+  const visibleMembers = useMemo(() => {
+    if (activeFilter === "All") return allMembers;
+    return allMembers.filter((m) => m.team === activeFilter);
   }, [activeFilter, allMembers]);
+
+  const visibleCardsCount = visibleMembers.length;
+
+  const selectedIndex = useMemo(() => {
+    if (!selectedId) return -1;
+    return visibleMembers.findIndex((m) => m.id === selectedId);
+  }, [selectedId, visibleMembers]);
+
+  const selectedMember: TeamCard | null =
+    selectedIndex >= 0 ? visibleMembers[selectedIndex] : null;
+
+  const closeLightbox = useCallback(() => {
+    setIsZoomed(false);
+    setSelectedId(null);
+  }, []);
+
+  const stepLightbox = useCallback(
+    (direction: -1 | 1) => {
+      if (visibleMembers.length === 0 || selectedIndex < 0) return;
+      const nextIndex =
+        (selectedIndex + direction + visibleMembers.length) %
+        visibleMembers.length;
+      setIsZoomed(false);
+      setOriginRect(null);
+      setSelectedId(visibleMembers[nextIndex].id);
+    },
+    [selectedIndex, visibleMembers]
+  );
+
+  const openLightbox = (
+    member: TeamCard,
+    event: MouseEvent<HTMLButtonElement>
+  ) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setIsZoomed(false);
+    setOriginRect({
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    });
+    setSelectedId(member.id);
+  };
+
+  useEffect(() => {
+    if (!selectedMember) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeLightbox();
+      else if (event.key === "ArrowLeft") stepLightbox(-1);
+      else if (event.key === "ArrowRight") stepLightbox(1);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [selectedMember, closeLightbox, stepLightbox]);
+
+  const initialLightboxMotion = useMemo(() => {
+    if (!originRect || typeof window === "undefined") {
+      return { x: 0, y: 28, scale: 0.72, opacity: 0 };
+    }
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const maxW = Math.min(vw * 0.9, 740);
+    const maxH = vh * 0.84;
+    const targetH = Math.min(maxH, maxW * 1.25);
+    const targetW = targetH * 0.8;
+    const originCenterX = originRect.left + originRect.width / 2;
+    const originCenterY = originRect.top + originRect.height / 2;
+
+    return {
+      x: originCenterX - vw / 2,
+      y: originCenterY - vh / 2,
+      scale: Math.max(0.22, Math.min(0.92, originRect.width / Math.max(targetW, 1))),
+      opacity: 0.65,
+    };
+  }, [originRect]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -248,7 +341,13 @@ export default function TeamsPage() {
                   data-category={member.category}
                 >
                   <div className="pw">
-                    <div className="poster">
+                    <button
+                      type="button"
+                      className="poster"
+                      data-cursor="view"
+                      aria-label={`Enlarge ${member.team} ${member.category === "group" ? "group photo" : `${member.category} poster`}`}
+                      onClick={(event) => openLightbox(member, event)}
+                    >
                       <Image
                         src={member.image}
                         alt={`${member.team} ${member.category === "group" ? "all-members group photo" : `${member.category} poster`} with names and positions`}
@@ -256,7 +355,7 @@ export default function TeamsPage() {
                         sizes="(max-width: 639px) 44vw, (max-width: 999px) 30vw, 22vw"
                         quality={75}
                       />
-                    </div>
+                    </button>
                   </div>
                 </article>
               );
@@ -306,6 +405,132 @@ export default function TeamsPage() {
 
       {/* ── FOOTER SECTION ───────────────────────────────────────────────── */}
       <FooterSection />
+
+      {/* ── ENLARGED IMAGE LIGHTBOX ──────────────────────────────────────── */}
+      <AnimatePresence>
+        {selectedMember && (
+          <motion.div
+            className="teams-lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${selectedMember.team} ${selectedMember.category} image preview`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.24, ease: "easeOut" }}
+            onClick={closeLightbox}
+          >
+            <motion.div
+              className="teams-lightbox-dialog"
+              initial={initialLightboxMotion}
+              animate={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+              exit={{
+                scale: 0.76,
+                opacity: 0,
+                transition: { duration: 0.18, ease: "easeIn" },
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 330,
+                damping: 21,
+                mass: 0.75,
+              }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="teams-lightbox-bar">
+                <div className="teams-lightbox-meta">
+                  <span className="teams-lightbox-team">{selectedMember.team}</span>
+                  <span className="teams-lightbox-cat">
+                    {selectedMember.category}
+                  </span>
+                </div>
+
+                <div className="teams-lightbox-actions">
+                  <span className="teams-lightbox-count">
+                    {selectedIndex + 1} / {visibleMembers.length}
+                  </span>
+                  <button
+                    type="button"
+                    className={`teams-lightbox-close${isZoomed ? " active" : ""}`}
+                    aria-label={isZoomed ? "Zoom out image" : "Zoom in image"}
+                    aria-pressed={isZoomed}
+                    onClick={() => setIsZoomed((prev) => !prev)}
+                  >
+                    {isZoomed ? <ZoomOut size={18} /> : <ZoomIn size={18} />}
+                  </button>
+                  <button
+                    type="button"
+                    className="teams-lightbox-close"
+                    aria-label="Close enlarged image"
+                    onClick={closeLightbox}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="teams-lightbox-stage">
+                {visibleMembers.length > 1 && (
+                  <button
+                    type="button"
+                    className="teams-lightbox-nav prev"
+                    aria-label="Previous image"
+                    onClick={() => stepLightbox(-1)}
+                  >
+                    <ChevronLeft size={22} />
+                  </button>
+                )}
+
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={selectedMember.id}
+                    className={`teams-lightbox-frame${isZoomed ? " is-zoomed" : ""}`}
+                    initial={{ opacity: 0, scale: 0.88 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 340,
+                      damping: 24,
+                    }}
+                    onClick={() => setIsZoomed((prev) => !prev)}
+                  >
+                    <motion.div
+                      className="teams-lightbox-img-wrap"
+                      animate={{ scale: isZoomed ? 1.42 : 1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 24,
+                      }}
+                    >
+                      <Image
+                        src={selectedMember.image}
+                        alt={`${selectedMember.team} ${selectedMember.category === "group" ? "all-members group photo" : `${selectedMember.category} poster`} with names and positions`}
+                        width={selectedMember.width}
+                        height={selectedMember.height}
+                        quality={95}
+                        priority
+                      />
+                    </motion.div>
+                  </motion.div>
+                </AnimatePresence>
+
+                {visibleMembers.length > 1 && (
+                  <button
+                    type="button"
+                    className="teams-lightbox-nav next"
+                    aria-label="Next image"
+                    onClick={() => stepLightbox(1)}
+                  >
+                    <ChevronRight size={22} />
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
