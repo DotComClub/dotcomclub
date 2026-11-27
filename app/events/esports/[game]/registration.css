@@ -1,0 +1,653 @@
+.esports-registration {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  background: #060214;
+  color: var(--ink);
+  position: relative;
+}
+
+.esports-registration .er-main {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: clamp(16px, 2.2vw, 32px) 24px clamp(48px, 6vw, 96px);
+  position: relative;
+  z-index: 10;
+}
+
+.esports-registration .eh-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.esports-registration .navback {
+  display: inline-flex;
+  gap: .6em;
+  min-height: 44px;
+  align-items: center;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+
+.esports-registration .navback:hover {
+  color: var(--red);
+}
+
+.esports-registration .er-header {
+  min-width: 0;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+/* Clean, fully readable display title with minimal cyber chromatic glitch by default */
+.esports-registration .er-title {
+  position: relative;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: clamp(20px, 3.5vw, 44px) 0 16px;
+  font: 900 clamp(68px, 15vw, 190px)/.84 var(--display);
+  text-transform: uppercase;
+  letter-spacing: -.005em;
+  color: #efe9ff;
+  text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  user-select: none;
+  cursor: default;
+  transition: transform 0.2s ease, text-shadow 0.2s ease;
+  animation: cs-ambient-glitch 4.2s infinite ease-in-out;
+}
+
+.esports-registration .er-title:hover,
+.esports-registration .er-title.glx {
+  animation: cs-minimal-glitch 0.38s steps(2) 1;
+}
+
+/* Ambient periodic glitch by default (runs automatically without hover) */
+@keyframes cs-ambient-glitch {
+  0%, 100% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  24% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  25% {
+    transform: translate(-2.5px, 0.5px);
+    text-shadow: 3.5px 0 rgba(155, 107, 255, 0.95), -3.5px 0 rgba(110, 242, 255, 0.85);
+  }
+  27% {
+    transform: translate(2px, -0.5px);
+    text-shadow: -3px 0 rgba(155, 107, 255, 0.95), 3px 0 rgba(110, 242, 255, 0.85);
+  }
+  29% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  62% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  63% {
+    transform: translate(2.5px, 0);
+    text-shadow: -3.5px 0 rgba(155, 107, 255, 0.95), 3.5px 0 rgba(110, 242, 255, 0.85);
+  }
+  65% {
+    transform: translate(-1.5px, 0);
+    text-shadow: 2.5px 0 rgba(155, 107, 255, 0.9), -2.5px 0 rgba(110, 242, 255, 0.8);
+  }
+  67% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  88% {
+    transform: translate(-3px, 0.5px);
+    text-shadow: 4px 0 rgba(155, 107, 255, 0.95), -4px 0 rgba(110, 242, 255, 0.85);
+  }
+  90% {
+    transform: translate(2.5px, -0.5px);
+    text-shadow: -3px 0 rgba(155, 107, 255, 0.95), 3px 0 rgba(110, 242, 255, 0.85);
+  }
+  92% {
+    transform: translate(-1px, 0);
+    text-shadow: 2px 0 rgba(155, 107, 255, 0.85), -2px 0 rgba(110, 242, 255, 0.75);
+  }
+  94% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+}
+
+@keyframes cs-minimal-glitch {
+  0% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  18% {
+    transform: translate(-3px, 0);
+    text-shadow: 4px 0 rgba(155, 107, 255, 0.95), -4px 0 rgba(110, 242, 255, 0.85);
+  }
+  36% {
+    transform: translate(2.5px, 0);
+    text-shadow: -3px 0 rgba(155, 107, 255, 0.95), 3px 0 rgba(110, 242, 255, 0.85);
+  }
+  54% {
+    transform: translate(-1.5px, 0);
+    text-shadow: 2px 0 rgba(155, 107, 255, 0.85), -2px 0 rgba(110, 242, 255, 0.75);
+  }
+  72% {
+    transform: translate(1px, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+  100% {
+    transform: translate(0, 0);
+    text-shadow: -2px 0 rgba(155, 107, 255, 0.85), 2px 0 rgba(110, 242, 255, 0.75);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .esports-registration .er-title,
+  .esports-registration .er-title:hover,
+  .esports-registration .er-title.glx {
+    animation: none !important;
+  }
+}
+
+.esports-registration .real-cricket-title {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  white-space: normal;
+  line-height: 1;
+}
+
+.esports-registration .pin {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .08em;
+  line-height: 1.6;
+  color: var(--dim);
+  max-width: 60ch;
+  margin: 0;
+}
+
+.esports-registration .er-form {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(28px, 5vw, 56px);
+}
+
+.esports-registration .er-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+}
+
+.esports-registration .er-field {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.esports-registration .er-field > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.esports-registration .er-roster-note {
+  margin: 0 0 24px;
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.esports-registration .er-field input {
+  width: 100%;
+  min-width: 0;
+  height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #08041c;
+  color: #efe9ff;
+  padding: 0 16px;
+  font: 400 13px var(--mono);
+  letter-spacing: .06em;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+
+.esports-registration .er-field input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(110, 242, 255, 0.3);
+  background: #0c0628;
+}
+
+.esports-registration .er-field input::placeholder {
+  color: #4a436e;
+  font-size: 12px;
+  letter-spacing: .05em;
+}
+
+.esports-registration .er-field.full {
+  grid-column: 1 / -1;
+}
+
+.esports-registration .er-field select,
+.esports-registration .er-field textarea {
+  width: 100%;
+  min-width: 0;
+  height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #08041c;
+  color: #efe9ff;
+  padding: 0 16px;
+  font: 400 13px var(--mono);
+  letter-spacing: .06em;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+
+.esports-registration .er-field textarea {
+  height: 96px;
+  padding: 12px 16px;
+  resize: vertical;
+}
+
+.esports-registration .er-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a79cc4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.esports-registration .er-field select:focus,
+.esports-registration .er-field textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(110, 242, 255, 0.3);
+  background: #0c0628;
+}
+
+.esports-registration .er-field textarea::placeholder {
+  color: #4a436e;
+  font-size: 12px;
+  letter-spacing: .05em;
+}
+
+.esports-registration .er-payment-box {
+  min-width: 0;
+  margin: 28px 0 0;
+  padding: clamp(16px, 2.5vw, 24px);
+  border: 1px solid var(--line);
+  background: rgba(14, 8, 38, 0.45);
+}
+
+.esports-registration .er-payment-box legend {
+  max-width: calc(100% - 16px);
+  padding: 0 10px;
+  color: var(--red);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.esports-registration .er-fee-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 18px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  background: rgba(155, 107, 255, 0.08);
+  border: 1px solid var(--red);
+}
+
+.esports-registration .er-fee-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.esports-registration .er-fee-sub {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.esports-registration .er-fee-amount {
+  font-family: var(--display);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.esports-registration .declaration-label {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  cursor: pointer;
+  padding: 14px 16px;
+  margin-top: 20px;
+  border: 1px solid var(--line);
+  background: rgba(8, 4, 28, 0.72);
+  color: var(--ink);
+  font: 400 12px/1.6 var(--mono);
+  letter-spacing: .03em;
+}
+
+.esports-registration .declaration-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--red);
+  cursor: pointer;
+}
+
+.esports-registration .er-team-name {
+  max-width: 520px;
+  margin-bottom: 24px;
+}
+
+.esports-registration .er-team fieldset {
+  min-width: 0;
+  margin: 0 0 24px;
+  padding: clamp(16px, 2.5vw, 24px);
+  border: 1px solid var(--line);
+  background: rgba(14, 8, 38, 0.45);
+}
+
+.esports-registration .er-team legend {
+  max-width: calc(100% - 16px);
+  padding: 0 10px;
+  color: var(--red);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+/* Event File Upload Component Styles */
+.esports-registration .event-upload {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 12px 14px;
+  border: 1px dashed rgba(110, 242, 255, 0.45);
+  background: rgba(13, 9, 32, 0.7);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, transform .15s ease;
+}
+
+.esports-registration .event-upload:hover,
+.esports-registration .event-upload:focus-within {
+  border-color: var(--cyan);
+  background: rgba(22, 14, 52, 0.85);
+  transform: translateY(-1px);
+}
+
+.esports-registration .event-upload-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font: 400 20px/1 var(--mono);
+}
+
+.esports-registration .event-upload-copy {
+  display: grid;
+  gap: 3px;
+  pointer-events: none;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.esports-registration .event-upload-copy b {
+  color: #efe9ff;
+  font: 600 13px/1.2 var(--mono);
+}
+
+.esports-registration .event-upload-copy small {
+  color: var(--dim);
+  font: 400 10px/1.4 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.esports-registration .event-upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.esports-registration .event-upload-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  color: var(--cyan);
+  font: 500 11px/1.4 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: 6px;
+}
+
+.esports-registration .event-upload-status b {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  font-size: 11px;
+}
+
+.esports-registration .er-submit {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding: 16px 24px;
+  background: var(--ink);
+  color: #060214;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  transition: background .2s, color .2s, transform .15s;
+}
+
+.esports-registration .er-submit span {
+  flex: 1;
+  text-align: left;
+}
+
+.esports-registration .er-submit b {
+  font-family: var(--mono);
+  font-size: 16px;
+  margin-left: 12px;
+}
+
+.esports-registration .er-submit:hover:not(:disabled) {
+  background: var(--cyan);
+  color: #060214;
+  transform: translateY(-1px);
+}
+
+.esports-registration .er-submit:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+.esports-registration .er-error {
+  color: #ff8da1;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .08em;
+  margin: 18px 0 0;
+}
+
+.esports-registration .er-success {
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  border-top: 1px solid var(--line);
+  padding: 40px 0;
+}
+
+.esports-registration .er-success > span {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.esports-registration .er-success-title {
+  position: relative;
+  margin: 0 0 16px;
+  font: 900 clamp(44px, 7vw, 84px)/.9 var(--display);
+  text-transform: uppercase;
+  color: #efe9ff;
+}
+
+.esports-registration .er-success p {
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .06em;
+  margin-bottom: 24px;
+}
+
+/* PRNC / CC Toggle Component */
+.esports-registration .er-code-block {
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+.esports-registration .prnc-cc-toggle-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 2px;
+}
+
+.esports-registration .prnc-cc-toggle {
+  display: inline-flex;
+  width: fit-content;
+  justify-self: start;
+  border: 1px solid var(--line);
+  background: #0d0920;
+  border-radius: 0;
+  padding: 4px;
+  gap: 4px;
+}
+
+.esports-registration .prnc-cc-btn {
+  padding: 10px 22px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.esports-registration .prnc-cc-btn:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.esports-registration .prnc-cc-btn.active {
+  background: var(--red);
+  color: #07041a;
+  border-color: var(--red);
+  font-weight: 700;
+  box-shadow: 0 0 16px rgba(155, 107, 255, 0.4);
+}
+
+@media (max-width: 700px) {
+  .esports-registration .er-main {
+    padding-inline: 16px;
+  }
+  .esports-registration .eh-top {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .esports-registration .eh-top > span {
+    padding-top: 13px;
+  }
+  .esports-registration .er-fields {
+    grid-template-columns: 1fr;
+  }
+  .esports-registration .er-team fieldset {
+    padding: 14px 10px;
+  }
+}

@@ -2,7 +2,7 @@ import { PollProvider } from "@/components/poll-provider";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import { Footer } from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/sonner";
-import { satoshi, dancingScript } from "@/fonts/font";
+import { satoshi, dancingScript, anton, dmSans } from "@/fonts/font";
 import { createMetadata } from "@/lib/metadata";
 import {
   generateOrganizationSchema,
@@ -24,7 +24,7 @@ export default function RootLayout({
   const websiteSchema = generateWebsiteSchema();
 
   return (
-    <html lang="en" className="overflow-x-hidden" suppressHydrationWarning>
+    <html lang="en" className="overflow-x-clip" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -39,12 +39,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${satoshi.className} ${dancingScript.variable} overflow-x-hidden`} suppressHydrationWarning>
+      <body className={`${satoshi.className} ${dancingScript.variable} ${anton.variable} ${dmSans.variable} overflow-x-clip`} suppressHydrationWarning>
         <ConvexClientProvider>
           <PollProvider>
             <Analytics />
             <FloatingNav />
-            <main className="min-h-screen overflow-x-hidden">{children}</main>
+            <main className="min-h-screen">{children}</main>
             <Footer />
             <Toaster />
           </PollProvider>

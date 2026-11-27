@@ -21,6 +21,9 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import * as htmlToImage from "html-to-image";
+import { anton, dmSans } from "@/fonts/font";
+import { BackgroundCanvas } from "@/components/home/BackgroundCanvas";
+import { Navbar } from "@/components/home/Navbar";
 
 // Generate barcode for CL/ACL
 const generateBarcode = (
@@ -115,7 +118,7 @@ const AccessCard = ({
     <div
       ref={cardRef}
       style={accentStyles}
-      className="relative flex w-full max-w-[320px] flex-col overflow-hidden rounded-[36px] border border-white/12 bg-[#080911] text-white shadow-[0_32px_70px_rgba(0,0,0,0.45)] min-h-[500px]"
+      className="cl-access-card relative flex w-full max-w-[320px] flex-col overflow-hidden rounded-[36px] border text-white shadow-[0_32px_70px_rgba(8,4,15,0.45)] min-h-[500px]"
     >
       <div className="pointer-events-none absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-white/10 text-base font-semibold text-slate-900 shadow-[0_12px_30px_rgba(0,0,0,0.35)]"></div>
       <div
@@ -279,7 +282,7 @@ export default function CLConfirmation() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#050509]">
         <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#9E71FF]"></div>
           <p className="text-gray-400 text-sm">Loading your confirmation...</p>
         </div>
       </div>
@@ -290,7 +293,7 @@ export default function CLConfirmation() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#050509]">
         <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#9E71FF]"></div>
           <p className="text-gray-400 text-sm">
             Loading your registration details...
           </p>
@@ -300,14 +303,16 @@ export default function CLConfirmation() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050509] text-white">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 py-16 md:px-8 pt-32">
+    <div className={`home-root cl-page cl-confirm-page ${anton.variable} ${dmSans.variable}`}>
+      <BackgroundCanvas />
+      <Navbar />
+      <div className="relative z-[1] mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 py-16 md:px-8 pt-32">
         {/* Header */}
         <div className="flex flex-col gap-6">
           <Button
             variant="ghost"
             asChild
-            className="w-fit text-zinc-300 hover:bg-white/5"
+            className="w-fit text-[#CBB7FF] hover:bg-white/10 hover:text-white"
           >
             <button
               onClick={() => router.push("/")}
@@ -319,10 +324,10 @@ export default function CLConfirmation() {
           </Button>
 
           <div className="flex flex-col gap-4">
-            <Badge className="w-fit bg-white/10 text-xs uppercase tracking-[0.35em] text-white">
+            <Badge className="cl-confirm-badge w-fit text-xs uppercase tracking-[0.35em] text-white">
               CL Registration • Cyberstrike 2026
             </Badge>
-            <h1 className="text-3xl font-bold md:text-4xl">
+            <h1 className="cl-confirm-title text-3xl font-bold md:text-4xl">
               Registration Confirmed!
             </h1>
             <p className="max-w-2xl text-sm text-zinc-300 md:text-base">
@@ -396,10 +401,10 @@ export default function CLConfirmation() {
           {/* Left Column on Desktop, Second on Mobile: Registration Info */}
           <div className="flex flex-col gap-6 lg:order-1">
             {/* CL Meet Info */}
-            <div className="rounded-lg border border-red-500/30 bg-red-900/10 p-6">
+            <div className="cl-confirm-panel cl-meet-panel rounded-lg p-6">
               <div className="flex items-center gap-3 mb-4">
-                <CheckCircle2 className="h-5 w-5 text-red-400" />
-                <h3 className="text-lg font-semibold text-white">
+                <CheckCircle2 className="h-5 w-5 text-[#CBB7FF]" />
+                <h3 className="cl-confirm-heading text-lg font-semibold text-white">
                   CL Meet
                 </h3>
               </div>
@@ -430,10 +435,10 @@ export default function CLConfirmation() {
             </div>
 
             {/* College Info */}
-            <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+            <div className="cl-confirm-panel rounded-lg p-6">
               <div className="flex items-center gap-3 mb-4">
-                <Building2 className="h-5 w-5 text-zinc-400" />
-                <h3 className="text-lg font-semibold text-white">
+                <Building2 className="h-5 w-5 text-[#CBB7FF]" />
+                <h3 className="cl-confirm-heading text-lg font-semibold text-white">
                   College Information
                 </h3>
               </div>
@@ -458,13 +463,13 @@ export default function CLConfirmation() {
             </div>
 
             {/* What's Next */}
-            <div className="rounded-lg border border-blue-500/30 bg-blue-900/10 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">
+            <div className="cl-confirm-panel cl-next-panel rounded-lg p-6">
+              <h3 className="cl-confirm-heading text-lg font-semibold text-white mb-4">
                 What&apos;s Next?
               </h3>
               <ul className="space-y-3 text-sm text-zinc-300">
                 <li className="flex items-start gap-3">
-                  <Mail className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                  <Mail className="h-4 w-4 text-[#9E71FF] mt-0.5 flex-shrink-0" />
                   <span>
                     Confirmation emails have been sent to both CL (
                     {registration.clEmail}) and Assistant CL (
@@ -472,18 +477,18 @@ export default function CLConfirmation() {
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-[#9E71FF] mt-0.5 flex-shrink-0" />
                   <span>Your documents are being verified by our team</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-[#9E71FF] mt-0.5 flex-shrink-0" />
                   <span>
                     Further details about Cyberstrike 2026 will be shared before
                     the event
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Building2 className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                  <Building2 className="h-4 w-4 text-[#9E71FF] mt-0.5 flex-shrink-0" />
                   <span>
                     Start preparing your college contingent for the event!
                   </span>
@@ -492,8 +497,8 @@ export default function CLConfirmation() {
             </div>
 
             {/* Registration Details */}
-            <div className="rounded-lg border border-white/10 bg-white/5 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">
+            <div className="cl-confirm-panel rounded-lg p-6">
+              <h3 className="cl-confirm-heading text-lg font-semibold text-white mb-4">
                 Registration Details
               </h3>
               <div className="grid gap-3 text-sm">
@@ -504,7 +509,7 @@ export default function CLConfirmation() {
                       registration.verificationStatus === "verified"
                         ? "bg-green-600"
                         : registration.verificationStatus === "rejected"
-                        ? "bg-red-600"
+                        ? "bg-[#8F5BD6]"
                         : "bg-yellow-600"
                     }
                   >
@@ -515,8 +520,8 @@ export default function CLConfirmation() {
             </div>
 
             {/* Contact */}
-            <div className="rounded-lg border border-white/10 bg-white/5 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">
+            <div className="cl-confirm-panel rounded-lg p-6">
+              <h3 className="cl-confirm-heading text-lg font-semibold text-white mb-4">
                 Need Help?
               </h3>
               <p className="text-sm text-zinc-300 mb-4">
@@ -525,7 +530,7 @@ export default function CLConfirmation() {
               </p>
               <a
                 href="mailto:jhcdotcomclub.official@gmail.com"
-                className="inline-flex items-center gap-2 text-sm text-red-400 hover:text-red-300"
+                className="inline-flex items-center gap-2 text-sm text-[#CBB7FF] hover:text-white"
               >
                 <Mail className="h-4 w-4" />
                 jhcdotcomclub.official@gmail.com

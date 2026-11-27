@@ -157,6 +157,48 @@ const applicationTables = {
     updatedBy: v.optional(v.string()),
   }),
 
+  esportsRegistrations: defineTable({
+    game: v.string(),
+    codeType: v.optional(v.string()), // "PRNC" | "CC"
+    codeValue: v.optional(v.string()), // The PRNC or CC code
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    ign: v.optional(v.string()),
+    collegeId: v.optional(v.string()),
+    collegeIdUrl: v.optional(v.string()),
+    govtIdUrl: v.optional(v.string()),
+    collegeName: v.optional(v.string()),
+    playerTag: v.optional(v.string()),
+    teamName: v.optional(v.string()),
+    players: v.optional(v.array(v.object({
+      name: v.string(),
+      email: v.string(),
+      ign: v.string(),
+      collegeId: v.optional(v.string()),
+      collegeIdUrl: v.optional(v.string()),
+      govtIdUrl: v.optional(v.string()),
+      number: v.string(),
+      collegeName: v.string(),
+    }))),
+    paymentMethod: v.optional(v.string()),
+    registrationFee: v.optional(v.string()),
+    upiTransactionId: v.optional(v.string()),
+    paymentScreenshotUrl: v.optional(v.string()),
+    additionalPaymentInfo: v.optional(v.string()),
+    declarationAccepted: v.optional(v.boolean()),
+    submittedAt: v.number(),
+    verificationStatus: v.union(
+      v.literal("pending"),
+      v.literal("verified"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_game", ["game"])
+    .index("by_email", ["email"])
+    .index("by_phone", ["phone"])
+    .index("by_submitted", ["submittedAt"]),
+
   popups: defineTable({
     title: v.string(),
     description: v.string(),
@@ -167,6 +209,99 @@ const applicationTables = {
     showOnlyOnce: v.optional(v.boolean()),
     createdAt: v.optional(v.number()),
   }).index("by_active", ["isActive"]),
+
+  culturalRegistrations: defineTable({
+    event: v.string(),
+    collegeName: v.string(),
+    codeType: v.string(), // "PRNC" | "CC"
+    codeValue: v.string(), // The PRNC or CC code
+    teamName: v.optional(v.string()),
+    entryFormat: v.optional(v.string()), // e.g. "Solo" | "Team"
+    teamSize: v.optional(v.string()),
+
+    // Primary participant or Team Leader details
+    name: v.string(),
+    email: v.string(),
+    phone: v.string(),
+    classYear: v.optional(v.string()),
+    collegeIdUrl: v.optional(v.string()),
+    govtIdUrl: v.optional(v.string()),
+
+    // Full participant roster
+    participants: v.optional(v.array(v.object({
+      role: v.string(), // "TEAM LEADER" | "TEAM MEMBER" | "INDIVIDUAL"
+      name: v.string(),
+      phone: v.string(),
+      email: v.string(),
+      classYear: v.string(),
+      collegeIdUrl: v.optional(v.string()),
+      govtIdUrl: v.optional(v.string()),
+    }))),
+
+    // Payment details
+    registrationFee: v.string(),
+    paymentMethod: v.string(), // "UPI" | "Bank Transfer" | "Cash"
+    upiTransactionId: v.optional(v.string()),
+    paymentScreenshotUrl: v.optional(v.string()),
+    additionalPaymentInfo: v.optional(v.string()),
+    declarationAccepted: v.boolean(),
+
+    submittedAt: v.number(),
+    verificationStatus: v.union(
+      v.literal("pending"),
+      v.literal("verified"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_event", ["event"])
+    .index("by_email", ["email"])
+    .index("by_submitted", ["submittedAt"])
+    .index("by_verification", ["verificationStatus"]),
+
+  technicalRegistrations: defineTable({
+    event: v.string(),
+    collegeName: v.string(),
+    codeType: v.string(),
+    codeValue: v.string(),
+    teamName: v.optional(v.string()),
+    entryFormat: v.optional(v.string()),
+    teamSize: v.optional(v.string()),
+
+    name: v.string(),
+    email: v.string(),
+    phone: v.string(),
+    classYear: v.optional(v.string()),
+    collegeIdUrl: v.optional(v.string()),
+    govtIdUrl: v.optional(v.string()),
+
+    participants: v.optional(v.array(v.object({
+      role: v.string(),
+      name: v.string(),
+      phone: v.string(),
+      email: v.string(),
+      classYear: v.string(),
+      collegeIdUrl: v.optional(v.string()),
+      govtIdUrl: v.optional(v.string()),
+    }))),
+
+    registrationFee: v.string(),
+    paymentMethod: v.string(),
+    upiTransactionId: v.optional(v.string()),
+    paymentScreenshotUrl: v.optional(v.string()),
+    additionalPaymentInfo: v.optional(v.string()),
+    declarationAccepted: v.boolean(),
+
+    submittedAt: v.number(),
+    verificationStatus: v.union(
+      v.literal("pending"),
+      v.literal("verified"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_event", ["event"])
+    .index("by_email", ["email"])
+    .index("by_submitted", ["submittedAt"])
+    .index("by_verification", ["verificationStatus"]),
 };
 
 export default defineSchema({

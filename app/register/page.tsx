@@ -1,14 +1,20 @@
 "use client";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm, type FieldPath } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
+
+import { anton, dmSans } from "@/fonts/font";
+import { BackgroundCanvas } from "@/components/home/BackgroundCanvas";
+import { Navbar } from "@/components/home/Navbar";
+import { HeroCanvas } from "@/components/home/HeroCanvas";
+import { RevealHeading } from "@/components/home/RevealHeading";
+import { FooterSection } from "@/components/home/FooterSection";
+import { CustomCursor } from "@/components/home/CustomCursor";
 import {
   Form,
   FormControl,
@@ -19,90 +25,208 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  fullName: z.string().min(2, {
-    message: "Full name must be at least 2 characters.",
-  }),
-  uid: z.string().min(1, {
-    message: "uid is required.",
-  }),
-  contactNo: z.string().min(10, {
-    message: "Contact number must be at least 10 digits.",
-  }),
-  department: z.enum(
-    [
-      "BSC IT",
-      "BVOC SD",
-      "BVOC TT",
-      "BCOM",
-      "BBA",
-      "BSC",
-      "BIOTECH",
-      "BMS",
-      "BMM",
-      "BFM",
-      "BAF",
-      "BBI",
-      "BA",
-      "BDS",
-      "Other",
-    ],
-    {
+const DEPARTMENTS = [
+  "BSC IT",
+  "BVOC SD",
+  "BVOC TT",
+  "BCOM",
+  "BBA",
+  "BSC",
+  "BIOTECH",
+  "BMS",
+  "BMM",
+  "BFM",
+  "BAF",
+  "BBI",
+  "BA",
+  "BDS",
+  "Other",
+] as const;
+
+const YEARS = ["FY", "SY", "TY"] as const;
+
+const TEAMS = [
+  "Hackathon",
+  "Contingent",
+  "Events",
+  "ESports",
+  "Marketing",
+  "PR (Public Relations)",
+  "WebOps",
+  "Media and Graphics",
+  "Photography",
+  "Decor",
+  "Editorial",
+  "Security and Logistics",
+] as const;
+
+const TSHIRT_SIZES = [
+  "XS - 34",
+  "S - 36",
+  "M - 38",
+  "L - 40",
+  "XL - 42",
+  "XXL - 44",
+  "Other",
+] as const;
+
+const HEAR_OPTIONS = [
+  "Social Media",
+  "On Campus",
+  "Via Email",
+  "Friends",
+  "Other",
+] as const;
+
+const TAPE_ITEMS = [
+  "Hackathon",
+  "WebOps",
+  "Esports",
+  "Media & Graphics",
+  "Contingent",
+  "Marketing",
+  "PR",
+  "Editorial",
+];
+
+const formSchema = z
+  .object({
+    email: z.string().email({
+      message: "Please enter a valid email address.",
+    }),
+    fullName: z.string().min(2, {
+      message: "Full name must be at least 2 characters.",
+    }),
+    uid: z.string().min(1, {
+      message: "UID is required (write NA if FY).",
+    }),
+    contactNo: z.string().min(10, {
+      message: "Contact number must be at least 10 digits.",
+    }),
+    department: z.enum(DEPARTMENTS, {
       required_error: "Please select a department.",
-    }
-  ),
-  departmentOther: z.string().optional(),
-  year: z.enum(["FY", "SY", "TY"], {
-    required_error: "Please select your year.",
-  }),
-  team: z.enum(
-    [
-      "Hackathon",
-      "Contingent",
-      "Events",
-      "ESports",
-      "Marketing",
-      "PR (Public Relations)",
-      "WebOps",
-      "Media and Graphics",
-      "Photography",
-      "Decor",
-      "Editorial",
-      "Security and Logistics",
-    ],
-    {
+    }),
+    departmentOther: z.string().optional(),
+    year: z.enum(YEARS, {
+      required_error: "Please select your year.",
+    }),
+    team: z.enum(TEAMS, {
       required_error: "Please select the team you would like to join.",
-    }
-  ),
-  tshirtSize: z.enum(["XS - 34", "S - 36", "M - 38", "L - 40", "XL - 42", "XXL - 44", "Other"], {
-    required_error: "Please select your T-shirt size.",
-  }),
-  tshirtSizeOther: z.string().optional(),
-  hearAboutDCC: z.enum(
-    ["Social Media", "On Campus", "Via Email", "Friends", "Other"],
-    {
+    }),
+    tshirtSize: z.enum(TSHIRT_SIZES, {
+      required_error: "Please select your T-shirt size.",
+    }),
+    tshirtSizeOther: z.string().optional(),
+    hearAboutDCC: z.enum(HEAR_OPTIONS, {
       required_error: "Please tell us how you heard about DCC.",
+    }),
+    hearAboutDCCOther: z.string().optional(),
+  })
+  .superRefine((values, ctx) => {
+    if (values.department === "Other" && !values.departmentOther?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["departmentOther"],
+        message: "Please specify your department.",
+      });
     }
-  ),
-  hearAboutDCCOther: z.string().optional(),
-});
+    if (values.tshirtSize === "Other" && !values.tshirtSizeOther?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["tshirtSizeOther"],
+        message: "Please specify your T-shirt size.",
+      });
+    }
+    if (values.hearAboutDCC === "Other" && !values.hearAboutDCCOther?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["hearAboutDCCOther"],
+        message: "Please specify how you heard about DCC.",
+      });
+    }
+  });
 
-const RegisterOC = () => {
-  const router = useRouter(); 
+type FormValues = z.infer<typeof formSchema>;
+
+interface RadioTileFieldProps {
+  control: ReturnType<typeof useForm<FormValues>>["control"];
+  name: FieldPath<FormValues>;
+  label: string;
+  options: readonly string[];
+  gridClassName: string;
+  idPrefix: string;
+}
+
+/**
+ * Reusable interactive radio-tile selector styled for the homepage design system.
+ */
+function RadioTileField({
+  control,
+  name,
+  label,
+  options,
+  gridClassName,
+  idPrefix,
+}: RadioTileFieldProps) {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className="space-y-3">
+          <FormLabel className="text-[15px] font-semibold text-[var(--tx)]">
+            {label}
+          </FormLabel>
+          <FormControl>
+            <RadioGroup
+              onValueChange={field.onChange}
+              value={typeof field.value === "string" ? field.value : undefined}
+              className={gridClassName}
+            >
+              {options.map((option) => {
+                const inputId = `${idPrefix}-${option}`;
+                const isSelected = field.value === option;
+                return (
+                  <label
+                    key={option}
+                    htmlFor={inputId}
+                    data-selected={isSelected ? "true" : "false"}
+                    className="reg-tile"
+                  >
+                    <RadioGroupItem
+                      value={option}
+                      id={inputId}
+                      className="border-[var(--p)] text-[var(--p)] shrink-0"
+                    />
+                    <span className="text-sm font-medium leading-snug">
+                      {option}
+                    </span>
+                  </label>
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
+          <FormMessage className="text-rose-400 text-xs font-medium" />
+        </FormItem>
+      )}
+    />
+  );
+}
+
+export default function RegisterOC() {
+  const router = useRouter();
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 40);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -115,475 +239,478 @@ const RegisterOC = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: FormValues) {
     setIsSubmitting(true);
-    
-    // Process form values
+
     const processedValues = {
       ...values,
-      department: values.department === "Other" ? values.departmentOther : values.department,
-      tshirtSize: values.tshirtSize === "Other" ? values.tshirtSizeOther : values.tshirtSize,
-      hearAboutDCC: values.hearAboutDCC === "Other" ? values.hearAboutDCCOther : values.hearAboutDCC,
+      department:
+        values.department === "Other"
+          ? values.departmentOther?.trim()
+          : values.department,
+      tshirtSize:
+        values.tshirtSize === "Other"
+          ? values.tshirtSizeOther?.trim()
+          : values.tshirtSize,
+      hearAboutDCC:
+        values.hearAboutDCC === "Other"
+          ? values.hearAboutDCCOther?.trim()
+          : values.hearAboutDCC,
     };
-    
-    // Save data to localStorage for the payment page to access
+
     localStorage.setItem("registrationData", JSON.stringify(processedValues));
-    
-    // In a real implementation, you would send this to your backend
-    console.log(processedValues);
-    
-    // Redirect to payment confirmation page
+
     setTimeout(() => {
       router.push("/payment-confirmation");
-    }, 500); // Short delay for better UX
+    }, 400);
   }
 
+  const marqueeContent = (
+    <div className="mq">
+      {[...Array(2)].map((_, loopIdx) => (
+        <span key={loopIdx} className="inline-flex">
+          {TAPE_ITEMS.map((item, itemIdx) => (
+            <span key={`${loopIdx}-${itemIdx}`}>
+              <span>{item}</span>
+              <span>●</span>
+            </span>
+          ))}
+        </span>
+      ))}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen py-8 px-4 pt-32">
-      <div className="max-w-4xl mx-auto">
-        <Card className="shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-white">
-              DCC - MEMBERSHIP 2026-27
-            </CardTitle>
-            <CardDescription className="text-muted-foreground mt-2">
-              Join the Dot Com Club and be part of an amazing community!
-            </CardDescription>
-          </CardHeader>
+    <div
+      data-loaded={isLoaded ? "true" : "false"}
+      className={`register-root home-root ${isLoaded ? "go" : ""} ${anton.variable} ${dmSans.variable} bg-[var(--bg)] text-[var(--tx)] relative`}
+    >
+      {/* Background Organic Drift & Brush Canvas */}
+      <BackgroundCanvas />
 
-          <CardContent className="space-y-6">
-            <Alert>
-              <AlertDescription>* Indicates required question</AlertDescription>
-            </Alert>
+      {/* Editorial Navigation matching Homepage */}
+      <Navbar />
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                {/* Email Field */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        Email *
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Your email"
-                          type="email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+      {/* Custom Comet Cursor (Desktop Only) */}
+      <CustomCursor />
 
-                {/* Full Name Field */}
-                <FormField
-                  control={form.control}
-                  name="fullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        Full Name *
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your answer" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+      {/* 1. Hero Section */}
+      <header className="hero" id="hero">
+        <HeroCanvas />
 
-                {/* UID Field */}
-                <FormField
-                  control={form.control}
-                  name="uid"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        UID (Write NA if FY) *
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your answer" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+        {/* Rotating Circular Badge SVG */}
+        <svg className="bdg" viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <path
+              id="reg-cp"
+              d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"
+            />
+          </defs>
+          <text
+            fontSize="19"
+            fontWeight="700"
+            fill="#1B1030"
+            fontFamily="DM Sans, sans-serif"
+          >
+            <textPath href="#reg-cp" textLength="480" lengthAdjust="spacing">
+              JAI HIND COLLEGE • EST. 2014 • TECH CLUB •
+            </textPath>
+          </text>
+          <circle cx="100" cy="100" r="14" fill="#1B1030" />
+        </svg>
 
-                {/* Contact Number Field */}
-                <FormField
-                  control={form.control}
-                  name="contactNo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        Contact No. *
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Your answer"
-                          type="tel"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+        <div className="wrap">
+          <h1 className="h1" aria-label="Join Dot Com Club">
+            <s>
+              <i>Join</i>
+            </s>
+            <s>
+              <i>
+                Dot<b className="od" />
+                Com
+              </i>
+            </s>
+          </h1>
 
-                <Separator />
+          <div className="c2">
+            <p>
+              Become an official member of DCC 2026–27. Pick your squad, unlock
+              flagship events, and build with Jai Hind&apos;s tech community.
+            </p>
+            <div>
+              <a className="btn dk" href="#register-form">
+                Apply Now
+              </a>
+              <a className="btn ol" href="#details">
+                Fee &amp; Details
+              </a>
+            </div>
+          </div>
+        </div>
 
-                {/* Department Field */}
-                <FormField
+        {/* Crossing Infinite Marquee Tapes */}
+        <div className="tp t1" aria-hidden="true">
+          {marqueeContent}
+        </div>
+        <div className="tp t2" aria-hidden="true">
+          {marqueeContent}
+        </div>
+      </header>
+
+      {/* 2. Lavender Overview Band */}
+      <section className="cnt" id="details">
+        <div className="wrap">
+          <RevealHeading>Membership 2026–27</RevealHeading>
+          <p className="lead" style={{ color: "var(--ink)" }}>
+            One registration connects you to all twelve club squads, exclusive
+            Cyberstrike &apos;26 privileges, and your official DCC tee.
+          </p>
+
+          <div className="reg-stats">
+            <div className="reg-stat">
+              <div className="reg-stat-val">₹300</div>
+              <small>Annual Membership Fee (2026–27)</small>
+            </div>
+            <div className="reg-stat">
+              <div className="reg-stat-val">12</div>
+              <small>Technical, Creative &amp; Core Squads</small>
+            </div>
+            <div className="reg-stat">
+              <div className="reg-stat-val">01 TEE</div>
+              <small>Custom Official DCC Merchandise Included</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Registration Form Section */}
+      <section id="register-form">
+        <div className="wrap">
+          <RevealHeading>Register Now</RevealHeading>
+          <p className="lead">
+            Complete the form below to reserve your spot. Fields marked with *
+            are required.
+          </p>
+
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8 max-w-4xl"
+            >
+              {/* Step 01: Personal Information */}
+              <div className="reg-card">
+                <div className="reg-card-head">
+                  <h3>Personal Identity</h3>
+                  <span className="reg-step-tag">01 / Identity</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="fullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[15px] font-semibold text-[var(--tx)]">
+                          Full Name *
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="reg-input"
+                            placeholder="Enter your full name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-rose-400 text-xs font-medium" />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[15px] font-semibold text-[var(--tx)]">
+                          Email *
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="reg-input"
+                            placeholder="you@example.com"
+                            type="email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-rose-400 text-xs font-medium" />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="uid"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[15px] font-semibold text-[var(--tx)]">
+                          UID (Write NA if FY) *
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="reg-input"
+                            placeholder="e.g. 24BIT001 or NA"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-rose-400 text-xs font-medium" />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="contactNo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[15px] font-semibold text-[var(--tx)]">
+                          Contact No. *
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="reg-input"
+                            placeholder="10-digit WhatsApp number"
+                            type="tel"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-rose-400 text-xs font-medium" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* Step 02: Academic Profile */}
+              <div className="reg-card space-y-8">
+                <div className="reg-card-head">
+                  <h3>Academic Profile</h3>
+                  <span className="reg-step-tag">02 / Academics</span>
+                </div>
+
+                <RadioTileField
                   control={form.control}
                   name="department"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        Department *
-                      </FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="grid grid-cols-3 gap-4"
-                        >
-                          {[
-                            "BSC IT",
-                            "BVOC SD",
-                            "BVOC TT",
-                            "BCOM",
-                            "BBA",
-                            "BSC",
-                            "BIOTECH",
-                            "BMS",
-                            "BMM",
-                            "BFM",
-                            "BAF",
-                            "BBI",
-                            "BA",
-                            "BDS",
-                            "Other",
-                          ].map((dept) => (
-                            <div
-                              key={dept}
-                              className="flex items-center space-x-2"
-                            >
-                              <RadioGroupItem value={dept} id={dept} />
-                              <label
-                                htmlFor={dept}
-                                className="text-sm font-normal cursor-pointer"
-                              >
-                                {dept}
-                              </label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Department *"
+                  options={DEPARTMENTS}
+                  gridClassName="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5"
+                  idPrefix="dept"
                 />
 
-                {/* Show input field if "Other" is selected for Department */}
                 {form.watch("department") === "Other" && (
                   <FormField
                     control={form.control}
                     name="departmentOther"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-medium">
+                        <FormLabel className="text-[15px] font-semibold text-[var(--tx)]">
                           Please specify your department *
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="Your department" {...field} />
+                          <Input
+                            className="reg-input"
+                            placeholder="Enter your department"
+                            {...field}
+                          />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-rose-400 text-xs font-medium" />
                       </FormItem>
                     )}
                   />
                 )}
 
-                <Separator />
-
-                {/* Year Field */}
-                <FormField
+                <RadioTileField
                   control={form.control}
                   name="year"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        Year *
-                      </FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col space-y-2"
-                        >
-                          {["FY", "SY", "TY"].map((year) => (
-                            <div
-                              key={year}
-                              className="flex items-center space-x-2"
-                            >
-                              <RadioGroupItem value={year} id={year} />
-                              <label
-                                htmlFor={year}
-                                className="text-sm font-normal cursor-pointer"
-                              >
-                                {year}
-                              </label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Year *"
+                  options={YEARS}
+                  gridClassName="grid grid-cols-3 gap-3 max-w-md"
+                  idPrefix="year"
                 />
+              </div>
 
-                <Separator />
+              {/* Step 03: Squad & Merchandise */}
+              <div className="reg-card space-y-8">
+                <div className="reg-card-head">
+                  <h3>Squad &amp; Merchandise</h3>
+                  <span className="reg-step-tag">03 / Squad</span>
+                </div>
 
-                {/* Team Selection */}
-                <FormField
+                <RadioTileField
                   control={form.control}
                   name="team"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        Select the team you would like to join *
-                      </FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col space-y-2"
-                        >
-                          {[
-                            "Hackathon",
-                            "Contingent",
-                            "Events",
-                            "ESports",
-                            "Marketing",
-                            "PR (Public Relations)",
-                            "WebOps",
-                            "Media and Graphics",
-                            "Photography",
-                            "Decor",
-                            "Editorial",
-                            "Security and Logistics",
-                          ].map((team) => (
-                            <div
-                              key={team}
-                              className="flex items-center space-x-2"
-                            >
-                              <RadioGroupItem value={team} id={team} />
-                              <label
-                                htmlFor={team}
-                                className="text-sm font-normal cursor-pointer"
-                              >
-                                {team}
-                              </label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Select the team you would like to join *"
+                  options={TEAMS}
+                  gridClassName="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+                  idPrefix="team"
                 />
 
-                <Separator />
-
-                {/* T-Shirt Size */}
-                <FormField
+                <RadioTileField
                   control={form.control}
                   name="tshirtSize"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        T Shirt Size *
-                      </FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col space-y-2"
-                        >
-                          {["XS - 34", "S - 36", "M - 38", "L - 40", "XL - 42", "XXL - 44", "Other"].map((size) => (
-                            <div
-                              key={size}
-                              className="flex items-center space-x-2"
-                            >
-                              <RadioGroupItem value={size} id={size} />
-                              <label
-                                htmlFor={size}
-                                className="text-sm font-normal cursor-pointer"
-                              >
-                                {size}
-                              </label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="T Shirt Size *"
+                  options={TSHIRT_SIZES}
+                  gridClassName="grid grid-cols-2 sm:grid-cols-4 gap-2.5"
+                  idPrefix="tshirt"
                 />
 
-                {/* Show input field if "Other" is selected for T-shirt size */}
                 {form.watch("tshirtSize") === "Other" && (
                   <FormField
                     control={form.control}
                     name="tshirtSizeOther"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-medium">
+                        <FormLabel className="text-[15px] font-semibold text-[var(--tx)]">
                           Please specify your T-shirt size *
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="Your T-shirt size" {...field} />
+                          <Input
+                            className="reg-input"
+                            placeholder="Enter your T-shirt size"
+                            {...field}
+                          />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-rose-400 text-xs font-medium" />
                       </FormItem>
                     )}
                   />
                 )}
+              </div>
 
-                <Separator />
+              {/* Step 04: Discovery & Payment */}
+              <div className="reg-card space-y-8">
+                <div className="reg-card-head">
+                  <h3>Discovery &amp; Checkout</h3>
+                  <span className="reg-step-tag">04 / Checkout</span>
+                </div>
 
-                {/* How did you hear about DCC */}
-                <FormField
+                <RadioTileField
                   control={form.control}
                   name="hearAboutDCC"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">
-                        How did you hear about DCC? *
-                      </FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col space-y-2"
-                        >
-                          {[
-                            "Social Media",
-                            "On Campus",
-                            "Via Email",
-                            "Friends",
-                            "Other",
-                          ].map((option) => (
-                            <div
-                              key={option}
-                              className="flex items-center space-x-2"
-                            >
-                              <RadioGroupItem value={option} id={option} />
-                              <label
-                                htmlFor={option}
-                                className="text-sm font-normal cursor-pointer"
-                              >
-                                {option}
-                              </label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="How did you hear about DCC? *"
+                  options={HEAR_OPTIONS}
+                  gridClassName="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2.5"
+                  idPrefix="hear"
                 />
 
-                {/* Show input field if "Other" is selected for how they heard about DCC */}
                 {form.watch("hearAboutDCC") === "Other" && (
                   <FormField
                     control={form.control}
                     name="hearAboutDCCOther"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-medium">
+                        <FormLabel className="text-[15px] font-semibold text-[var(--tx)]">
                           Please specify how you heard about DCC *
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="Your answer" {...field} />
+                          <Input
+                            className="reg-input"
+                            placeholder="Tell us where you found DCC"
+                            {...field}
+                          />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-rose-400 text-xs font-medium" />
                       </FormItem>
                     )}
                   />
                 )}
 
-                <Separator />
-
-                <div className="bg-amber-100 border border-amber-300 rounded-md p-4 text-amber-800 space-y-2">
-                  <p>
-                    The membership fee for DCC 2026-27 is <span className="font-bold text-l">₹300</span>.
-                  </p>
-                  <p>
-                    After submitting this form, you&apos;ll be directed to our payment page to complete your registration.
-                  </p>
+                <div className="reg-fee-box">
+                  <div className="space-y-1.5 max-w-xl">
+                    <div className="flex items-center gap-2 text-[var(--p)] font-bold text-sm uppercase tracking-wider">
+                      <Sparkles className="w-4 h-4" />
+                      <span>Membership Fee Summary</span>
+                    </div>
+                    <p className="text-sm sm:text-base text-[var(--tx)] leading-relaxed m-0">
+                      The membership fee for DCC 2026–27 is{" "}
+                      <strong className="text-white">₹300</strong>. After
+                      submitting, you&apos;ll be directed to our payment page to
+                      upload your screenshot and complete registration.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[var(--mute)]">
+                    <CheckCircle2 className="w-4 h-4 text-[var(--p)] shrink-0" />
+                    <span>Instant confirmation step</span>
+                  </div>
                 </div>
 
-                <Separator />
-
-                {/* Submit Button with loading state */}
-                <div className="flex justify-center pt-4">
-                  <Button
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 pt-2">
+                  <button
                     type="submit"
-                    className="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-md font-medium coursor-pointer"
+                    className="reg-submit"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
-                      <span className="flex items-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <>
+                        <svg
+                          className="animate-spin h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
                         </svg>
-                        Processing...
-                      </span>
+                        <span>Processing...</span>
+                      </>
                     ) : (
-                      "Continue to Payment"
+                      <>
+                        <span>Continue to Payment</span>
+                        <ArrowRight className="w-5 h-5" />
+                      </>
                     )}
-                  </Button>
-                </div>
+                  </button>
 
-                <div className="text-center text-xs text-gray-500 mt-4">
-                  <p>
+                  <p className="text-xs text-[var(--mute)] m-0 flex flex-wrap items-center gap-x-3 gap-y-1">
                     <Link
                       href="/contact-us"
-                      className="text-red-600 hover:underline"
+                      className="hover:text-white underline underline-offset-4"
                     >
                       Contact Us
-                    </Link>{" "}
-                    |
+                    </Link>
+                    <span>•</span>
                     <Link
                       href="/terms-and-conditions"
-                      className="text-red-600 hover:underline ml-1"
+                      className="hover:text-white underline underline-offset-4"
                     >
-                      Terms and Conditions
-                    </Link>{" "}
-                    |
+                      Terms &amp; Conditions
+                    </Link>
+                    <span>•</span>
                     <Link
                       href="/refund-policy"
-                      className="text-red-600 hover:underline ml-1"
+                      className="hover:text-white underline underline-offset-4"
                     >
                       Refund Policy
                     </Link>
                   </p>
                 </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-      </div>
+              </div>
+            </form>
+          </Form>
+        </div>
+      </section>
+
+      {/* Editorial Footer matching Homepage */}
+      <FooterSection />
     </div>
   );
-};
-
-export default RegisterOC;
+}

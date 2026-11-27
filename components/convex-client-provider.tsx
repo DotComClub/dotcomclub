@@ -1,14 +1,18 @@
 "use client";
 
 import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
+
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || "https://dummy.convex.cloud";
+
+if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
+  console.warn(
+    "⚠️ NEXT_PUBLIC_CONVEX_URL is not configured. Convex features will run in mock/offline mode. Add NEXT_PUBLIC_CONVEX_URL to your .env.local or run `npx convex dev`."
+  );
+}
+
+const convex = new ConvexReactClient(convexUrl);
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
-  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || "https://dummy.convex.cloud";
-
-  const convex = useMemo(() => {
-    return new ConvexReactClient(convexUrl);
-  }, [convexUrl]);
-
   return <ConvexProvider client={convex}>{children}</ConvexProvider>;
 }
