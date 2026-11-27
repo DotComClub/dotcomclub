@@ -153,7 +153,7 @@ const feeds = [
     id: "real-cricket",
     number: "05",
     name: "REAL CRICKET",
-    fee: "To be announced",
+    fee: "Free",
     venue: "To be announced",
     description: "Register for the Real Cricket tournament and receive match reporting details.",
     rules: [

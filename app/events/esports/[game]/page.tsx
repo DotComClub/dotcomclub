@@ -21,7 +21,7 @@ const games: Record<string, { title: string; label: string; roster: "bgmi" | "va
   valorant: { title: "VALORANT", label: "Feed 02", roster: "valorant", feeDesc: "₹1,000 per team", feeAmount: 1000, isFree: false },
   "clash-royale": { title: "CLASH ROYALE", label: "Feed 03", roster: "solo", feeDesc: "₹50 per player", feeAmount: 50, isFree: false },
   "fifa-25": { title: "FIFA 25", label: "Feed 04", roster: "solo", feeDesc: "₹100 per player", feeAmount: 100, isFree: false },
-  "real-cricket": { title: "REAL CRICKET", label: "Esports registration", roster: "solo", feeDesc: "To be announced", isFree: false },
+  "real-cricket": { title: "REAL CRICKET", label: "Esports registration", roster: "solo", feeDesc: "Free", isFree: true },
 };
 
 function Field({ label, name, type = "text", placeholder, required = true, fullWidth = false }: { label: string; name: string; type?: string; placeholder?: string; required?: boolean; fullWidth?: boolean }) {
@@ -242,7 +242,7 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
 
       const paymentPayload = {
         registrationFee: game.feeDesc,
-        paymentMethod: game.isFree ? "Free (Krafton Sponsored)" : paymentMethod,
+        paymentMethod: game.isFree ? game.feeDesc : paymentMethod,
         ...(!game.isFree && value("upiTransactionId")
           ? { upiTransactionId: value("upiTransactionId") }
           : {}),
@@ -510,11 +510,6 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
               <div className="er-fee-card">
                 <div>
                   <span className="er-fee-label">Registration Fee</span>
-                  <small className="er-fee-sub">
-                    {game.isFree
-                      ? "Sponsored by Krafton — no payment required"
-                      : `${game.title} entry fee`}
-                  </small>
                 </div>
                 <b className="er-fee-amount">{game.feeDesc}</b>
               </div>
