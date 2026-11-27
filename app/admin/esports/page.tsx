@@ -36,6 +36,7 @@ export default function AdminEsportsRegistrations() {
           player.number,
           player.collegeName,
           registration.verificationStatus,
+          registration.registrationFee ?? "",
           registration.paymentMethod ?? "",
           registration.upiTransactionId ?? "",
           registration.paymentScreenshotUrl ?? "",
@@ -58,6 +59,7 @@ export default function AdminEsportsRegistrations() {
         registration.phone ?? "",
         registration.collegeName ?? "",
         registration.verificationStatus,
+        registration.registrationFee ?? "",
         registration.paymentMethod ?? "",
         registration.upiTransactionId ?? "",
         registration.paymentScreenshotUrl ?? "",
@@ -66,7 +68,7 @@ export default function AdminEsportsRegistrations() {
       ]];
     });
 
-    const headers = ["S.No", "Game", "Code Type", "Code", "Team Name", "Player No", "Name", "Email", "IGN", "College ID", "Govt ID", "Number", "College Name", "Status", "Payment Method", "UPI Reference", "Payment Screenshot", "Additional Payment Info", "Submitted"];
+    const headers = ["S.No", "Game", "Code Type", "Code", "Team Name", "Player No", "Name", "Email", "IGN", "College ID", "Govt ID", "Number", "College Name", "Status", "Fee", "Payment Method", "UPI Reference", "Payment Screenshot", "Additional Payment Info", "Submitted"];
     const csv = [headers, ...rows]
       .map((row) => row.map((field) => `"${String(field).replaceAll('"', '""')}"`).join(","))
       .join("\n");
@@ -239,10 +241,12 @@ export default function AdminEsportsRegistrations() {
                           )}
                         </td>
                         <td className="p-3">
-                          {registration.paymentMethod ? (
+                          {registration.paymentMethod || registration.registrationFee ? (
                             <div className="space-y-1 text-xs">
                               <span className="font-medium text-white">
-                                {registration.paymentMethod}
+                                {[registration.paymentMethod, registration.registrationFee]
+                                  .filter(Boolean)
+                                  .join(" · ")}
                               </span>
                               {registration.upiTransactionId && (
                                 <span className="block break-all text-cyan-300">

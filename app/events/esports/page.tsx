@@ -93,6 +93,7 @@ const feeds = [
     id: "bgmi",
     number: "01",
     name: "BGMI",
+    fee: "Free (Krafton Sponsored)",
     venue: "Class 1D or Lab 6A",
     description: "Squad mode in custom rooms. Points for where you finish and every elimination.",
     rules: [
@@ -107,6 +108,7 @@ const feeds = [
     id: "valorant",
     number: "02",
     name: "VALORANT",
+    fee: "₹1,000 / team",
     venue: "Lab 2",
     description: "Five-a-side knockout bracket. Win and advance.",
     rules: [
@@ -121,6 +123,7 @@ const feeds = [
     id: "clash-royale",
     number: "03",
     name: "Clash Royale",
+    fee: "₹50 / player",
     venue: "Foyer",
     description: "Mega Draft 1v1 knockout. Both players draft their cards for every match.",
     rules: [
@@ -135,6 +138,7 @@ const feeds = [
     id: "fifa-25",
     number: "04",
     name: "FIFA 25",
+    fee: "₹100 / player",
     venue: "Foyer",
     description: "1v1 knockout on official club teams.",
     rules: [
@@ -149,6 +153,7 @@ const feeds = [
     id: "real-cricket",
     number: "05",
     name: "REAL CRICKET",
+    fee: "To be announced",
     venue: "To be announced",
     description: "Register for the Real Cricket tournament and receive match reporting details.",
     rules: [
@@ -869,7 +874,7 @@ export default function EsportsPage() {
               </h1>
               <p className="pin">
                 Five tournaments. Report 15–20 minutes before your match, play on registered accounts,
-                no cheats, macros or collusion. Entry fee and prize pool: to be announced.
+                no cheats, macros or collusion. Check each feed for entry fee and match details.
               </p>
             </header>
 
@@ -913,6 +918,10 @@ export default function EsportsPage() {
                             ? "5 players + 1 sub"
                             : "Solo"}
                         </dd>
+                      </div>
+                      <div>
+                        <dt>Fee</dt>
+                        <dd>{feed.fee}</dd>
                       </div>
                       <div>
                         <dt>Venue</dt>
@@ -972,6 +981,10 @@ export default function EsportsPage() {
                       ? "5 players + 1 sub"
                       : "Solo"}
                   </dd>
+                </div>
+                <div>
+                  <dt>Fee</dt>
+                  <dd>{activeFeed.fee}</dd>
                 </div>
                 <div>
                   <dt>Venue</dt>

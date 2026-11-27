@@ -35,7 +35,7 @@ type EventSchema = {
   isFixedTeam: boolean;
   teamSize?: number;
   isConditionalTeam?: boolean; // Beat Drop: Solo or 3-5
-  isSizedTeam?: boolean; // La Couture: 6-8
+  isSizedTeam?: boolean; // La Couture: 8-10
 };
 
 const EVENTS_DATA: Record<string, EventSchema> = {
@@ -175,13 +175,13 @@ const EVENTS_DATA: Record<string, EventSchema> = {
     feeDesc: "₹50 per person",
     baseFeeNum: 50,
     feeMode: "per_person",
-    teamFormat: "6–8 participants per team",
+    teamFormat: "8–10 participants per team",
     venue: "Auditorium",
     capacity: "Maximum 10 Teams",
     intro:
       "Creativity meets confidence at La Couture Nights. Bring your team together and make your mark on the stage. Registration is subject to availability and payment verification.",
     rules: [
-      "Each team must have a minimum of 6 and maximum of 8 participants.",
+      "Each team must have a minimum of 8 and maximum of 10 participants.",
       "One participant must be identified as Team Leader.",
       "Provide details and college ID proof for every registered participant.",
       "Fee is ₹50 per participant; total depends on team size.",
@@ -333,7 +333,7 @@ export default function EventRegistrationPage({
   const [codeType, setCodeType] = useState<"PRNC" | "CC">("PRNC");
   const [beatDropFormat, setBeatDropFormat] = useState<"solo" | "team">("solo");
   const [beatDropTeamSize, setBeatDropTeamSize] = useState<number>(3);
-  const [coutureTeamSize, setCoutureTeamSize] = useState<number>(6);
+  const [coutureTeamSize, setCoutureTeamSize] = useState<number>(8);
   const [paymentMethod, setPaymentMethod] = useState<string>("UPI");
   const [declaration, setDeclaration] = useState(false);
 
@@ -753,9 +753,9 @@ export default function EventRegistrationPage({
                         setCoutureTeamSize(Number(e.target.value))
                       }
                     >
-                      <option value={6}>6 Participants (Min)</option>
-                      <option value={7}>7 Participants</option>
-                      <option value={8}>8 Participants (Max)</option>
+                      <option value={8}>8 Participants (Min)</option>
+                      <option value={9}>9 Participants</option>
+                      <option value={10}>10 Participants (Max)</option>
                     </select>
                   </label>
                 </div>

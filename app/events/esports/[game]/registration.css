@@ -320,6 +320,43 @@
   overflow-wrap: anywhere;
 }
 
+.esports-registration .er-fee-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 18px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  background: rgba(155, 107, 255, 0.08);
+  border: 1px solid var(--red);
+}
+
+.esports-registration .er-fee-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.esports-registration .er-fee-sub {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.esports-registration .er-fee-amount {
+  font-family: var(--display);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
 .esports-registration .declaration-label {
   display: grid;
   grid-template-columns: 22px minmax(0, 1fr);

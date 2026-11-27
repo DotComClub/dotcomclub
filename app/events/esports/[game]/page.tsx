@@ -16,12 +16,12 @@ import "./registration.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
 import { PaymentQrCard } from "@/components/cyberstrike/PaymentQrCard";
 
-const games: Record<string, { title: string; label: string; roster: "bgmi" | "valorant" | "solo" }> = {
-  bgmi: { title: "BGMI", label: "Feed 01", roster: "bgmi" },
-  valorant: { title: "VALORANT", label: "Feed 02", roster: "valorant" },
-  "clash-royale": { title: "CLASH ROYALE", label: "Feed 03", roster: "solo" },
-  "fifa-25": { title: "FIFA 25", label: "Feed 04", roster: "solo" },
-  "real-cricket": { title: "REAL CRICKET", label: "Esports registration", roster: "solo" },
+const games: Record<string, { title: string; label: string; roster: "bgmi" | "valorant" | "solo"; feeDesc: string; isFree: boolean }> = {
+  bgmi: { title: "BGMI", label: "Feed 01", roster: "bgmi", feeDesc: "Free (Krafton Sponsored)", isFree: true },
+  valorant: { title: "VALORANT", label: "Feed 02", roster: "valorant", feeDesc: "₹1,000 per team", isFree: false },
+  "clash-royale": { title: "CLASH ROYALE", label: "Feed 03", roster: "solo", feeDesc: "₹50 per player", isFree: false },
+  "fifa-25": { title: "FIFA 25", label: "Feed 04", roster: "solo", feeDesc: "₹100 per player", isFree: false },
+  "real-cricket": { title: "REAL CRICKET", label: "Esports registration", roster: "solo", feeDesc: "To be announced", isFree: false },
 };
 
 function Field({ label, name, type = "text", placeholder, required = true, fullWidth = false }: { label: string; name: string; type?: string; placeholder?: string; required?: boolean; fullWidth?: boolean }) {
@@ -232,7 +232,7 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
       }
 
       const paymentScreenshotUrl = uploadedFiles.paymentScreenshot;
-      if (!paymentScreenshotUrl) {
+      if (!game.isFree && !paymentScreenshotUrl) {
         throw new Error("Please upload your payment screenshot before submitting.");
       }
 
@@ -241,11 +241,12 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
       }
 
       const paymentPayload = {
-        paymentMethod,
-        ...(value("upiTransactionId")
+        registrationFee: game.feeDesc,
+        paymentMethod: game.isFree ? "Free (Krafton Sponsored)" : paymentMethod,
+        ...(!game.isFree && value("upiTransactionId")
           ? { upiTransactionId: value("upiTransactionId") }
           : {}),
-        paymentScreenshotUrl,
+        ...(paymentScreenshotUrl ? { paymentScreenshotUrl } : {}),
         ...(value("additionalPaymentInfo")
           ? { additionalPaymentInfo: value("additionalPaymentInfo") }
           : {}),
@@ -506,71 +507,87 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
             <fieldset className="er-payment-box">
               <legend>Payment &amp; Verification</legend>
 
-              <PaymentQrCard />
-
-              <div className="er-fields">
-                <label className="er-field">
-                  <span>Payment Method *</span>
-                  <select
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  >
-                    <option value="UPI">UPI</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
-                    <option value="Cash">Cash (only if accepted)</option>
-                  </select>
-                </label>
-
-                <label className="er-field">
-                  <span>
-                    UPI Transaction ID / Reference Number{" "}
-                    {paymentMethod !== "Cash" ? "*" : "(If applicable)"}
-                  </span>
-                  <input
-                    name="upiTransactionId"
-                    type="text"
-                    required={paymentMethod !== "Cash"}
-                    autoComplete="off"
-                    placeholder="12-digit UPI reference or txn ID"
-                  />
-                </label>
-
-                <div className="er-field full">
-                  <span>Payment Screenshot (PDF / JPG / PNG) *</span>
-                  <label className="event-upload">
-                    <span className="event-upload-icon" aria-hidden="true">↑</span>
-                    <span className="event-upload-copy">
-                      <b>Choose payment screenshot</b>
-                      <small>JPG, PNG, WEBP or PDF · Max 4 MB</small>
-                    </span>
-                    <input
-                      type="file"
-                      accept=".jpg,.jpeg,.png,.webp,.pdf"
-                      required={!uploadedFiles.paymentScreenshot}
-                      disabled={uploadingField === "paymentScreenshot"}
-                      onChange={(event) =>
-                        handleFileUpload(
-                          "paymentScreenshot",
-                          event.target.files?.[0]
-                        )
-                      }
-                    />
-                  </label>
-                  {uploadedFiles.paymentScreenshot && (
-                    <span className="event-upload-status">
-                      <b aria-hidden="true">✓</b> Payment proof uploaded
-                    </span>
-                  )}
+              <div className="er-fee-card">
+                <div>
+                  <span className="er-fee-label">Registration Fee</span>
+                  <small className="er-fee-sub">
+                    {game.isFree
+                      ? "Sponsored by Krafton — no payment required"
+                      : `${game.title} entry fee`}
+                  </small>
                 </div>
-
-                <label className="er-field full">
-                  <span>Additional Payment Information (Optional)</span>
-                  <textarea
-                    name="additionalPaymentInfo"
-                    placeholder="Any notes about payer name, transfer time, or registration remarks..."
-                  />
-                </label>
+                <b className="er-fee-amount">{game.feeDesc}</b>
               </div>
+
+              {!game.isFree && (
+                <>
+                  <PaymentQrCard />
+
+                  <div className="er-fields">
+                    <label className="er-field">
+                      <span>Payment Method *</span>
+                      <select
+                        value={paymentMethod}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      >
+                        <option value="UPI">UPI</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Cash">Cash (only if accepted)</option>
+                      </select>
+                    </label>
+
+                    <label className="er-field">
+                      <span>
+                        UPI Transaction ID / Reference Number{" "}
+                        {paymentMethod !== "Cash" ? "*" : "(If applicable)"}
+                      </span>
+                      <input
+                        name="upiTransactionId"
+                        type="text"
+                        required={paymentMethod !== "Cash"}
+                        autoComplete="off"
+                        placeholder="12-digit UPI reference or txn ID"
+                      />
+                    </label>
+
+                    <div className="er-field full">
+                      <span>Payment Screenshot (PDF / JPG / PNG) *</span>
+                      <label className="event-upload">
+                        <span className="event-upload-icon" aria-hidden="true">↑</span>
+                        <span className="event-upload-copy">
+                          <b>Choose payment screenshot</b>
+                          <small>JPG, PNG, WEBP or PDF · Max 4 MB</small>
+                        </span>
+                        <input
+                          type="file"
+                          accept=".jpg,.jpeg,.png,.webp,.pdf"
+                          required={!uploadedFiles.paymentScreenshot}
+                          disabled={uploadingField === "paymentScreenshot"}
+                          onChange={(event) =>
+                            handleFileUpload(
+                              "paymentScreenshot",
+                              event.target.files?.[0]
+                            )
+                          }
+                        />
+                      </label>
+                      {uploadedFiles.paymentScreenshot && (
+                        <span className="event-upload-status">
+                          <b aria-hidden="true">✓</b> Payment proof uploaded
+                        </span>
+                      )}
+                    </div>
+
+                    <label className="er-field full">
+                      <span>Additional Payment Information (Optional)</span>
+                      <textarea
+                        name="additionalPaymentInfo"
+                        placeholder="Any notes about payer name, transfer time, or registration remarks..."
+                      />
+                    </label>
+                  </div>
+                </>
+              )}
 
               <label className="declaration-label">
                 <input

@@ -182,6 +182,7 @@ const applicationTables = {
       collegeName: v.string(),
     }))),
     paymentMethod: v.optional(v.string()),
+    registrationFee: v.optional(v.string()),
     upiTransactionId: v.optional(v.string()),
     paymentScreenshotUrl: v.optional(v.string()),
     additionalPaymentInfo: v.optional(v.string()),

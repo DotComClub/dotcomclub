@@ -115,14 +115,14 @@ const CULTURAL_EVENTS = [
     number: "06",
     name: "La Couture Nights",
     tagline: "Style the stage. Make your statement.",
-    team: "6–8 participants / team",
+    team: "8–10 participants / team",
     fee: "₹50 / person",
     venue: "Auditorium",
     capacity: "Max 10 Teams",
     description:
       "Creativity meets confidence at La Couture Nights. Bring your runway team together and make your mark on the stage.",
     rules: [
-      "Each team must have a minimum of 6 and maximum of 8 participants.",
+      "Each team must have a minimum of 8 and maximum of 10 participants.",
       "One participant must be identified as Team Leader.",
       "Provide details and college ID proof for every registered participant.",
       "Fee is ₹50 per participant; total depends on team size.",
