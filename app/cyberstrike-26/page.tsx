@@ -2193,7 +2193,7 @@ export default function Cyberstrike26Page() {
                 <a href="/contact-us">Contact Us</a>
               </li>
               <li>
-                <a href="/e-waste">E-waste</a>
+                <a href="/ewaste-26">E-waste</a>
               </li>
             </ul>
           </nav>
