@@ -1987,13 +1987,6 @@ export default function Cyberstrike26Page() {
                 <br />
                 Origin unknown.
               </p>
-              <div
-                className="meta mono enter"
-                style={{ ["--d" as string]: "1.4s" }}
-              >
-                <span>Jai Hind College, Mumbai</span>
-                <span>20 November 2026</span>
-              </div>
             </div>
             <div className="cue mono enter" style={{ ["--d" as string]: "1.7s" }}>
               <i />
