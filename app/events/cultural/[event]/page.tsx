@@ -444,9 +444,13 @@ export default function EventRegistrationPage({
   }
 
   // Calculated Fee
+  const totalFeeAmount =
+    ev.feeMode === "per_person"
+      ? ev.baseFeeNum * totalParticipants
+      : ev.baseFeeNum;
   let calculatedFee = ev.feeDesc;
   if (ev.feeMode === "per_person") {
-    calculatedFee = `₹${ev.baseFeeNum * totalParticipants} (₹${ev.baseFeeNum} × ${totalParticipants})`;
+    calculatedFee = `₹${totalFeeAmount} (₹${ev.baseFeeNum} × ${totalParticipants})`;
   }
 
   // Form Submission
@@ -945,7 +949,7 @@ export default function EventRegistrationPage({
                 <div className="fee-display-amount">{calculatedFee}</div>
               </div>
 
-              <PaymentQrCard />
+              <PaymentQrCard amount={totalFeeAmount} />
 
               <div className="er-fields" style={{ marginBottom: "28px" }}>
                 <label className="er-field">

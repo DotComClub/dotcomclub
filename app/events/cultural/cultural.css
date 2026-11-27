@@ -32,21 +32,29 @@
 }
 
 .cultural-registration .navback {
+  position: relative;
+  z-index: 60;
   display: inline-flex;
   gap: 0.6em;
-  min-height: 44px;
+  min-height: 40px;
+  padding: 6px 14px;
   align-items: center;
-  color: var(--ink);
+  border: 1px solid rgba(239, 233, 255, 0.34);
+  background: rgba(239, 233, 255, 0.09);
+  color: #ffffff;
   text-decoration: none;
   font-family: var(--mono);
   font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  transition: color 0.2s;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
 
 .cultural-registration .navback:hover {
-  color: var(--red);
+  color: #ffffff;
+  border-color: var(--cyan);
+  background: rgba(110, 242, 255, 0.16);
 }
 
 .cultural-registration .ph {

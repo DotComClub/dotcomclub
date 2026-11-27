@@ -4,9 +4,28 @@
 }
 
 .esports-reference .eh-top .navback {
+  position: relative;
+  z-index: 60;
   margin-left: auto;
   margin-right: 0;
   order: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 1px solid rgba(239, 233, 255, 0.34);
+  background: rgba(239, 233, 255, 0.09);
+  color: #ffffff;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color .2s, border-color .2s, background .2s;
+}
+
+.esports-reference .eh-top .navback:hover {
+  color: #ffffff;
+  border-color: var(--cyan);
+  background: rgba(110, 242, 255, 0.16);
 }
 
 .esports-reference .pg {

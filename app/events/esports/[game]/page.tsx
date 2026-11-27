@@ -16,11 +16,11 @@ import "./registration.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
 import { PaymentQrCard } from "@/components/cyberstrike/PaymentQrCard";
 
-const games: Record<string, { title: string; label: string; roster: "bgmi" | "valorant" | "solo"; feeDesc: string; isFree: boolean }> = {
+const games: Record<string, { title: string; label: string; roster: "bgmi" | "valorant" | "solo"; feeDesc: string; feeAmount?: number; isFree: boolean }> = {
   bgmi: { title: "BGMI", label: "Feed 01", roster: "bgmi", feeDesc: "Free (Krafton Sponsored)", isFree: true },
-  valorant: { title: "VALORANT", label: "Feed 02", roster: "valorant", feeDesc: "₹1,000 per team", isFree: false },
-  "clash-royale": { title: "CLASH ROYALE", label: "Feed 03", roster: "solo", feeDesc: "₹50 per player", isFree: false },
-  "fifa-25": { title: "FIFA 25", label: "Feed 04", roster: "solo", feeDesc: "₹100 per player", isFree: false },
+  valorant: { title: "VALORANT", label: "Feed 02", roster: "valorant", feeDesc: "₹1,000 per team", feeAmount: 1000, isFree: false },
+  "clash-royale": { title: "CLASH ROYALE", label: "Feed 03", roster: "solo", feeDesc: "₹50 per player", feeAmount: 50, isFree: false },
+  "fifa-25": { title: "FIFA 25", label: "Feed 04", roster: "solo", feeDesc: "₹100 per player", feeAmount: 100, isFree: false },
   "real-cricket": { title: "REAL CRICKET", label: "Esports registration", roster: "solo", feeDesc: "To be announced", isFree: false },
 };
 
@@ -521,7 +521,7 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
 
               {!game.isFree && (
                 <>
-                  <PaymentQrCard />
+                  <PaymentQrCard amount={game.feeAmount} />
 
                   <div className="er-fields">
                     <label className="er-field">

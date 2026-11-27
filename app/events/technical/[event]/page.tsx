@@ -108,6 +108,10 @@ export default function TechEventRegistrationPage({
 
   const totalParticipants = ev.isSolo ? 1 : ev.teamSize;
   const isTeamEntry = !ev.isSolo;
+  const totalFeeAmount =
+    ev.feeMode === "per_person"
+      ? ev.baseFeeNum * totalParticipants
+      : ev.baseFeeNum;
 
   // Keep unedited participant college fields synced with Section 1 College Name
   const handleInstitutionChange = (val: string) => {
@@ -634,7 +638,7 @@ export default function TechEventRegistrationPage({
                 <div className="fee-display-amount">{ev.feeDesc}</div>
               </div>
 
-              <PaymentQrCard />
+              <PaymentQrCard amount={totalFeeAmount} />
 
               <div className="er-fields" style={{ marginBottom: "28px" }}>
                 <label className="er-field">
