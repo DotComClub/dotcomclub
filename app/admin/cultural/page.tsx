@@ -40,6 +40,7 @@ export default function AdminCulturalRegistrations() {
               phone: registration.phone,
               classYear: registration.classYear ?? "",
               collegeIdUrl: registration.collegeIdUrl,
+              govtIdUrl: registration.govtIdUrl,
             },
           ]
       ).map((participant, index) => [
@@ -57,6 +58,7 @@ export default function AdminCulturalRegistrations() {
         participant.phone,
         participant.classYear,
         participant.collegeIdUrl ?? "",
+        participant.govtIdUrl ?? "",
         registration.registrationFee,
         registration.paymentMethod,
         registration.upiTransactionId ?? "",
@@ -82,6 +84,7 @@ export default function AdminCulturalRegistrations() {
       "Phone",
       "Class / Year",
       "College ID URL",
+      "Govt ID URL",
       "Fee",
       "Payment Method",
       "UPI Reference",
@@ -276,12 +279,13 @@ export default function AdminCulturalRegistrations() {
                               phone: registration.phone,
                               classYear: registration.classYear ?? "",
                               collegeIdUrl: registration.collegeIdUrl,
+                              govtIdUrl: registration.govtIdUrl,
                             },
                           ]
                       ).map((participant, index) => (
                         <div
                           key={`${participant.email}-${index}`}
-                          className="grid gap-3 rounded border border-white/10 p-3 sm:grid-cols-[1fr_128px]"
+                          className="grid gap-3 rounded border border-white/10 p-3 sm:grid-cols-[1fr_128px_128px]"
                         >
                           <div className="text-sm">
                             <Badge variant="secondary" className="mb-2">
@@ -295,10 +299,20 @@ export default function AdminCulturalRegistrations() {
                               {participant.classYear}
                             </p>
                           </div>
-                          <DocumentLink
-                            url={participant.collegeIdUrl}
-                            alt={`College ID for ${participant.name}`}
-                          />
+                          <div>
+                            <span className="mb-1 block text-xs text-gray-500">College ID</span>
+                            <DocumentLink
+                              url={participant.collegeIdUrl}
+                              alt={`College ID for ${participant.name}`}
+                            />
+                          </div>
+                          <div>
+                            <span className="mb-1 block text-xs text-gray-500">Govt ID</span>
+                            <DocumentLink
+                              url={participant.govtIdUrl}
+                              alt={`Government ID for ${participant.name}`}
+                            />
+                          </div>
                         </div>
                       ))}
                     </div>

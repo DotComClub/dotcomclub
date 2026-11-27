@@ -2079,3 +2079,111 @@ html.navlock body {
   }
 }
 
+/* Shared UPI Payment QR Card for Event Forms */
+.cs26-root .event-qr-card {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 20px 24px;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--cyan);
+  background: rgba(13, 9, 32, 0.78);
+}
+
+.cs26-root .event-qr-img-wrap {
+  width: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(110, 242, 255, 0.35);
+  background: #ffffff;
+}
+
+.cs26-root .event-qr-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.cs26-root .event-qr-info {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cs26-root .event-qr-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.cs26-root .event-qr-payee {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.cs26-root .event-qr-upi-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.cs26-root .event-qr-upi {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  background: #07041a;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  word-break: break-all;
+}
+
+.cs26-root .event-qr-copy {
+  padding: 8px 14px;
+  border: 1px solid var(--cyan);
+  background: rgba(110, 242, 255, 0.1);
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.cs26-root .event-qr-copy:hover {
+  background: var(--cyan);
+  color: #07041a;
+}
+
+.cs26-root .event-qr-note {
+  margin: 0;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .cs26-root .event-qr-card {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+  .cs26-root .event-qr-img-wrap {
+    width: min(220px, 100%);
+  }
+}
+

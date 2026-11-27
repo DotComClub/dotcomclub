@@ -14,6 +14,7 @@ import "../../../cyberstrike-26/cyberstrike.css";
 import "../esports.css";
 import "./registration.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
+import { PaymentQrCard } from "@/components/cyberstrike/PaymentQrCard";
 
 const games: Record<string, { title: string; label: string; roster: "bgmi" | "valorant" | "solo" }> = {
   bgmi: { title: "BGMI", label: "Feed 01", roster: "bgmi" },
@@ -23,9 +24,9 @@ const games: Record<string, { title: string; label: string; roster: "bgmi" | "va
   "real-cricket": { title: "REAL CRICKET", label: "Esports registration", roster: "solo" },
 };
 
-function Field({ label, name, type = "text", placeholder, required = true }: { label: string; name: string; type?: string; placeholder?: string; required?: boolean }) {
+function Field({ label, name, type = "text", placeholder, required = true, fullWidth = false }: { label: string; name: string; type?: string; placeholder?: string; required?: boolean; fullWidth?: boolean }) {
   return (
-    <label className="er-field">
+    <label className={`er-field${fullWidth ? " full" : ""}`}>
       <span>{label}</span>
       <input
         name={name}
@@ -69,7 +70,7 @@ function PlayerRoster({
             <Field label="Mail" name={`player${index + 1}Email`} type="email" required={index < requiredCount} />
             <Field label="IGN (with tag)" name={`player${index + 1}Ign`} required={index < requiredCount} />
             <Field label="Number" name={`player${index + 1}Number`} type="tel" required={index < requiredCount} placeholder="10-digit number" />
-            <Field label="College Name" name={`player${index + 1}CollegeName`} required={index < requiredCount} />
+            <Field label="College Name" name={`player${index + 1}CollegeName`} required={index < requiredCount} fullWidth />
             <div className="er-field">
               <span>College ID Photo *</span>
               <label className="event-upload">
@@ -97,6 +98,33 @@ function PlayerRoster({
                 </span>
               )}
             </div>
+            <div className="er-field">
+              <span>Government ID Photo *</span>
+              <label className="event-upload">
+                <span className="event-upload-icon" aria-hidden="true">↑</span>
+                <span className="event-upload-copy">
+                  <b>Choose government ID</b>
+                  <small>JPG, PNG, WEBP or PDF · Max 4 MB</small>
+                </span>
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.webp,.pdf"
+                  required={index < requiredCount}
+                  disabled={uploadingField === `player${index + 1}GovtId`}
+                  onChange={(event) =>
+                    onFileUpload(
+                      `player${index + 1}GovtId`,
+                      event.target.files?.[0]
+                    )
+                  }
+                />
+              </label>
+              {uploadedFiles[`player${index + 1}GovtId`] && (
+                <span className="event-upload-status">
+                  <b aria-hidden="true">✓</b> Government ID uploaded
+                </span>
+              )}
+            </div>
           </div>
         </fieldset>
       ))}
@@ -110,6 +138,8 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [codeType, setCodeType] = useState<"PRNC" | "CC">("PRNC");
+  const [paymentMethod, setPaymentMethod] = useState<string>("UPI");
+  const [declaration, setDeclaration] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const createRegistration = useMutation(api.esportsRegistrations.createRegistration);
@@ -201,6 +231,27 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
         throw new Error(`Enter your ${codeType} code.`);
       }
 
+      const paymentScreenshotUrl = uploadedFiles.paymentScreenshot;
+      if (!paymentScreenshotUrl) {
+        throw new Error("Please upload your payment screenshot before submitting.");
+      }
+
+      if (!declaration) {
+        throw new Error("Please confirm the declaration checkbox before submitting.");
+      }
+
+      const paymentPayload = {
+        paymentMethod,
+        ...(value("upiTransactionId")
+          ? { upiTransactionId: value("upiTransactionId") }
+          : {}),
+        paymentScreenshotUrl,
+        ...(value("additionalPaymentInfo")
+          ? { additionalPaymentInfo: value("additionalPaymentInfo") }
+          : {}),
+        declarationAccepted: true,
+      };
+
       if (game.roster === "bgmi" || game.roster === "valorant") {
         const requiredCount = game.roster === "bgmi" ? 4 : 5;
         const players = [];
@@ -213,20 +264,34 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
           if (!collegeIdUrl) {
             throw new Error(`Upload a college ID photo for player ${playerNumber}.`);
           }
+          const govtIdUrl = uploadedFiles[`player${playerNumber}GovtId`];
+          if (!govtIdUrl) {
+            throw new Error(`Upload a government ID photo for player ${playerNumber}.`);
+          }
 
           players.push({
             name,
             email: value(`player${playerNumber}Email`),
             ign: value(`player${playerNumber}Ign`),
             collegeIdUrl,
+            govtIdUrl,
             number: value(`player${playerNumber}Number`),
             collegeName: value(`player${playerNumber}CollegeName`),
           });
         }
-        await createRegistration({ game: game.title, codeType, codeValue, teamName: value("teamName"), players });
+        await createRegistration({
+          game: game.title,
+          codeType,
+          codeValue,
+          teamName: value("teamName"),
+          players,
+          ...paymentPayload,
+        });
       } else if (gameSlug === "clash-royale") {
         const collegeIdUrl = uploadedFiles.collegeIdPhoto;
         if (!collegeIdUrl) throw new Error("Upload your college ID photo.");
+        const govtIdUrl = uploadedFiles.govtIdPhoto;
+        if (!govtIdUrl) throw new Error("Upload your government ID photo.");
         await createRegistration({
           game: game.title,
           codeType,
@@ -238,10 +303,14 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
           playerTag: value("playerTag"),
           collegeName: value("collegeName"),
           collegeIdUrl,
+          govtIdUrl,
+          ...paymentPayload,
         });
       } else {
         const collegeIdUrl = uploadedFiles.collegeIdPhoto;
         if (!collegeIdUrl) throw new Error("Upload your college ID photo.");
+        const govtIdUrl = uploadedFiles.govtIdPhoto;
+        if (!govtIdUrl) throw new Error("Upload your government ID photo.");
         await createRegistration({
           game: game.title,
           codeType,
@@ -251,7 +320,9 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
           phone: value("phone"),
           collegeName: value("collegeName"),
           collegeIdUrl,
+          govtIdUrl,
           ...(gameSlug === "real-cricket" ? { ign: value("ign") } : {}),
+          ...paymentPayload,
         });
       }
       setSubmitted(true);
@@ -402,12 +473,123 @@ export default function GameRegistrationPage({ params }: { params: Promise<{ gam
                     </span>
                   )}
                 </div>
+                <div className="er-field">
+                  <span>Government ID Photo *</span>
+                  <label className="event-upload">
+                    <span className="event-upload-icon" aria-hidden="true">↑</span>
+                    <span className="event-upload-copy">
+                      <b>Choose government ID</b>
+                      <small>JPG, PNG, WEBP or PDF · Max 4 MB</small>
+                    </span>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.webp,.pdf"
+                      required
+                      disabled={uploadingField === "govtIdPhoto"}
+                      onChange={(event) =>
+                        handleFileUpload(
+                          "govtIdPhoto",
+                          event.target.files?.[0]
+                        )
+                      }
+                    />
+                  </label>
+                  {uploadedFiles.govtIdPhoto && (
+                    <span className="event-upload-status">
+                      <b aria-hidden="true">✓</b> Government ID uploaded
+                    </span>
+                  )}
+                </div>
               </div>
             )}
 
+            <fieldset className="er-payment-box">
+              <legend>Payment &amp; Verification</legend>
+
+              <PaymentQrCard />
+
+              <div className="er-fields">
+                <label className="er-field">
+                  <span>Payment Method *</span>
+                  <select
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  >
+                    <option value="UPI">UPI</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Cash">Cash (only if accepted)</option>
+                  </select>
+                </label>
+
+                <label className="er-field">
+                  <span>
+                    UPI Transaction ID / Reference Number{" "}
+                    {paymentMethod !== "Cash" ? "*" : "(If applicable)"}
+                  </span>
+                  <input
+                    name="upiTransactionId"
+                    type="text"
+                    required={paymentMethod !== "Cash"}
+                    autoComplete="off"
+                    placeholder="12-digit UPI reference or txn ID"
+                  />
+                </label>
+
+                <div className="er-field full">
+                  <span>Payment Screenshot (PDF / JPG / PNG) *</span>
+                  <label className="event-upload">
+                    <span className="event-upload-icon" aria-hidden="true">↑</span>
+                    <span className="event-upload-copy">
+                      <b>Choose payment screenshot</b>
+                      <small>JPG, PNG, WEBP or PDF · Max 4 MB</small>
+                    </span>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.webp,.pdf"
+                      required={!uploadedFiles.paymentScreenshot}
+                      disabled={uploadingField === "paymentScreenshot"}
+                      onChange={(event) =>
+                        handleFileUpload(
+                          "paymentScreenshot",
+                          event.target.files?.[0]
+                        )
+                      }
+                    />
+                  </label>
+                  {uploadedFiles.paymentScreenshot && (
+                    <span className="event-upload-status">
+                      <b aria-hidden="true">✓</b> Payment proof uploaded
+                    </span>
+                  )}
+                </div>
+
+                <label className="er-field full">
+                  <span>Additional Payment Information (Optional)</span>
+                  <textarea
+                    name="additionalPaymentInfo"
+                    placeholder="Any notes about payer name, transfer time, or registration remarks..."
+                  />
+                </label>
+              </div>
+
+              <label className="declaration-label">
+                <input
+                  type="checkbox"
+                  checked={declaration}
+                  onChange={(e) => setDeclaration(e.target.checked)}
+                  required
+                />
+                <span>
+                  <b>Required Declaration:</b> I confirm all roster and payment
+                  details provided are accurate, and I understand registration is
+                  subject to capacity and payment verification.
+                </span>
+              </label>
+            </fieldset>
+
             {error && <p className="er-error" role="alert">{error}</p>}
             <button className="rgb er-submit" type="submit" disabled={submitting || uploadingField !== null}>
-              <span>{uploadingField ? "Uploading college ID..." : submitting ? "Submitting..." : "Submit registration"}</span>
+              <span>{uploadingField ? "Uploading file..." : submitting ? "Submitting..." : "Submit registration"}</span>
               <b aria-hidden="true">↗</b>
             </button>
           </form>

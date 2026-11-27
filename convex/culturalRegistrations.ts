@@ -17,6 +17,7 @@ export const createCulturalRegistration = mutation({
     phone: v.string(),
     classYear: v.optional(v.string()),
     collegeIdUrl: v.optional(v.string()),
+    govtIdUrl: v.optional(v.string()),
 
     participants: v.optional(v.array(v.object({
       role: v.string(),
@@ -25,6 +26,7 @@ export const createCulturalRegistration = mutation({
       email: v.string(),
       classYear: v.string(),
       collegeIdUrl: v.optional(v.string()),
+      govtIdUrl: v.optional(v.string()),
     }))),
 
     registrationFee: v.string(),
@@ -44,6 +46,9 @@ export const createCulturalRegistration = mutation({
       ...(participant.collegeIdUrl
         ? { collegeIdUrl: participant.collegeIdUrl }
         : {}),
+      ...(participant.govtIdUrl
+        ? { govtIdUrl: participant.govtIdUrl }
+        : {}),
     }));
 
     const registration = {
@@ -59,6 +64,7 @@ export const createCulturalRegistration = mutation({
       phone: args.phone,
       ...(args.classYear ? { classYear: args.classYear } : {}),
       ...(args.collegeIdUrl ? { collegeIdUrl: args.collegeIdUrl } : {}),
+      ...(args.govtIdUrl ? { govtIdUrl: args.govtIdUrl } : {}),
       ...(participants ? { participants } : {}),
       registrationFee: args.registrationFee,
       paymentMethod: args.paymentMethod,

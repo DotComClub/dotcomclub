@@ -16,6 +16,7 @@ import "../../esports/esports.css";
 import "../../cultural/cultural.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
 import { CyberstrikeFooter } from "@/components/cyberstrike/CyberstrikeFooter";
+import { PaymentQrCard } from "@/components/cyberstrike/PaymentQrCard";
 import { TECHNICAL_EVENTS_BY_ID } from "@/lib/technical-events";
 
 export default function TechEventRegistrationPage({
@@ -169,6 +170,12 @@ export default function TechEventRegistrationPage({
         );
         return;
       }
+      if (!uploadedFiles[`p${i}_govtId`]) {
+        setError(
+          `Please upload Government ID Proof (PDF/JPG/PNG) for Participant ${i}.`
+        );
+        return;
+      }
     }
 
     if (!uploadedFiles["paymentScreenshot"]) {
@@ -208,6 +215,7 @@ export default function TechEventRegistrationPage({
         const pYear = getVal(`p${i}_year`);
         const pCollege = getVal(`p${i}_college`) || institution;
         const pCollegeIdUrl = uploadedFiles[`p${i}_id`];
+        const pGovtIdUrl = uploadedFiles[`p${i}_govtId`];
 
         participantsList.push({
           role,
@@ -216,6 +224,7 @@ export default function TechEventRegistrationPage({
           email: pEmail,
           classYear: `${pYear} · ${pCollege}`,
           ...(pCollegeIdUrl ? { collegeIdUrl: pCollegeIdUrl } : {}),
+          ...(pGovtIdUrl ? { govtIdUrl: pGovtIdUrl } : {}),
         });
       }
 
@@ -234,6 +243,7 @@ export default function TechEventRegistrationPage({
         phone: p1.phone,
         classYear: p1.classYear,
         ...(p1.collegeIdUrl ? { collegeIdUrl: p1.collegeIdUrl } : {}),
+        ...(p1.govtIdUrl ? { govtIdUrl: p1.govtIdUrl } : {}),
         participants: participantsList,
         registrationFee: ev.feeDesc,
         paymentMethod,
@@ -513,7 +523,7 @@ export default function TechEventRegistrationPage({
                         />
                       </label>
 
-                      <div className="er-field full">
+                      <div className="er-field">
                         <span>
                           College ID Proof Upload (PDF / JPG / PNG) *
                         </span>
@@ -545,6 +555,42 @@ export default function TechEventRegistrationPage({
                         {uploadedFiles[`p${pNum}_id`] && (
                           <span className="event-upload-status">
                             <b aria-hidden="true">✓</b> College ID uploaded
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="er-field">
+                        <span>
+                          Government ID Proof Upload (PDF / JPG / PNG) *
+                        </span>
+                        <label className="event-upload">
+                          <span className="event-upload-icon" aria-hidden="true">
+                            ↑
+                          </span>
+                          <span className="event-upload-copy">
+                            <b>Choose government ID</b>
+                            <small>PDF, JPG or PNG · Max 4 MB</small>
+                          </span>
+                          <input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            disabled={uploadingField === `p${pNum}_govtId`}
+                            onChange={(e) =>
+                              handleFileUpload(
+                                `p${pNum}_govtId`,
+                                e.target.files?.[0]
+                              )
+                            }
+                          />
+                        </label>
+                        {uploadingField === `p${pNum}_govtId` && (
+                          <span className="event-upload-status">
+                            Uploading Government ID...
+                          </span>
+                        )}
+                        {uploadedFiles[`p${pNum}_govtId`] && (
+                          <span className="event-upload-status">
+                            <b aria-hidden="true">✓</b> Government ID uploaded
                           </span>
                         )}
                       </div>
@@ -587,6 +633,8 @@ export default function TechEventRegistrationPage({
                 </div>
                 <div className="fee-display-amount">{ev.feeDesc}</div>
               </div>
+
+              <PaymentQrCard />
 
               <div className="er-fields" style={{ marginBottom: "28px" }}>
                 <label className="er-field">

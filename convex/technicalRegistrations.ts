@@ -13,6 +13,7 @@ const participantValidator = v.object({
   email: v.string(),
   classYear: v.string(),
   collegeIdUrl: v.optional(v.string()),
+  govtIdUrl: v.optional(v.string()),
 });
 
 const registrationFields = {
@@ -28,6 +29,7 @@ const registrationFields = {
   phone: v.string(),
   classYear: v.optional(v.string()),
   collegeIdUrl: v.optional(v.string()),
+  govtIdUrl: v.optional(v.string()),
   participants: v.optional(v.array(participantValidator)),
   registrationFee: v.string(),
   paymentMethod: v.string(),
@@ -152,6 +154,9 @@ export const migrateLegacyBatch = internalMutation({
           : {}),
         ...(registration.collegeIdUrl !== undefined
           ? { collegeIdUrl: registration.collegeIdUrl }
+          : {}),
+        ...(registration.govtIdUrl !== undefined
+          ? { govtIdUrl: registration.govtIdUrl }
           : {}),
         ...(registration.participants !== undefined
           ? { participants: registration.participants }

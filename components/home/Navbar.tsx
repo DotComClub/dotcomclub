@@ -12,6 +12,7 @@ interface NavLinkItem {
 
 const NAV_LINKS: NavLinkItem[] = [
   { label: "Home", href: "/" },
+  { label: "Events", href: "/events" },
   { label: "Blogs", href: "/blogs" },
   { label: "About Us", href: "/about-us" },
   { label: "Sponsors", href: "/sponsors" },
@@ -274,7 +275,7 @@ export function Navbar() {
           }
         }}
       >
-        {NAV_LINKS.slice(0, 8).map((link, idx) => {
+        {NAV_LINKS.filter((link) => !link.isCl).map((link, idx) => {
           const isActive = idx === activeIndex;
           return (
             <Link

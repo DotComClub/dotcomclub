@@ -15,6 +15,7 @@ import "../../events.css";
 import "../../esports/esports.css";
 import "../cultural.css";
 import CyberstrikeBackground from "@/components/cyberstrike/CyberstrikeBackground";
+import { PaymentQrCard } from "@/components/cyberstrike/PaymentQrCard";
 
 type EventSchema = {
   id: string;
@@ -470,6 +471,10 @@ export default function EventRegistrationPage({
       // Extract participants
       const participantsList = [];
       for (let i = 1; i <= totalParticipants; i++) {
+        const isOptional =
+          ev.isConditionalTeam &&
+          beatDropFormat === "team" &&
+          i > 3;
         const role =
           ev.isSolo || (!isTeamEntry && i === 1)
             ? "INDIVIDUAL"
@@ -482,6 +487,18 @@ export default function EventRegistrationPage({
         const pEmail = getVal(`p${i}_email`);
         const pYear = getVal(`p${i}_year`);
         const pCollegeIdUrl = uploadedFiles[`p${i}_id`] || undefined;
+        const pGovtIdUrl = uploadedFiles[`p${i}_govtId`] || undefined;
+
+        if ((!isOptional || pName) && !pCollegeIdUrl) {
+          setError(`Please upload College ID Proof for Participant ${i}.`);
+          setSubmitting(false);
+          return;
+        }
+        if ((!isOptional || pName) && !pGovtIdUrl) {
+          setError(`Please upload Government ID Proof for Participant ${i}.`);
+          setSubmitting(false);
+          return;
+        }
 
         if (pName) {
           participantsList.push({
@@ -491,6 +508,7 @@ export default function EventRegistrationPage({
             email: pEmail,
             classYear: pYear,
             ...(pCollegeIdUrl ? { collegeIdUrl: pCollegeIdUrl } : {}),
+            ...(pGovtIdUrl ? { govtIdUrl: pGovtIdUrl } : {}),
           });
         }
       }
@@ -501,6 +519,7 @@ export default function EventRegistrationPage({
         phone: getVal("p1_phone"),
         classYear: getVal("p1_year"),
         collegeIdUrl: uploadedFiles["p1_id"] || undefined,
+        govtIdUrl: uploadedFiles["p1_govtId"] || undefined,
       };
 
       await createRegistration({
@@ -516,6 +535,7 @@ export default function EventRegistrationPage({
         phone: p1.phone,
         classYear: p1.classYear,
         ...(p1.collegeIdUrl ? { collegeIdUrl: p1.collegeIdUrl } : {}),
+        ...(p1.govtIdUrl ? { govtIdUrl: p1.govtIdUrl } : {}),
         participants: participantsList,
         registrationFee: calculatedFee,
         paymentMethod,
@@ -837,7 +857,7 @@ export default function EventRegistrationPage({
                         </select>
                       </label>
 
-                      <div className="er-field full">
+                      <div className="er-field">
                         <span>
                           College ID Proof Upload (PDF / JPG / PNG) *
                         </span>
@@ -862,6 +882,35 @@ export default function EventRegistrationPage({
                         {uploadedFiles[`p${pNum}_id`] && (
                           <span className="event-upload-status">
                             <b aria-hidden="true">✓</b> College ID uploaded
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="er-field">
+                        <span>
+                          Government ID Proof Upload (PDF / JPG / PNG) *
+                        </span>
+                        <label className="event-upload">
+                          <span className="event-upload-icon" aria-hidden="true">↑</span>
+                          <span className="event-upload-copy">
+                            <b>Choose government ID</b>
+                            <small>PDF, JPG, PNG or WEBP · Max 4 MB</small>
+                          </span>
+                          <input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png,.webp"
+                            onChange={(e) =>
+                              handleFileUpload(
+                                `p${pNum}_govtId`,
+                                e.target.files?.[0]
+                              )
+                            }
+                            disabled={uploadingField === `p${pNum}_govtId`}
+                          />
+                        </label>
+                        {uploadedFiles[`p${pNum}_govtId`] && (
+                          <span className="event-upload-status">
+                            <b aria-hidden="true">✓</b> Government ID uploaded
                           </span>
                         )}
                       </div>
@@ -895,6 +944,8 @@ export default function EventRegistrationPage({
                 </div>
                 <div className="fee-display-amount">{calculatedFee}</div>
               </div>
+
+              <PaymentQrCard />
 
               <div className="er-fields" style={{ marginBottom: "28px" }}>
                 <label className="er-field">

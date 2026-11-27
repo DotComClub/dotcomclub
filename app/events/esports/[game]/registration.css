@@ -250,6 +250,99 @@
   letter-spacing: .05em;
 }
 
+.esports-registration .er-field.full {
+  grid-column: 1 / -1;
+}
+
+.esports-registration .er-field select,
+.esports-registration .er-field textarea {
+  width: 100%;
+  min-width: 0;
+  height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #08041c;
+  color: #efe9ff;
+  padding: 0 16px;
+  font: 400 13px var(--mono);
+  letter-spacing: .06em;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+
+.esports-registration .er-field textarea {
+  height: 96px;
+  padding: 12px 16px;
+  resize: vertical;
+}
+
+.esports-registration .er-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a79cc4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.esports-registration .er-field select:focus,
+.esports-registration .er-field textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(110, 242, 255, 0.3);
+  background: #0c0628;
+}
+
+.esports-registration .er-field textarea::placeholder {
+  color: #4a436e;
+  font-size: 12px;
+  letter-spacing: .05em;
+}
+
+.esports-registration .er-payment-box {
+  min-width: 0;
+  margin: 28px 0 0;
+  padding: clamp(16px, 2.5vw, 24px);
+  border: 1px solid var(--line);
+  background: rgba(14, 8, 38, 0.45);
+}
+
+.esports-registration .er-payment-box legend {
+  max-width: calc(100% - 16px);
+  padding: 0 10px;
+  color: var(--red);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.esports-registration .declaration-label {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  cursor: pointer;
+  padding: 14px 16px;
+  margin-top: 20px;
+  border: 1px solid var(--line);
+  background: rgba(8, 4, 28, 0.72);
+  color: var(--ink);
+  font: 400 12px/1.6 var(--mono);
+  letter-spacing: .03em;
+}
+
+.esports-registration .declaration-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--red);
+  cursor: pointer;
+}
+
 .esports-registration .er-team-name {
   max-width: 520px;
   margin-bottom: 24px;

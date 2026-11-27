@@ -167,6 +167,7 @@ const applicationTables = {
     ign: v.optional(v.string()),
     collegeId: v.optional(v.string()),
     collegeIdUrl: v.optional(v.string()),
+    govtIdUrl: v.optional(v.string()),
     collegeName: v.optional(v.string()),
     playerTag: v.optional(v.string()),
     teamName: v.optional(v.string()),
@@ -176,9 +177,15 @@ const applicationTables = {
       ign: v.string(),
       collegeId: v.optional(v.string()),
       collegeIdUrl: v.optional(v.string()),
+      govtIdUrl: v.optional(v.string()),
       number: v.string(),
       collegeName: v.string(),
     }))),
+    paymentMethod: v.optional(v.string()),
+    upiTransactionId: v.optional(v.string()),
+    paymentScreenshotUrl: v.optional(v.string()),
+    additionalPaymentInfo: v.optional(v.string()),
+    declarationAccepted: v.optional(v.boolean()),
     submittedAt: v.number(),
     verificationStatus: v.union(
       v.literal("pending"),
@@ -217,6 +224,7 @@ const applicationTables = {
     phone: v.string(),
     classYear: v.optional(v.string()),
     collegeIdUrl: v.optional(v.string()),
+    govtIdUrl: v.optional(v.string()),
 
     // Full participant roster
     participants: v.optional(v.array(v.object({
@@ -226,6 +234,7 @@ const applicationTables = {
       email: v.string(),
       classYear: v.string(),
       collegeIdUrl: v.optional(v.string()),
+      govtIdUrl: v.optional(v.string()),
     }))),
 
     // Payment details
@@ -262,6 +271,7 @@ const applicationTables = {
     phone: v.string(),
     classYear: v.optional(v.string()),
     collegeIdUrl: v.optional(v.string()),
+    govtIdUrl: v.optional(v.string()),
 
     participants: v.optional(v.array(v.object({
       role: v.string(),
@@ -270,6 +280,7 @@ const applicationTables = {
       email: v.string(),
       classYear: v.string(),
       collegeIdUrl: v.optional(v.string()),
+      govtIdUrl: v.optional(v.string()),
     }))),
 
     registrationFee: v.string(),

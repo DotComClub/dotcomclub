@@ -1091,7 +1091,7 @@ html.cc * {
   position: relative;
   display: flex;
   align-items: center;
-  gap: clamp(18px, 2.2vw, 34px);
+  gap: clamp(12px, 1.8vw, 28px);
   font-weight: 500;
   font-size: 15px;
 }

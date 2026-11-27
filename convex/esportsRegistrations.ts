@@ -12,6 +12,7 @@ export const createRegistration = mutation({
     ign: v.optional(v.string()),
     collegeId: v.optional(v.string()),
     collegeIdUrl: v.optional(v.string()),
+    govtIdUrl: v.optional(v.string()),
     collegeName: v.optional(v.string()),
     playerTag: v.optional(v.string()),
     teamName: v.optional(v.string()),
@@ -21,9 +22,15 @@ export const createRegistration = mutation({
       ign: v.string(),
       collegeId: v.optional(v.string()),
       collegeIdUrl: v.optional(v.string()),
+      govtIdUrl: v.optional(v.string()),
       number: v.string(),
       collegeName: v.string(),
     }))),
+    paymentMethod: v.optional(v.string()),
+    upiTransactionId: v.optional(v.string()),
+    paymentScreenshotUrl: v.optional(v.string()),
+    additionalPaymentInfo: v.optional(v.string()),
+    declarationAccepted: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("esportsRegistrations", {

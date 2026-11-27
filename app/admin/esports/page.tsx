@@ -32,9 +32,14 @@ export default function AdminEsportsRegistrations() {
           player.email,
           player.ign,
           player.collegeIdUrl ?? player.collegeId ?? "",
+          player.govtIdUrl ?? "",
           player.number,
           player.collegeName,
           registration.verificationStatus,
+          registration.paymentMethod ?? "",
+          registration.upiTransactionId ?? "",
+          registration.paymentScreenshotUrl ?? "",
+          registration.additionalPaymentInfo ?? "",
           new Date(registration.submittedAt).toLocaleString(),
         ]);
       }
@@ -49,14 +54,19 @@ export default function AdminEsportsRegistrations() {
         registration.email ?? "",
         registration.ign ?? "",
         registration.collegeIdUrl ?? registration.collegeId ?? "",
+        registration.govtIdUrl ?? "",
         registration.phone ?? "",
         registration.collegeName ?? "",
         registration.verificationStatus,
+        registration.paymentMethod ?? "",
+        registration.upiTransactionId ?? "",
+        registration.paymentScreenshotUrl ?? "",
+        registration.additionalPaymentInfo ?? "",
         new Date(registration.submittedAt).toLocaleString(),
       ]];
     });
 
-    const headers = ["S.No", "Game", "Code Type", "Code", "Team Name", "Player No", "Name", "Email", "IGN", "College ID", "Number", "College Name", "Status", "Submitted"];
+    const headers = ["S.No", "Game", "Code Type", "Code", "Team Name", "Player No", "Name", "Email", "IGN", "College ID", "Govt ID", "Number", "College Name", "Status", "Payment Method", "UPI Reference", "Payment Screenshot", "Additional Payment Info", "Submitted"];
     const csv = [headers, ...rows]
       .map((row) => row.map((field) => `"${String(field).replaceAll('"', '""')}"`).join(","))
       .join("\n");
@@ -111,6 +121,7 @@ export default function AdminEsportsRegistrations() {
                       <th className="p-3">Game</th>
                       <th className="p-3">Entrant / Team</th>
                       <th className="p-3">Roster</th>
+                      <th className="p-3">Payment</th>
                       <th className="p-3">Submitted</th>
                       <th className="p-3">Status</th>
                       <th className="p-3">Action</th>
@@ -146,20 +157,38 @@ export default function AdminEsportsRegistrations() {
                                   )}
                                   <span className="block break-all text-gray-400">{player.email} · {player.number}</span>
                                   <span className="block text-gray-500">{player.ign} · {player.collegeName}</span>
-                                  {(player.collegeIdUrl || player.collegeId) && (
-                                    <a
-                                      href={player.collegeIdUrl || player.collegeId}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="mt-2 block"
-                                    >
-                                      <img
-                                        src={player.collegeIdUrl || player.collegeId}
-                                        alt={`College ID for ${player.name}`}
-                                        className="h-20 w-32 rounded border border-cyan-500/30 object-cover"
-                                      />
-                                    </a>
-                                  )}
+                                  <div className="mt-2 flex flex-wrap gap-3">
+                                    {(player.collegeIdUrl || player.collegeId) && (
+                                      <a
+                                        href={player.collegeIdUrl || player.collegeId}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block"
+                                      >
+                                        <span className="mb-1 block text-xs text-gray-500">College ID</span>
+                                        <img
+                                          src={player.collegeIdUrl || player.collegeId}
+                                          alt={`College ID for ${player.name}`}
+                                          className="h-20 w-32 rounded border border-cyan-500/30 object-cover"
+                                        />
+                                      </a>
+                                    )}
+                                    {player.govtIdUrl && (
+                                      <a
+                                        href={player.govtIdUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block"
+                                      >
+                                        <span className="mb-1 block text-xs text-gray-500">Govt ID</span>
+                                        <img
+                                          src={player.govtIdUrl}
+                                          alt={`Government ID for ${player.name}`}
+                                          className="h-20 w-32 rounded border border-cyan-500/30 object-cover"
+                                        />
+                                      </a>
+                                    )}
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -168,27 +197,80 @@ export default function AdminEsportsRegistrations() {
                               <span>{registration.ign || registration.playerTag || "-"}</span>
                               <span className="block text-gray-400">{registration.collegeName || "-"}</span>
                               <span className="block text-gray-500">{registration.phone || "-"}</span>
-                              {(registration.collegeIdUrl || registration.collegeId) && (
+                              <div className="mt-2 flex flex-wrap gap-3">
+                                {(registration.collegeIdUrl || registration.collegeId) && (
+                                  <a
+                                    href={
+                                      registration.collegeIdUrl ||
+                                      registration.collegeId
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block"
+                                  >
+                                    <span className="mb-1 block text-xs text-gray-500">College ID</span>
+                                    <img
+                                      src={
+                                        registration.collegeIdUrl ||
+                                        registration.collegeId
+                                      }
+                                      alt={`College ID for ${registration.name || "entrant"}`}
+                                      className="h-20 w-32 rounded border border-cyan-500/30 object-cover"
+                                    />
+                                  </a>
+                                )}
+                                {registration.govtIdUrl && (
+                                  <a
+                                    href={registration.govtIdUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block"
+                                  >
+                                    <span className="mb-1 block text-xs text-gray-500">Govt ID</span>
+                                    <img
+                                      src={registration.govtIdUrl}
+                                      alt={`Government ID for ${registration.name || "entrant"}`}
+                                      className="h-20 w-32 rounded border border-cyan-500/30 object-cover"
+                                    />
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </td>
+                        <td className="p-3">
+                          {registration.paymentMethod ? (
+                            <div className="space-y-1 text-xs">
+                              <span className="font-medium text-white">
+                                {registration.paymentMethod}
+                              </span>
+                              {registration.upiTransactionId && (
+                                <span className="block break-all text-cyan-300">
+                                  Ref: {registration.upiTransactionId}
+                                </span>
+                              )}
+                              {registration.additionalPaymentInfo && (
+                                <span className="block text-gray-400">
+                                  {registration.additionalPaymentInfo}
+                                </span>
+                              )}
+                              {registration.paymentScreenshotUrl && (
                                 <a
-                                  href={
-                                    registration.collegeIdUrl ||
-                                    registration.collegeId
-                                  }
+                                  href={registration.paymentScreenshotUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="mt-2 block"
                                 >
                                   <img
-                                    src={
-                                      registration.collegeIdUrl ||
-                                      registration.collegeId
-                                    }
-                                    alt={`College ID for ${registration.name || "entrant"}`}
+                                    src={registration.paymentScreenshotUrl}
+                                    alt="Payment screenshot"
                                     className="h-20 w-32 rounded border border-cyan-500/30 object-cover"
                                   />
                                 </a>
                               )}
                             </div>
+                          ) : (
+                            <span className="text-xs text-gray-500">—</span>
                           )}
                         </td>
                         <td className="p-3 whitespace-nowrap text-gray-400">
