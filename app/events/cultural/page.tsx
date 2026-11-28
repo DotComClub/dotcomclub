@@ -19,18 +19,17 @@ const CULTURAL_EVENTS = [
   {
     id: "capture-the-strike",
     number: "01",
-    name: "Capture the Strike",
+    name: "Capture The Strike",
     tagline: "Aim. Focus. Conquer.",
     team: "Solo",
     fee: "₹50 / person",
     venue: "Room Lab 3",
     capacity: "10–15 Participants",
     description:
-      "A team challenge that calls for focus, coordination and precision. Register and get ready to Capture the Strike. Registration is subject to availability and payment verification.",
+      "Create a short reel on your own, showcasing your creativity and editing skills. Register as an individual participant. Registration is subject to availability and payment verification.",
     rules: [
-      "Solo participants.",
-      "One participant must be identified as Team Leader.",
-      "All members must provide their details and college ID proof.",
+      "This is an individual event; team registrations are not applicable.",
+      "Participant must provide accurate personal and college details and college ID proof.",
       "Fee is ₹50 per participant.",
       "Participation is subject to capacity, payment verification and organizer confirmation.",
     ],

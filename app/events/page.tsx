@@ -922,7 +922,7 @@ const EventsPage = () => {
               Events
             </h1>
             <p className="pin">
-              Eighteen events on three channels. Pick a channel to see every event, its
+              Nineteen events on three channels. Pick a channel to see every event, its
               rules and how to register.
             </p>
             <nav className="hub" aria-label="Event channels">
@@ -936,8 +936,10 @@ const EventsPage = () => {
                   <span className="nm">E-Sports</span>
                 </span>
                 <span className="hm">
-                  <span className="mono">4 events</span>
-                  <span className="hd">BGMI, VALORANT, Clash Royale, FIFA 25</span>
+                  <span className="mono">5 events</span>
+                  <span className="hd">
+                    BGMI, VALORANT, Clash Royale, FIFA 25, REAL CRICKET
+                  </span>
                   <i className="ar" aria-hidden="true">
                     ↗
                   </i>
@@ -975,8 +977,8 @@ const EventsPage = () => {
                 <span className="hm">
                   <span className="mono">8 events</span>
                   <span className="hd">
-                    Blackout Empire, The Masked Truth, Red Handed, Beat Drop, The Static
-                    Carnival, Roll the Chaos, La Couture Nights, Debate: Dead Air
+                    Capture The Strike (Reel Making), Blackout Empire, The Masked Truth, Red Handed,
+                    Beat Drop, La Couture Nights, Escape Room, Debate
                   </span>
                   <i className="ar" aria-hidden="true">
                     ↗

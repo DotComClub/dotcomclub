@@ -41,7 +41,7 @@ type EventSchema = {
 const EVENTS_DATA: Record<string, EventSchema> = {
   "capture-the-strike": {
     id: "capture-the-strike",
-    title: "CAPTURE THE STRIKE",
+    title: "Capture The Strike (Reel Making)",
     label: "Feed 01",
     tagline: "Aim. Focus. Conquer.",
     feeDesc: "₹50 per person",
@@ -51,19 +51,17 @@ const EVENTS_DATA: Record<string, EventSchema> = {
     venue: "Room Lab 3",
     capacity: "Maximum participation: 10–15 Participants",
     intro:
-      "A team challenge that calls for focus, coordination and precision. Register all three team members and get ready to Capture the Strike. Registration is subject to availability and payment verification.",
+      "Create a short reel on your own, showcasing your creativity and editing skills. Register as an individual participant. Registration is subject to availability and payment verification.",
     rules: [
-      "Solo participants.",
-      "One participant must be identified as Team Leader.",
-      "All members must provide their details and college ID proof.",
+      "This is an individual event; team registrations are not applicable.",
+      "Participant must provide accurate personal and college details and college ID proof.",
       "Fee is ₹50 per participant.",
       "Participation is subject to capacity, payment verification and organizer confirmation.",
     ],
     confirmation:
-      "Thank you for registering for CAPTURE THE STRIKE. Your details will be reviewed by the organizing committee. Participation is confirmed only after registration and payment verification. Venue: Room Lab 3.",
-    isSolo: false, // collects Team Name + Team Leader as per doc
-    isFixedTeam: true,
-    teamSize: 1,
+      "Thank you for registering for Capture The Strike (Reel Making). Your details will be reviewed by the organizing committee. Participation is confirmed only after registration and payment verification. Venue: Room Lab 3.",
+    isSolo: true,
+    isFixedTeam: false,
   },
   "blackout-empire": {
     id: "blackout-empire",
